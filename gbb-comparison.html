@@ -13,6 +13,8 @@ button{cursor:pointer;font-family:Georgia,serif;}
 button:focus{outline:none;}
 input{font-family:Georgia,serif;}
 input::placeholder{color:#9ca3af;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spin{animation:spin 0.8s linear infinite;border-radius:50%;flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -20,14 +22,14 @@ input::placeholder{color:#9ca3af;}
 <!-- GATE -->
 
 <div id="gate" style="min-height:100vh;background:#1e40af;display:flex;align-items:center;justify-content:center;padding:24px;">
-  <div style="background:#fff;border-radius:12px;padding:40px 36px;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-    <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Campaign Architecture</div>
-    <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#111827;">GBB Comparison Tool</h1>
+  <div style="background:#fff;border-radius:12px;padding:40px 36px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center;">
+    <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Campaign Architecture · Enterprise Engineering</div>
+    <h1 style="margin:0 0 6px;font-size:22px;font-weight:700;color:#111827;">GBB Comparison Tool</h1>
     <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">Enter your access code to continue.</p>
     <input id="pw-in" type="password" placeholder="Access code" style="width:100%;padding:12px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;margin-bottom:10px;text-align:center;letter-spacing:0.2em;display:block;"/>
     <p id="pw-err" class="hide" style="font-size:13px;color:#dc2626;margin-bottom:8px;">Incorrect — please try again.</p>
-    <button onclick="checkPw()" style="width:100%;padding:12px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;">Enter</button>
-    <p style="margin:20px 0 0;font-size:12px;color:#d1d5db;">Campaign Architecture · Proprietary</p>
+    <button onclick="checkPw()" style="width:100%;padding:13px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;">Enter</button>
+    <p style="margin:20px 0 0;font-size:12px;color:#d1d5db;">Scott Archimbaud · Campaign Architecture</p>
   </div>
 </div>
 
@@ -44,18 +46,20 @@ input::placeholder{color:#9ca3af;}
     <div style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:28px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
       <h2 style="margin:0 0 8px;font-size:20px;color:#111827;font-weight:700;">Load Organization Assessments</h2>
       <p style="margin:0 0 18px;font-size:14px;color:#6b7280;line-height:1.6;">Enter the organization name exactly as entered in the diagnostic tool.</p>
+      <label style="display:block;font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Organization Name</label>
       <input id="org-in" type="text" placeholder="e.g. Arthritis Foundation" style="width:100%;padding:12px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;color:#111827;margin-bottom:14px;display:block;"/>
       <button onclick="loadOrg()" style="width:100%;padding:13px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;display:block;margin-bottom:10px;">Load Assessments</button>
       <button onclick="loadSample()" style="width:100%;padding:11px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;color:#374151;font-size:14px;display:block;">Preview Sample — Charity X</button>
+      <p id="load-err" class="hide" style="margin-top:10px;font-size:13px;color:#dc2626;"></p>
     </div>
     <div style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:18px 22px;margin-bottom:16px;">
       <h3 style="margin:0 0 12px;font-size:14px;color:#111827;font-weight:700;">Role Titles for Reports</h3>
-      <div id="role-inputs" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+      <div id="role-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
       <button onclick="resetRoles()" style="margin-top:10px;padding:6px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;">Reset to Defaults</button>
     </div>
     <div style="background:#fffbeb;border-radius:8px;border:1px solid #fcd34d;padding:14px 18px;">
       <p style="font-weight:bold;color:#78350f;margin-bottom:4px;font-size:13px;">How this works</p>
-      <p style="color:#78350f;line-height:1.6;font-size:13px;">Each person completes the GBB Diagnostic Tool independently and saves their assessment. This tool loads all saved assessments for an organization and displays them side by side.</p>
+      <p style="color:#78350f;line-height:1.6;font-size:13px;">Each person completes the GBB Diagnostic Tool independently and saves their assessment. This tool loads all saved assessments for an organization and displays them side by side — revealing alignment, divergence, and the holds where conversation is most needed.</p>
     </div>
   </div>
 </div>
@@ -73,14 +77,14 @@ input::placeholder{color:#9ca3af;}
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <button id="btn-exec" onclick="doExec()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;font-weight:bold;">Executive Report</button>
         <button id="btn-rep" onclick="doReport()" style="padding:7px 14px;background:#fff;border:none;border-radius:6px;color:#1e40af;font-size:13px;font-weight:bold;">Diagnostic Summary</button>
-        <button onclick="showLoad()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">New Search</button>
+        <button onclick="newSearch()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">New Search</button>
       </div>
     </div>
   </div>
   <div style="max-width:960px;margin:0 auto;padding:28px 24px 60px;">
 
 ```
-<!-- Executive Report Box -->
+<!-- Executive Report -->
 <div id="exec-box" class="hide" style="background:#1e40af;border-radius:10px;padding:26px 30px;margin-bottom:22px;box-shadow:0 4px 16px rgba(30,64,175,0.3);">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
     <div>
@@ -90,13 +94,17 @@ input::placeholder{color:#9ca3af;}
     </div>
     <button onclick="document.getElementById('exec-box').classList.add('hide')" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:12px;padding:5px 10px;">Dismiss</button>
   </div>
-  <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:22px 26px;">
+  <div id="exec-loading" class="hide" style="display:flex;align-items:center;gap:12px;padding:20px 0;">
+    <div class="spin" style="width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;"></div>
+    <span style="font-size:14px;color:#bfdbfe;font-style:italic;">Analyzing alignment gaps and revenue impact…</span>
+  </div>
+  <div id="exec-content" class="hide" style="background:rgba(255,255,255,0.07);border-radius:8px;padding:22px 26px;">
     <div id="exec-text" style="font-size:15px;color:#e0eaff;line-height:1.9;white-space:pre-wrap;"></div>
     <div style="font-size:12px;color:#93c5fd;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.15);">Campaign Architecture · Scott Archimbaud · scott@scottarchconsultancy.com · 917-868-0745</div>
   </div>
 </div>
 
-<!-- Diagnostic Summary Box -->
+<!-- Diagnostic Summary -->
 <div id="rep-box" class="hide" style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:26px 30px;margin-bottom:22px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
     <div>
@@ -105,11 +113,16 @@ input::placeholder{color:#9ca3af;}
     </div>
     <button onclick="document.getElementById('rep-box').classList.add('hide')" style="background:transparent;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;padding:5px 10px;">Dismiss</button>
   </div>
+  <div id="rep-loading" class="hide" style="display:flex;align-items:center;gap:12px;padding:20px 0;">
+    <div class="spin" style="width:20px;height:20px;border:2px solid #e5e7eb;border-top-color:#1e40af;"></div>
+    <span style="font-size:14px;color:#6b7280;font-style:italic;">Analyzing assessment data…</span>
+  </div>
   <div id="rep-text" style="font-size:15px;color:#1f2937;line-height:1.9;white-space:pre-wrap;"></div>
-  <div style="font-size:12px;color:#9ca3af;margin-top:14px;padding-top:12px;border-top:1px solid #f3f4f6;">Campaign Architecture · Scott Archimbaud · scott@scottarchconsultancy.com · 917-868-0745</div>
+  <div id="rep-foot" class="hide" style="font-size:12px;color:#9ca3af;margin-top:14px;padding-top:12px;border-top:1px solid #f3f4f6;">Campaign Architecture · Scott Archimbaud · scott@scottarchconsultancy.com · 917-868-0745</div>
 </div>
 
 <div id="resp-cards" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;"></div>
+
 <div id="mis-banner" class="hide" style="background:#fef2f2;border-radius:8px;border:1px solid #fca5a5;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
   <span style="font-size:18px;">⚡</span>
   <span id="mis-text" style="font-size:14px;color:#991b1b;"></span>
@@ -122,6 +135,7 @@ input::placeholder{color:#9ca3af;}
   </div>
   <div id="nat-rows" style="background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;"></div>
 </div>
+
 <div style="margin-bottom:28px;">
   <div style="background:#0f766e;border-radius:8px 8px 0 0;padding:12px 20px;">
     <span style="font-size:14px;font-weight:700;color:#fff;">Field Matrix</span>
@@ -140,19 +154,26 @@ input::placeholder{color:#9ca3af;}
 
 <script>
 var PW = "FLW";
-var sessions = null;
+var AT_TOKEN = "patRxZBAR6wuXsHMN.41a4bd14d79483cb776f73d19f7b0afc22a9f142c60b1b8bd4ba689fa5c043f8";
+var AT_BASE = "appcepfmeJ97ulWuZ";
+var AT_TABLE = "tbl9BfE2fPYJWL7oH";
+var AT_URL = "https://api.airtable.com/v0/" + AT_BASE + "/" + AT_TABLE;
+
 var DROLES = {ceo:"CEO / President",cdo:"Chief Development Officer",nce:"National Campaign Executive",rd:"Regional VP",ad:"Area Director",lgl:"Local Geographic Leader",lpl:"Local Program Lead"};
-var roles = {ceo:"CEO / President",cdo:"Chief Development Officer",nce:"National Campaign Executive",rd:"Regional VP",ad:"Area Director",lgl:"Local Geographic Leader",lpl:"Local Program Lead"};
+var roles = JSON.parse(JSON.stringify(DROLES));
+var sessions = null;
 
 var RORDER = ["notInPlace","inDevelopment","good","better","best"];
 var RLABELS = {notInPlace:"Not in Place",inDevelopment:"In Development",good:"Good",better:"Better",best:"Best in Class"};
 var RS = {
-  notInPlace:{bg:"#f3f4f6",tx:"#374151",bd:"#d1d5db"},
-  inDevelopment:{bg:"#fef3c7",tx:"#92400e",bd:"#fcd34d"},
-  good:{bg:"#dcfce7",tx:"#166534",bd:"#86efac"},
-  better:{bg:"#dbeafe",tx:"#1e40af",bd:"#93c5fd"},
-  best:{bg:"#f3e8ff",tx:"#6b21a8",bd:"#c4b5fd"}
+  notInPlace:{bg:"#f3f4f6",tx:"#374151",bd:"#d1d5db",dot:"#9ca3af"},
+  inDevelopment:{bg:"#fef3c7",tx:"#92400e",bd:"#fcd34d",dot:"#f59e0b"},
+  good:{bg:"#dcfce7",tx:"#166534",bd:"#86efac",dot:"#22c55e"},
+  better:{bg:"#dbeafe",tx:"#1e40af",bd:"#93c5fd",dot:"#3b82f6"},
+  best:{bg:"#f3e8ff",tx:"#6b21a8",bd:"#c4b5fd",dot:"#a855f7"}
 };
+var DC = ["#1e40af","#0f766e","#b45309","#6b21a8","#991b1b"];
+
 var HOLDS = [
   {id:"n1",num:"N1",title:"National Campaign Chair Recruitment and Stewardship",matrix:"national"},
   {id:"n2",num:"N2",title:"National Board P2P Engagement and Championship",matrix:"national"},
@@ -176,219 +197,256 @@ var HOLDS = [
   {id:"f10",num:"F10",title:"Local Recognition and Volunteer Stewardship",matrix:"field"},
   {id:"f11",num:"F11",title:"Local Mission and Narrative Alignment",matrix:"field"}
 ];
+
 var SAMPLE = [
-  {key:"s1",person:"Sarah Chen, CDO",org:"Charity X",savedAt:"2026-04-01",scores:{n1:{rating:"better",payoff:5,ease:3},n2:{rating:"better",payoff:4,ease:3},n3:{rating:"good",payoff:3,ease:4},n4:{rating:"better",payoff:4,ease:3},n5:{rating:"best",payoff:5,ease:2},n6:{rating:"good",payoff:3,ease:4},n7:{rating:"better",payoff:4,ease:3},n8:{rating:"better",payoff:4,ease:3},n9:{rating:"good",payoff:3,ease:4},n10:{rating:"better",payoff:4,ease:3},f1:{rating:"good",payoff:4,ease:3},f2:{rating:"better",payoff:5,ease:2},f3:{rating:"better",payoff:4,ease:3},f4:{rating:"good",payoff:3,ease:4},f5:{rating:"better",payoff:4,ease:3},f6:{rating:"good",payoff:3,ease:4},f7:{rating:"better",payoff:3,ease:3},f8:{rating:"good",payoff:3,ease:4},f9:{rating:"good",payoff:3,ease:4},f10:{rating:"better",payoff:3,ease:3},f11:{rating:"good",payoff:3,ease:4}}},
-  {key:"s2",person:"Marcus Webb, Regional VP",org:"Charity X",savedAt:"2026-04-01",scores:{n1:{rating:"good",payoff:5,ease:3},n2:{rating:"good",payoff:4,ease:3},n3:{rating:"inDevelopment",payoff:3,ease:4},n4:{rating:"good",payoff:4,ease:3},n5:{rating:"better",payoff:5,ease:2},n6:{rating:"inDevelopment",payoff:3,ease:4},n7:{rating:"good",payoff:4,ease:3},n8:{rating:"good",payoff:4,ease:3},n9:{rating:"inDevelopment",payoff:3,ease:4},n10:{rating:"good",payoff:4,ease:3},f1:{rating:"inDevelopment",payoff:4,ease:3},f2:{rating:"good",payoff:5,ease:2},f3:{rating:"good",payoff:4,ease:3},f4:{rating:"inDevelopment",payoff:3,ease:4},f5:{rating:"good",payoff:4,ease:3},f6:{rating:"inDevelopment",payoff:3,ease:4},f7:{rating:"good",payoff:3,ease:3},f8:{rating:"inDevelopment",payoff:3,ease:4},f9:{rating:"good",payoff:3,ease:4},f10:{rating:"good",payoff:3,ease:3},f11:{rating:"inDevelopment",payoff:3,ease:4}}},
-  {key:"s3",person:"Jennifer Park, Local Leader",org:"Charity X",savedAt:"2026-04-01",scores:{n1:{rating:"inDevelopment",payoff:5,ease:3},n2:{rating:"notInPlace",payoff:4,ease:3},n3:{rating:"notInPlace",payoff:3,ease:4},n4:{rating:"inDevelopment",payoff:4,ease:3},n5:{rating:"good",payoff:5,ease:2},n6:{rating:"notInPlace",payoff:3,ease:4},n7:{rating:"inDevelopment",payoff:4,ease:3},n8:{rating:"inDevelopment",payoff:4,ease:3},n9:{rating:"notInPlace",payoff:3,ease:4},n10:{rating:"inDevelopment",payoff:4,ease:3},f1:{rating:"notInPlace",payoff:4,ease:3},f2:{rating:"inDevelopment",payoff:5,ease:2},f3:{rating:"inDevelopment",payoff:4,ease:3},f4:{rating:"notInPlace",payoff:3,ease:4},f5:{rating:"inDevelopment",payoff:4,ease:3},f6:{rating:"notInPlace",payoff:3,ease:4},f7:{rating:"inDevelopment",payoff:3,ease:3},f8:{rating:"notInPlace",payoff:3,ease:4},f9:{rating:"inDevelopment",payoff:3,ease:4},f10:{rating:"inDevelopment",payoff:3,ease:3},f11:{rating:"notInPlace",payoff:3,ease:4}}}
+  {person:"Sarah Chen, CDO",org:"Charity X",savedAt:"2026-04-01",scores:{n1:{rating:"better",payoff:5,ease:3},n2:{rating:"better",payoff:4,ease:3},n3:{rating:"good",payoff:3,ease:4},n4:{rating:"better",payoff:4,ease:3},n5:{rating:"best",payoff:5,ease:2},n6:{rating:"good",payoff:3,ease:4},n7:{rating:"better",payoff:4,ease:3},n8:{rating:"better",payoff:4,ease:3},n9:{rating:"good",payoff:3,ease:4},n10:{rating:"better",payoff:4,ease:3},f1:{rating:"good",payoff:4,ease:3},f2:{rating:"better",payoff:5,ease:2},f3:{rating:"better",payoff:4,ease:3},f4:{rating:"good",payoff:3,ease:4},f5:{rating:"better",payoff:4,ease:3},f6:{rating:"good",payoff:3,ease:4},f7:{rating:"better",payoff:3,ease:3},f8:{rating:"good",payoff:3,ease:4},f9:{rating:"good",payoff:3,ease:4},f10:{rating:"better",payoff:3,ease:3},f11:{rating:"good",payoff:3,ease:4}}},
+  {person:"Marcus Webb, Regional VP",org:"Charity X",savedAt:"2026-04-01",scores:{n1:{rating:"good",payoff:5,ease:3},n2:{rating:"good",payoff:4,ease:3},n3:{rating:"inDevelopment",payoff:3,ease:4},n4:{rating:"good",payoff:4,ease:3},n5:{rating:"better",payoff:5,ease:2},n6:{rating:"inDevelopment",payoff:3,ease:4},n7:{rating:"good",payoff:4,ease:3},n8:{rating:"good",payoff:4,ease:3},n9:{rating:"inDevelopment",payoff:3,ease:4},n10:{rating:"good",payoff:4,ease:3},f1:{rating:"inDevelopment",payoff:4,ease:3},f2:{rating:"good",payoff:5,ease:2},f3:{rating:"good",payoff:4,ease:3},f4:{rating:"inDevelopment",payoff:3,ease:4},f5:{rating:"good",payoff:4,ease:3},f6:{rating:"inDevelopment",payoff:3,ease:4},f7:{rating:"good",payoff:3,ease:3},f8:{rating:"inDevelopment",payoff:3,ease:4},f9:{rating:"good",payoff:3,ease:4},f10:{rating:"good",payoff:3,ease:3},f11:{rating:"inDevelopment",payoff:3,ease:4}}},
+  {person:"Jennifer Park, Local Leader",org:"Charity X",savedAt:"2026-04-01",scores:{n1:{rating:"inDevelopment",payoff:5,ease:3},n2:{rating:"notInPlace",payoff:4,ease:3},n3:{rating:"notInPlace",payoff:3,ease:4},n4:{rating:"inDevelopment",payoff:4,ease:3},n5:{rating:"good",payoff:5,ease:2},n6:{rating:"notInPlace",payoff:3,ease:4},n7:{rating:"inDevelopment",payoff:4,ease:3},n8:{rating:"inDevelopment",payoff:4,ease:3},n9:{rating:"notInPlace",payoff:3,ease:4},n10:{rating:"inDevelopment",payoff:4,ease:3},f1:{rating:"notInPlace",payoff:4,ease:3},f2:{rating:"inDevelopment",payoff:5,ease:2},f3:{rating:"inDevelopment",payoff:4,ease:3},f4:{rating:"notInPlace",payoff:3,ease:4},f5:{rating:"inDevelopment",payoff:4,ease:3},f6:{rating:"notInPlace",payoff:3,ease:4},f7:{rating:"inDevelopment",payoff:3,ease:3},f8:{rating:"notInPlace",payoff:3,ease:4},f9:{rating:"inDevelopment",payoff:3,ease:4},f10:{rating:"inDevelopment",payoff:3,ease:3},f11:{rating:"notInPlace",payoff:3,ease:4}}}
 ];
 
-function show(id) { document.getElementById(id).classList.remove("hide"); }
-function hide(id) { document.getElementById(id).classList.add("hide"); }
-function esc(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
-function getRating(s,id) { return s.scores[id] ? s.scores[id].rating : null; }
-function getScore(s,id) { var sc=s.scores[id]; return sc&&sc.payoff&&sc.ease ? sc.payoff+sc.ease : null; }
-function rIdx(r) { return r ? RORDER.indexOf(r) : -1; }
-function pC(v) { return !v?"#9ca3af":v>=9?"#dc2626":v>=7?"#d97706":v>=5?"#2563eb":"#6b7280"; }
-function pL(v) { return !v?"—":v>=9?"Immediate Focus":v>=7?"High Priority":v>=5?"Secondary":"Lower Priority"; }
-function fmtD(iso) { try { return new Date(iso).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); } catch(e) { return iso; } }
+function show(id){document.getElementById(id).classList.remove("hide");}
+function hide(id){document.getElementById(id).classList.add("hide");}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function rIdx(r){return r?RORDER.indexOf(r):-1;}
+function pC(v){return !v?"#9ca3af":v>=9?"#dc2626":v>=7?"#d97706":v>=5?"#2563eb":"#6b7280";}
+function pL(v){return !v?"—":v>=9?"Immediate Focus":v>=7?"High Priority":v>=5?"Secondary":"Lower Priority";}
+function getRating(s,id){return s.scores[id]?s.scores[id].rating:null;}
+function getScore(s,id){var sc=s.scores[id];return sc&&sc.payoff&&sc.ease?sc.payoff+sc.ease:null;}
+function fmtD(iso){try{return new Date(iso).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}catch(e){return iso;}}
 
-document.getElementById("pw-in").addEventListener("keydown", function(e) { if (e.key==="Enter") checkPw(); });
+document.getElementById("pw-in").addEventListener("keydown",function(e){if(e.key==="Enter")checkPw();});
+document.getElementById("org-in").addEventListener("keydown",function(e){if(e.key==="Enter")loadOrg();});
 
-function checkPw() {
-  var val = document.getElementById("pw-in").value.trim();
-  if (val === PW) { hide("gate"); showLoad(); }
-  else {
-    document.getElementById("pw-in").value = "";
-    document.getElementById("pw-in").style.borderColor = "#fca5a5";
+function checkPw(){
+  var v=document.getElementById("pw-in").value.trim();
+  if(v===PW){hide("gate");showLoad();}
+  else{
+    document.getElementById("pw-in").value="";
+    document.getElementById("pw-in").style.borderColor="#fca5a5";
     show("pw-err");
-    setTimeout(function() { document.getElementById("pw-in").style.borderColor="#d1d5db"; hide("pw-err"); }, 2000);
+    setTimeout(function(){document.getElementById("pw-in").style.borderColor="#d1d5db";hide("pw-err");},2000);
   }
 }
 
-function buildRoleInputs() {
-  var keys = Object.keys(DROLES);
-  var html = "";
-  for (var i=0; i<keys.length; i++) {
-    var k = keys[i];
-    html += '<div><label style="display:block;font-size:11px;color:#9ca3af;margin-bottom:3px;">' + esc(DROLES[k]) + '</label><input data-role="' + k + '" type="text" value="' + esc(roles[k]) + '" style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:Georgia,serif;"/></div>';
+function showLoad(){hide("results-screen");show("load-screen");buildRoleGrid();}
+function newSearch(){hide("results-screen");show("load-screen");}
+
+function buildRoleGrid(){
+  var keys=Object.keys(DROLES);
+  var html="";
+  for(var i=0;i<keys.length;i++){
+    var k=keys[i];
+    html+='<div><label style="display:block;font-size:11px;color:#9ca3af;margin-bottom:3px;">'+esc(DROLES[k])+'</label><input data-role="'+k+'" type="text" value="'+esc(roles[k])+'" style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:Georgia,serif;"/></div>';
   }
-  document.getElementById("role-inputs").innerHTML = html;
-  var inputs = document.querySelectorAll("[data-role]");
-  for (var i=0; i<inputs.length; i++) {
-    inputs[i].addEventListener("input", function() { roles[this.dataset.role] = this.value; });
+  document.getElementById("role-grid").innerHTML=html;
+  var inputs=document.querySelectorAll("[data-role]");
+  for(var i=0;i<inputs.length;i++){
+    inputs[i].addEventListener("input",function(){roles[this.dataset.role]=this.value;});
   }
 }
 
-function resetRoles() {
-  var keys = Object.keys(DROLES);
-  for (var i=0; i<keys.length; i++) { roles[keys[i]] = DROLES[keys[i]]; }
-  buildRoleInputs();
+function resetRoles(){
+  var keys=Object.keys(DROLES);
+  for(var i=0;i<keys.length;i++){roles[keys[i]]=DROLES[keys[i]];}
+  buildRoleGrid();
 }
 
-function showLoad() {
-  hide("results-screen");
-  show("load-screen");
-  buildRoleInputs();
-}
-
-function loadSample() {
-  sessions = SAMPLE;
+function loadSample(){
+  sessions=SAMPLE;
   showResults();
 }
 
-async function loadOrg() {
-  var org = document.getElementById("org-in").value.trim();
-  if (!org) return;
-  if (!window.storage) { alert("Storage not available."); return; }
-  try {
-    var slug = org.toLowerCase().replace(/[^a-z0-9]/g,"-").slice(0,30);
-    var keys = await window.storage.list("gbb-session:"+slug+":");
-    if (!keys||!keys.keys||!keys.keys.length) { alert("No saved assessments found."); return; }
-    var ss = [];
-    for (var i=0; i<keys.keys.length; i++) {
-      try {
-        var r = await window.storage.get(keys.keys[i]);
-        if (r&&r.value) {
-          var d = JSON.parse(r.value);
-          ss.push({key:keys.keys[i],person:d.person||d.personName||"Unknown",org:d.org||d.orgName||org,scores:d.scores||{},savedAt:d.savedAt});
-        }
-      } catch(e) {}
+async function loadOrg(){
+  var org=document.getElementById("org-in").value.trim();
+  if(!org)return;
+  hide("load-err");
+  try{
+    var slug=org.toLowerCase().replace(/[^a-z0-9]/g,"-").slice(0,30);
+    var formula=encodeURIComponent('FIND("'+slug+'",LOWER({org}))');
+    var res=await fetch(AT_URL+"?filterByFormula="+encodeURIComponent('{org}="'+org+'"'),{headers:{"Authorization":"Bearer "+AT_TOKEN}});
+    var data=await res.json();
+    if(!data.records||!data.records.length){
+      var errEl=document.getElementById("load-err");
+      errEl.textContent="No saved assessments found for that organization.";
+      show("load-err");
+      return;
     }
-    if (ss.length) {
-      sessions = ss.sort(function(a,b){return a.person.localeCompare(b.person);});
-      showResults();
+    var ss=[];
+    for(var i=0;i<data.records.length;i++){
+      var f=data.records[i].fields;
+      try{ss.push({person:f.person||"Unknown",org:f.org||org,savedAt:f.savedAt,scores:JSON.parse(f.scores||"{}")});}catch(e){}
     }
-  } catch(e) { alert("Error: "+e.message); }
+    if(!ss.length){
+      var errEl=document.getElementById("load-err");
+      errEl.textContent="Could not read saved assessments.";
+      show("load-err");
+      return;
+    }
+    sessions=ss.sort(function(a,b){return a.person.localeCompare(b.person);});
+    showResults();
+  }catch(e){
+    var errEl=document.getElementById("load-err");
+    errEl.textContent="Error: "+e.message;
+    show("load-err");
+  }
 }
 
-function holdRow(hold, hi) {
-  var ss = sessions;
-  var rats = [];
-  for (var i=0; i<ss.length; i++) { var ri=rIdx(getRating(ss[i],hold.id)); if(ri>=0) rats.push(ri); }
-  var mis = rats.length>1 && Math.max.apply(null,rats)-Math.min.apply(null,rats)>=2;
-  var scs = [];
-  for (var i=0; i<ss.length; i++) { var sc=getScore(ss[i],hold.id); if(sc) scs.push(sc); }
-  var spread = scs.length>1 ? Math.max.apply(null,scs)-Math.min.apply(null,scs) : 0;
-  var avg = scs.length ? Math.round(scs.reduce(function(a,b){return a+b;},0)/scs.length*10)/10 : null;
-
-  var badges = "";
-  for (var i=0; i<ss.length; i++) {
-    var r = getRating(ss[i],hold.id);
-    var b = r ? '<span style="font-size:12px;padding:3px 9px;border-radius:5px;background:'+RS[r].bg+';color:'+RS[r].tx+';border:1px solid '+RS[r].bd+';white-space:nowrap;">'+RLABELS[r]+'</span>'
-              : '<span style="font-size:12px;padding:3px 9px;border-radius:5px;background:#f9fafb;color:#9ca3af;border:1px solid #e5e7eb;">Not scored</span>';
-    badges += '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><span style="font-size:11px;color:#9ca3af;white-space:nowrap;">'+esc(ss[i].person)+'</span>'+b+'</div>';
-  }
-
-  var avgBox = "";
-  if (avg!==null&&ss.length>1) {
-    avgBox = '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;margin-left:8px;padding-left:12px;border-left:1px solid #e5e7eb;"><span style="font-size:11px;color:#9ca3af;">Avg</span><div style="width:40px;height:40px;border-radius:8px;background:#f9fafb;border:2px solid '+pC(avg)+';display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-size:14px;font-weight:bold;color:'+pC(avg)+';line-height:1;">'+avg+'</span><span style="font-size:8px;color:#9ca3af;text-transform:uppercase;">/10</span></div><span style="font-size:10px;color:'+pC(avg)+';font-weight:bold;">'+pL(avg)+'</span></div>';
-  }
-
-  var flags = "";
-  if (mis) flags += '<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#fef2f2;color:#991b1b;border:1px solid #fca5a5;font-weight:bold;">Rating Gap</span> ';
-  if (spread>=3) flags += '<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;font-weight:bold;">Score Gap</span>';
-
-  var bt = hi===0 ? "none" : "1px solid #f3f4f6";
-  var bg = (mis||spread>=3) ? "#fffbfb" : "#fff";
-  return '<div style="border-top:'+bt+';background:'+bg+';padding:16px 20px;"><div style="display:flex;gap:12px;flex-wrap:wrap;"><span style="font-size:12px;font-weight:bold;color:#6b7280;min-width:34px;padding-top:2px;">'+hold.num+'</span><div style="flex:1;min-width:180px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;"><span style="font-size:14px;color:#111827;font-weight:600;">'+esc(hold.title)+'</span>'+flags+'</div><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;">'+badges+avgBox+'</div></div></div></div>';
+function getMisalign(id){
+  if(!sessions)return false;
+  var rs=sessions.map(function(s){return rIdx(getRating(s,id));}).filter(function(r){return r>=0;});
+  return rs.length>1&&Math.max.apply(null,rs)-Math.min.apply(null,rs)>=2;
+}
+function getAvg(id){
+  if(!sessions)return null;
+  var sc=sessions.map(function(s){return getScore(s,id);}).filter(Boolean);
+  return sc.length?Math.round(sc.reduce(function(a,b){return a+b;},0)/sc.length*10)/10:null;
+}
+function getSpread(id){
+  if(!sessions)return 0;
+  var sc=sessions.map(function(s){return getScore(s,id);}).filter(Boolean);
+  return sc.length>1?Math.max.apply(null,sc)-Math.min.apply(null,sc):0;
 }
 
-function showResults() {
+function showResults(){
   hide("load-screen");
   show("results-screen");
-  hide("exec-box");
-  hide("rep-box");
+  hide("exec-box");hide("rep-box");
 
-  var org = sessions[0] ? sessions[0].org : "";
-  document.getElementById("hdr-sub").textContent = org+" · "+sessions.length+" respondent"+(sessions.length!==1?"s":"");
-  document.getElementById("exec-title").textContent = "Top Five Recommendations — "+org;
-  document.getElementById("exec-sub").textContent = "Prepared for the "+roles.ceo+", "+roles.cdo+", and "+roles.nce;
-  document.getElementById("rep-title").textContent = "Diagnostic Summary — "+org;
+  var org=sessions[0]?sessions[0].org:"";
+  document.getElementById("hdr-sub").textContent=org+" · "+sessions.length+" respondent"+(sessions.length!==1?"s":"");
+  document.getElementById("exec-title").textContent="Top Five Recommendations — "+org;
+  document.getElementById("exec-sub").textContent="Prepared for the "+roles.ceo+", "+roles.cdo+", and "+roles.nce;
+  document.getElementById("rep-title").textContent="Diagnostic Summary — "+org;
 
-  var cards = "";
-  for (var i=0; i<sessions.length; i++) {
-    var s = sessions[i];
-    var scored = 0;
-    for (var j=0; j<HOLDS.length; j++) { var sc=s.scores[HOLDS[j].id]; if(sc&&sc.payoff&&sc.ease) scored++; }
-    cards += '<div style="background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:12px 16px;flex:1 1 160px;"><div style="font-size:13px;font-weight:bold;color:#111827;margin-bottom:2px;">'+esc(s.person)+'</div><div style="font-size:12px;color:#6b7280;margin-bottom:4px;">'+esc(fmtD(s.savedAt))+'</div><div style="font-size:12px;color:#374151;">'+scored+'/'+HOLDS.length+' holds scored</div></div>';
+  var cards="";
+  for(var i=0;i<sessions.length;i++){
+    var s=sessions[i];
+    var scored=HOLDS.filter(function(h){return s.scores[h.id]&&s.scores[h.id].payoff&&s.scores[h.id].ease;}).length;
+    cards+='<div style="background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:12px 16px;flex:1 1 160px;"><div style="font-size:13px;font-weight:bold;color:#111827;margin-bottom:2px;">'+esc(s.person)+'</div><div style="font-size:12px;color:#6b7280;margin-bottom:4px;">'+esc(fmtD(s.savedAt))+'</div><div style="font-size:12px;color:#374151;">'+scored+'/'+HOLDS.length+' holds scored</div></div>';
   }
-  document.getElementById("resp-cards").innerHTML = cards;
+  document.getElementById("resp-cards").innerHTML=cards;
 
-  var misHolds = [];
-  for (var i=0; i<HOLDS.length; i++) {
-    var h = HOLDS[i];
-    var rats = [];
-    for (var j=0; j<sessions.length; j++) { var ri=rIdx(getRating(sessions[j],h.id)); if(ri>=0) rats.push(ri); }
-    if (rats.length>1&&Math.max.apply(null,rats)-Math.min.apply(null,rats)>=2) misHolds.push(h);
-  }
-  if (misHolds.length>0) {
-    document.getElementById("mis-text").innerHTML = "<strong>"+misHolds.length+" hold"+(misHolds.length!==1?"s":"")+"</strong> show significant rating misalignment — your highest-value conversation starters.";
+  var mc=HOLDS.filter(function(h){return getMisalign(h.id);}).length;
+  if(mc>0){
+    document.getElementById("mis-text").innerHTML="<strong>"+mc+" hold"+(mc!==1?"s":"")+"</strong> show significant rating misalignment — your highest-value conversation starters.";
     show("mis-banner");
-  } else { hide("mis-banner"); }
+  }else{hide("mis-banner");}
 
-  var natHTML = "", fieldHTML = "";
-  var natIdx=0, fieldIdx=0;
-  for (var i=0; i<HOLDS.length; i++) {
-    if (HOLDS[i].matrix==="national") { natHTML += holdRow(HOLDS[i],natIdx); natIdx++; }
-    else { fieldHTML += holdRow(HOLDS[i],fieldIdx); fieldIdx++; }
+  document.getElementById("nat-rows").innerHTML=HOLDS.filter(function(h){return h.matrix==="national";}).map(function(h,i){return holdRow(h,i);}).join("");
+  document.getElementById("field-rows").innerHTML=HOLDS.filter(function(h){return h.matrix==="field";}).map(function(h,i){return holdRow(h,i);}).join("");
+}
+
+function holdRow(hold,hi){
+  var rats=sessions.map(function(s){return rIdx(getRating(s,hold.id));}).filter(function(r){return r>=0;});
+  var mis=rats.length>1&&Math.max.apply(null,rats)-Math.min.apply(null,rats)>=2;
+  var scs=sessions.map(function(s){return getScore(s,hold.id);}).filter(Boolean);
+  var sp=scs.length>1?Math.max.apply(null,scs)-Math.min.apply(null,scs):0;
+  var avg=scs.length?Math.round(scs.reduce(function(a,b){return a+b;},0)/scs.length*10)/10:null;
+  var flagged=mis||sp>=3;
+
+  var badges=sessions.map(function(s,i){
+    var r=getRating(s,hold.id);
+    var b=r?('<span style="font-size:12px;padding:3px 9px;border-radius:5px;background:'+RS[r].bg+';color:'+RS[r].tx+';border:1px solid '+RS[r].bd+';white-space:nowrap;">'+RLABELS[r]+'</span>'):('<span style="font-size:12px;padding:3px 9px;border-radius:5px;background:#f9fafb;color:#9ca3af;border:1px solid #e5e7eb;">Not scored</span>');
+    return '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><span style="font-size:11px;color:#9ca3af;white-space:nowrap;">'+esc(s.person)+'</span>'+b+'</div>';
+  }).join("");
+
+  var avgBox="";
+  if(avg!==null&&sessions.length>1){
+    avgBox='<div style="display:flex;flex-direction:column;align-items:center;gap:3px;margin-left:8px;padding-left:12px;border-left:1px solid #e5e7eb;"><span style="font-size:11px;color:#9ca3af;">Avg</span><div style="width:40px;height:40px;border-radius:8px;background:#f9fafb;border:2px solid '+pC(avg)+';display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-size:14px;font-weight:bold;color:'+pC(avg)+';line-height:1;">'+avg+'</span><span style="font-size:8px;color:#9ca3af;text-transform:uppercase;">/10</span></div><span style="font-size:10px;color:'+pC(avg)+';font-weight:bold;">'+pL(avg)+'</span></div>';
   }
-  document.getElementById("nat-rows").innerHTML = natHTML;
-  document.getElementById("field-rows").innerHTML = fieldHTML;
+
+  var valid=sessions.map(function(s,i){return{name:s.person,sc:getScore(s,hold.id),i:i};}).filter(function(x){return x.sc!==null;});
+  var track="";
+  if(valid.length>1){
+    var mn=Math.min.apply(null,valid.map(function(x){return x.sc;}));
+    var mx=Math.max.apply(null,valid.map(function(x){return x.sc;}));
+    var tsp=mx-mn;
+    var W=150;
+    function pos(v){return Math.round((v-2)/8*W);}
+    var spBadge=tsp>=3?'<span style="font-size:11px;padding:1px 7px;border-radius:4px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;font-weight:bold;">Gap: '+tsp+' pts</span>':tsp>0?'<span style="font-size:11px;padding:1px 7px;border-radius:4px;background:#f0fdf4;color:#166534;border:1px solid #86efac;">Spread: '+tsp+' pt'+(tsp!==1?"s":"")+'</span>':'<span style="font-size:11px;padding:1px 7px;border-radius:4px;background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;">Agreement</span>';
+    var dots=valid.map(function(x){return '<div style="position:absolute;top:6px;left:'+(pos(x.sc)-5)+'px;width:11px;height:11px;border-radius:50%;background:'+DC[x.i%DC.length]+';border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>';}).join("");
+    var leg=valid.map(function(x){return '<span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#374151;"><span style="width:8px;height:8px;border-radius:50%;background:'+DC[x.i%DC.length]+';display:inline-block;"></span>'+esc(x.name)+': <strong style="color:'+pC(x.sc)+';">'+x.sc+'/10</strong></span>';}).join("");
+    track='<div style="margin-top:10px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;">Score Range</span>'+spBadge+'</div><div style="position:relative;height:28px;width:'+(W+16)+'px;"><div style="position:absolute;top:11px;left:0;width:'+W+'px;height:3px;background:#e5e7eb;border-radius:2px;"><div style="position:absolute;left:'+pos(mn)+'px;width:'+Math.max(pos(mx)-pos(mn),1)+'px;height:100%;background:#93c5fd;border-radius:2px;"></div></div>'+dots+'</div><div style="display:flex;gap:10px;flex-wrap:wrap;">'+leg+'</div></div>';
+  }
+
+  var flags=(mis?'<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#fef2f2;color:#991b1b;border:1px solid #fca5a5;font-weight:bold;">Rating Gap</span> ':'')+( sp>=3?'<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;font-weight:bold;">Score Gap</span>':"");
+  return '<div style="border-top:'+(hi===0?"none":"1px solid #f3f4f6")+';background:'+(flagged?"#fffbfb":"#fff")+';padding:16px 20px;"><div style="display:flex;gap:12px;flex-wrap:wrap;"><span style="font-size:12px;font-weight:bold;color:#6b7280;min-width:34px;padding-top:2px;">'+hold.num+'</span><div style="flex:1;min-width:180px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;"><span style="font-size:14px;color:#111827;font-weight:600;">'+esc(hold.title)+'</span>'+flags+'</div><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;margin-bottom:4px;">'+badges+avgBox+'</div>'+track+'</div></div></div>';
 }
 
-async function callAPI(prompt, maxTok) {
-  var body = JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:maxTok,temperature:0.2,messages:[{role:"user",content:prompt}]});
-  var res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:body});
-  var data = await res.json();
-  if (data.error) throw new Error("API: "+data.error.message);
-  var out = "";
-  if (data.content) { for (var i=0; i<data.content.length; i++) { if(data.content[i].type==="text") out+=data.content[i].text; } }
-  return out;
-}
-
-function buildCtx() {
-  var org = sessions[0] ? sessions[0].org : "the organization";
-  var resp = sessions.map(function(s){return s.person;}).join(", ");
-  var rGaps = [], sGaps = [], topArr = [];
-  for (var i=0; i<HOLDS.length; i++) {
-    var h = HOLDS[i];
-    var rats=[], scs=[];
-    for (var j=0; j<sessions.length; j++) { var ri=rIdx(getRating(sessions[j],h.id)); if(ri>=0) rats.push(ri); var sc=getScore(sessions[j],h.id); if(sc) scs.push(sc); }
-    if (rats.length>1&&Math.max.apply(null,rats)-Math.min.apply(null,rats)>=2) rGaps.push(h.num);
-    if (scs.length>1&&Math.max.apply(null,scs)-Math.min.apply(null,scs)>=3) sGaps.push(h.num);
-    var avg = scs.length ? Math.round(scs.reduce(function(a,b){return a+b;},0)/scs.length*10)/10 : 0;
+function buildCtx(){
+  var org=sessions[0]?sessions[0].org:"the organization";
+  var resp=sessions.map(function(s){return s.person;}).join(", ");
+  var rGaps=[],sGaps=[],topArr=[];
+  for(var i=0;i<HOLDS.length;i++){
+    var h=HOLDS[i];
+    var rats=[],scs=[];
+    for(var j=0;j<sessions.length;j++){var ri=rIdx(getRating(sessions[j],h.id));if(ri>=0)rats.push(ri);var sc=getScore(sessions[j],h.id);if(sc)scs.push(sc);}
+    if(rats.length>1&&Math.max.apply(null,rats)-Math.min.apply(null,rats)>=2)rGaps.push(h.num);
+    if(scs.length>1&&Math.max.apply(null,scs)-Math.min.apply(null,scs)>=3)sGaps.push(h.num);
+    var avg=scs.length?Math.round(scs.reduce(function(a,b){return a+b;},0)/scs.length*10)/10:0;
     topArr.push({num:h.num,avg:avg});
   }
   topArr.sort(function(a,b){return b.avg-a.avg;});
-  var top = topArr.slice(0,5).map(function(x){return x.num+"="+x.avg;}).join(" ");
-  var rl = Object.keys(roles).map(function(k){return roles[k];}).join(", ");
-  return {org:org,resp:resp,rGaps:rGaps.join(" ")||"none",sGaps:sGaps.join(" ")||"none",top:top,rl:rl};
+  return {
+    org:org,resp:resp,
+    rGaps:rGaps.join(" ")||"none",
+    sGaps:sGaps.join(" ")||"none",
+    top:topArr.slice(0,5).map(function(x){return x.num+"="+x.avg;}).join(" "),
+    rl:Object.keys(roles).map(function(k){return roles[k];}).join(", ")
+  };
 }
 
-async function doReport() {
-  var btn = document.getElementById("btn-rep");
-  btn.textContent = "Generating…"; btn.disabled = true;
-  var c = buildCtx();
-  var p = "P2P consultant. Org:"+c.org+". Respondents:"+c.resp+". Roles:"+c.rl+". Rating gaps:"+c.rGaps+". Score gaps:"+c.sGaps+". Top holds:"+c.top+". Write 3-4 paragraph diagnostic summary. Open with what ratings collectively suggest. Identify most significant misalignment and role-based reasons. Note shared agreements and gaps. Close with priority direction. Direct consultant voice, no headers, no bullets.";
-  try {
-    var text = await callAPI(p,900);
-    document.getElementById("rep-text").textContent = text || "Could not generate.";
-    show("rep-box");
-  } catch(e) { document.getElementById("rep-text").textContent = "Error: "+e.message; show("rep-box"); }
-  btn.textContent = "Diagnostic Summary"; btn.disabled = false;
+async function callAPI(prompt,maxTok){
+  var res=await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+    body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:maxTok,temperature:0.2,messages:[{role:"user",content:prompt}]})
+  });
+  var data=await res.json();
+  if(data.error)throw new Error(data.error.message);
+  var out="";
+  if(data.content){for(var i=0;i<data.content.length;i++){if(data.content[i].type==="text")out+=data.content[i].text;}}
+  return out;
 }
 
-async function doExec() {
-  var btn = document.getElementById("btn-exec");
-  btn.textContent = "Generating…"; btn.disabled = true;
-  var c = buildCtx();
-  var p = "P2P consultant. Org:"+c.org+". Respondents:"+c.resp+". Roles:"+c.rl+". Priority holds:"+c.top+". Rating gaps:"+c.rGaps+". Score gaps:"+c.sGaps+". Write executive report for "+roles.ceo+", "+roles.cdo+", "+roles.nce+". Give exactly 5 numbered recommendations. Each: short bold title, 2-3 sentences on alignment gap, 2-3 sentences on specific action and revenue rationale. End with one closing paragraph to executive team. No bullets. Direct.";
-  try {
-    var text = await callAPI(p,1200);
-    document.getElementById("exec-text").textContent = text || "Could not generate.";
-    show("exec-box");
-  } catch(e) { document.getElementById("exec-text").textContent = "Error: "+e.message; show("exec-box"); }
-  btn.textContent = "Executive Report"; btn.disabled = false;
+async function doReport(){
+  var btn=document.getElementById("btn-rep");
+  btn.textContent="Generating…";btn.disabled=true;
+  show("rep-box");hide("rep-foot");
+  document.getElementById("rep-text").textContent="";
+  show("rep-loading");
+  var c=buildCtx();
+  var p="P2P consultant. Org:"+c.org+". Respondents:"+c.resp+". Roles:"+c.rl+". Rating gaps:"+c.rGaps+". Score gaps:"+c.sGaps+". Top holds:"+c.top+". Write 3-4 paragraph diagnostic summary. Open with what ratings collectively suggest. Identify most significant misalignment and role-based reasons. Note shared agreements and gaps. Close with priority direction. Direct consultant voice, no headers, no bullets.";
+  try{
+    var text=await callAPI(p,900);
+    hide("rep-loading");
+    document.getElementById("rep-text").textContent=text||"Could not generate.";
+    show("rep-foot");
+  }catch(e){
+    hide("rep-loading");
+    document.getElementById("rep-text").textContent="Error: "+e.message;
+  }
+  btn.textContent="Diagnostic Summary";btn.disabled=false;
+}
+
+async function doExec(){
+  var btn=document.getElementById("btn-exec");
+  btn.textContent="Generating…";btn.disabled=true;
+  show("exec-box");hide("exec-content");
+  show("exec-loading");
+  var c=buildCtx();
+  var p="P2P consultant. Org:"+c.org+". Respondents:"+c.resp+". Roles:"+c.rl+". Priority holds:"+c.top+". Rating gaps:"+c.rGaps+". Score gaps:"+c.sGaps+". Write executive report for "+roles.ceo+", "+roles.cdo+", "+roles.nce+". Give exactly 5 numbered recommendations. Each: short bold title, 2-3 sentences on alignment gap, 2-3 sentences on specific action and revenue rationale. End with one closing paragraph to executive team. No bullets. Direct.";
+  try{
+    var text=await callAPI(p,1200);
+    hide("exec-loading");
+    document.getElementById("exec-text").textContent=text||"Could not generate.";
+    show("exec-content");
+  }catch(e){
+    hide("exec-loading");
+    document.getElementById("exec-text").textContent="Error: "+e.message;
+    show("exec-content");
+  }
+  btn.textContent="Executive Report";btn.disabled=false;
 }
 </script>
 
