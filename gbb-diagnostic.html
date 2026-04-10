@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -28,7 +27,6 @@ input::placeholder{color:#9ca3af;}
 <body>
 
 <!-- GATE -->
-
 <div id="gate" style="min-height:100vh;background:#1e40af;display:flex;align-items:center;justify-content:center;padding:24px;">
   <div style="background:#fff;border-radius:12px;padding:40px 36px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center;">
     <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Campaign Architecture · Enterprise Engineering</div>
@@ -42,7 +40,6 @@ input::placeholder{color:#9ca3af;}
 </div>
 
 <!-- INTRO -->
-
 <div id="intro" class="hide">
   <div class="hdr">
     <div class="hdr-inner" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
@@ -81,7 +78,6 @@ input::placeholder{color:#9ca3af;}
 </div>
 
 <!-- ASSESSMENT -->
-
 <div id="assess" class="hide">
   <div class="hdr">
     <div class="hdr-inner">
@@ -124,7 +120,6 @@ input::placeholder{color:#9ca3af;}
 </div>
 
 <!-- RESULTS -->
-
 <div id="results-screen" class="hide">
   <div class="hdr">
     <div class="hdr-inner" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
@@ -371,7 +366,10 @@ function getTotal(id){var s=state.scores[id]||{};return(s.payoff&&s.ease)?s.payo
 function fmtD(iso){try{return new Date(iso).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}catch(e){return iso;}}
 
 // ── GATE ─────────────────────────────────────────────────────────────────
-document.getElementById("pw-in").addEventListener("keydown",function(e){if(e.key==="Enter")checkPw();});
+document.addEventListener("DOMContentLoaded",function(){
+  document.getElementById("pw-in").addEventListener("keydown",function(e){if(e.key==="Enter")checkPw();});
+  document.getElementById("pw-btn").addEventListener("click",checkPw);
+});
 function checkPw(){
   var val=document.getElementById("pw-in").value.trim();
   if(val===PW){hide("gate");showScreen("intro");}
@@ -581,6 +579,5 @@ function jumpToHold(id){
   if(idx>=0){state.seqIdx=idx;showScreen("assess");renderSeqItem();updateProgress();}
 }
 </script>
-
 </body>
 </html>
