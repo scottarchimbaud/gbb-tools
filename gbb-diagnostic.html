@@ -10,44 +10,36 @@ body{font-family:Georgia,serif;background:#f3f4f6;color:#111827;font-size:14px;}
 .hide{display:none!important;}
 button{cursor:pointer;font-family:Georgia,serif;}
 button:focus{outline:none;}
-input,select{font-family:Georgia,serif;}
+input{font-family:Georgia,serif;}
 input::placeholder{color:#9ca3af;}
 .hdr{background:#1e40af;padding:20px 24px;}
 .hdr-inner{max-width:860px;margin:0 auto;}
 .wrap{max-width:860px;margin:0 auto;padding:28px 24px 60px;}
 .card{background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
-.btn-primary{padding:12px 24px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:bold;}
-.btn-secondary{padding:10px 20px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;color:#374151;font-size:14px;}
-.rating-btn{width:100%;padding:12px 16px;border-radius:8px;border:1px solid #e5e7eb;background:transparent;cursor:pointer;text-align:left;margin-bottom:8px;transition:all 0.15s;}
-.score-btn{flex:1;height:40px;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;background:#f9fafb;color:#6b7280;font-weight:bold;font-size:14px;font-family:Georgia,serif;}
-.score-btn.active-p{background:#dc2626;border-color:#dc2626;color:#fff;}
-.score-btn.active-e{background:#2563eb;border-color:#2563eb;color:#fff;}
 </style>
 </head>
 <body>
 
-<!-- GATE -->
 <div id="gate" style="min-height:100vh;background:#1e40af;display:flex;align-items:center;justify-content:center;padding:24px;">
   <div style="background:#fff;border-radius:12px;padding:40px 36px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center;">
-    <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Campaign Architecture · Enterprise Engineering</div>
+    <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Campaign Architecture</div>
     <h1 style="margin:0 0 6px;font-size:22px;font-weight:700;color:#111827;">GBB Diagnostic Tool</h1>
     <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">Enter your access code to continue.</p>
     <input id="pw-in" type="password" placeholder="Access code" style="width:100%;padding:12px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;margin-bottom:10px;text-align:center;letter-spacing:0.2em;display:block;"/>
     <p id="pw-err" class="hide" style="font-size:13px;color:#dc2626;margin-bottom:8px;">Incorrect — please try again.</p>
-    <button onclick="checkPw()" class="btn-primary" style="width:100%;padding:13px;">Enter</button>
+    <button id="pw-btn" style="width:100%;padding:13px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;">Enter</button>
     <p style="margin:20px 0 0;font-size:12px;color:#d1d5db;">Scott Archimbaud · Campaign Architecture</p>
   </div>
 </div>
 
-<!-- INTRO -->
 <div id="intro" class="hide">
   <div class="hdr">
-    <div class="hdr-inner" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
+    <div class="hdr-inner" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
       <div>
-        <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px;">Campaign Architecture · Enterprise Engineering</div>
+        <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px;">Campaign Architecture</div>
         <div style="font-size:20px;font-weight:700;color:#fff;">Good / Better / Best Diagnostic</div>
       </div>
-      <button onclick="goAssess()" class="btn-primary" style="background:#fff;color:#1e40af;" id="intro-start-btn">Begin Assessment →</button>
+      <button onclick="goAssess()" style="padding:9px 18px;background:#fff;border:none;border-radius:6px;color:#1e40af;font-size:13px;font-weight:bold;">Begin Assessment →</button>
     </div>
   </div>
   <div class="wrap">
@@ -56,40 +48,39 @@ input::placeholder{color:#9ca3af;}
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
         <div>
           <label style="display:block;font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Organization</label>
-          <input id="org-in" type="text" placeholder="Enter organization" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;color:#111827;" oninput="state.org=this.value"/>
+          <input id="org-in" type="text" placeholder="Enter organization" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;"/>
         </div>
         <div>
           <label style="display:block;font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Completed By</label>
-          <input id="person-in" type="text" placeholder="Enter your name" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;color:#111827;" oninput="state.person=this.value"/>
+          <input id="person-in" type="text" placeholder="Enter your name" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;"/>
         </div>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button onclick="doSave()" id="save-btn" style="padding:9px 18px;border-radius:6px;border:1px solid #3b82f6;background:#eff6ff;color:#1e40af;font-size:13px;font-weight:bold;font-family:Georgia,serif;">Save Assessment</button>
-        <button onclick="doLoad()" style="padding:9px 18px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#374151;font-size:13px;font-family:Georgia,serif;">Load Saved</button>
-        <span id="save-msg" style="font-size:13px;color:#166534;line-height:2.2;"></span>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button onclick="doSave()" id="save-btn" style="padding:9px 18px;border-radius:6px;border:1px solid #3b82f6;background:#eff6ff;color:#1e40af;font-size:13px;font-weight:bold;">Save Assessment</button>
+        <button onclick="doLoad()" style="padding:9px 18px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#374151;font-size:13px;">Load Saved</button>
+        <span id="save-msg" style="font-size:13px;color:#166534;"></span>
       </div>
     </div>
     <div style="background:#fffbeb;border-radius:8px;border:1px solid #fcd34d;padding:16px 20px;margin-bottom:20px;">
       <p style="margin:0 0 6px;font-size:14px;font-weight:bold;color:#78350f;">About the Rating Scale</p>
-      <p style="margin:0;font-size:14px;color:#78350f;line-height:1.6;">Each hold is rated on a five-level scale: <strong>Not in Place → In Development → Good → Better → Best in Class</strong>. For some holds — particularly those involving volunteer leadership, recognition architecture, or corporate strategy — the difference between Good and Best in Class is not effort. It is architecture.</p>
+      <p style="margin:0;font-size:14px;color:#78350f;line-height:1.6;">Each hold is rated: <strong>Not in Place → In Development → Good → Better → Best in Class</strong>.</p>
     </div>
-    <button onclick="goAssess()" class="btn-primary" style="width:100%;padding:14px;font-size:15px;" id="begin-btn">Begin Assessment →</button>
+    <button onclick="goAssess()" style="width:100%;padding:14px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;">Begin Assessment →</button>
   </div>
 </div>
 
-<!-- ASSESSMENT -->
 <div id="assess" class="hide">
   <div class="hdr">
     <div class="hdr-inner">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:14px;">
         <div>
-          <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px;">Campaign Architecture · Enterprise Engineering</div>
+          <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px;">Campaign Architecture</div>
           <div style="font-size:20px;font-weight:700;color:#fff;">Good / Better / Best Diagnostic</div>
           <div id="assess-sub" style="font-size:13px;color:#bfdbfe;margin-top:2px;"></div>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button onclick="showScreen('intro')" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;font-family:Georgia,serif;">Setup</button>
-          <button onclick="showResults()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;font-family:Georgia,serif;">Results</button>
+        <div style="display:flex;gap:8px;">
+          <button onclick="showScreen('intro')" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Setup</button>
+          <button onclick="showResults()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Results</button>
         </div>
       </div>
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
@@ -104,14 +95,13 @@ input::placeholder{color:#9ca3af;}
   <div class="wrap">
     <div id="assess-content"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:16px;">
-      <button onclick="goPrev()" class="btn-secondary" style="font-weight:bold;">← Previous</button>
+      <button onclick="goPrev()" style="padding:12px 24px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;color:#374151;font-weight:bold;">← Previous</button>
       <div style="font-size:13px;color:#6b7280;text-align:center;">
         <div id="nav-label" style="font-weight:bold;color:#374151;"></div>
         <div id="nav-scored" style="font-size:12px;margin-top:2px;"></div>
       </div>
-      <button onclick="goNext()" class="btn-primary" id="next-btn">Next →</button>
+      <button onclick="goNext()" id="next-btn" style="padding:12px 24px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-weight:bold;">Next →</button>
     </div>
-    <!-- Jump nav -->
     <div class="card" style="margin-top:24px;padding:14px 18px;">
       <p style="font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Jump to Hold</p>
       <div id="jump-nav" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
@@ -119,55 +109,47 @@ input::placeholder{color:#9ca3af;}
   </div>
 </div>
 
-<!-- RESULTS -->
 <div id="results-screen" class="hide">
   <div class="hdr">
     <div class="hdr-inner" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
       <div>
-        <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px;">Campaign Architecture · Enterprise Engineering</div>
+        <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px;">Campaign Architecture</div>
         <div style="font-size:20px;font-weight:700;color:#fff;">Assessment Results</div>
         <div id="results-sub" style="font-size:13px;color:#bfdbfe;margin-top:2px;"></div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button onclick="showScreen('assess')" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;font-family:Georgia,serif;">Continue Assessment</button>
-        <button onclick="doSave()" style="padding:7px 14px;background:#fff;border:none;border-radius:6px;color:#1e40af;font-size:13px;font-weight:bold;font-family:Georgia,serif;">Save</button>
+      <div style="display:flex;gap:8px;">
+        <button onclick="showScreen('assess')" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Continue</button>
+        <button onclick="doSave()" style="padding:7px 14px;background:#fff;border:none;border-radius:6px;color:#1e40af;font-size:13px;font-weight:bold;">Save</button>
       </div>
     </div>
   </div>
   <div class="wrap">
-    <div class="card" style="display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center;padding:14px 18px;">
+    <div class="card" style="padding:14px 18px;display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center;">
       <span style="font-size:13px;color:#374151;font-weight:bold;">Priority Score:</span>
       <span style="font-size:13px;"><strong style="color:#dc2626;">9–10</strong> Immediate Focus</span>
       <span style="font-size:13px;"><strong style="color:#d97706;">7–8</strong> High Priority</span>
       <span style="font-size:13px;"><strong style="color:#2563eb;">5–6</strong> Secondary</span>
       <span style="font-size:13px;"><strong style="color:#6b7280;">&lt;5</strong> Lower Priority</span>
     </div>
-    <h2 style="font-size:18px;font-weight:700;color:#111827;margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid #e5e7eb;">National Matrix — Priority Summary</h2>
+    <h2 style="font-size:18px;font-weight:700;color:#111827;margin:20px 0 14px;padding-bottom:10px;border-bottom:1px solid #e5e7eb;">National Matrix — Priority Summary</h2>
     <div id="results-nat" style="margin-bottom:32px;"></div>
     <h2 style="font-size:18px;font-weight:700;color:#111827;margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid #e5e7eb;">Field Matrix — Priority Summary</h2>
     <div id="results-field" style="margin-bottom:32px;"></div>
-    <div style="margin-top:40px;padding-top:20px;border-top:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-      <div>
-        <p style="margin:0 0 2px;font-size:13px;color:#374151;font-weight:bold;">Scott Archimbaud · Campaign Architecture</p>
-        <p style="margin:0;font-size:13px;color:#6b7280;">scott@scottarchconsultancy.com · 917-868-0745 · scottarchconsultancy.com</p>
-      </div>
+    <div style="margin-top:40px;padding-top:20px;border-top:1px solid #e5e7eb;">
+      <p style="font-size:13px;color:#374151;font-weight:bold;">Scott Archimbaud · Campaign Architecture</p>
+      <p style="font-size:13px;color:#6b7280;">scott@scottarchconsultancy.com · 917-868-0745</p>
     </div>
   </div>
 </div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────────────────
 var PW = "FLW";
 var AT_TOKEN = "patRxZBAR6wuXsHMN.41a4bd14d79483cb776f73d19f7b0afc22a9f142c60b1b8bd4ba689fa5c043f8";
 var AT_BASE = "appcepfmeJ97ulWuZ";
 var AT_TABLE = "tbl9BfE2fPYJWL7oH";
 var AT_URL = "https://api.airtable.com/v0/" + AT_BASE + "/" + AT_TABLE;
-var AT_HDR = {"Authorization":"Bearer "+AT_TOKEN,"Content-Type":"application/json"};
+var state = {org:"",person:"",scores:{},seqIdx:0};
 
-// ── STATE ────────────────────────────────────────────────────────────────
-var state = {org:"",person:"",scores:{},seqIdx:0,atRecordId:null};
-
-// ── RATING DATA ──────────────────────────────────────────────────────────
 var RORDER = ["notInPlace","inDevelopment","good","better","best"];
 var RLABELS = {notInPlace:"Not in Place",inDevelopment:"In Development",good:"Good",better:"Better",best:"Best in Class"};
 var RS = {
@@ -177,58 +159,77 @@ var RS = {
   better:{border:"#93c5fd",bg:"#eff6ff",text:"#1e40af",dot:"#3b82f6",bbg:"#dbeafe"},
   best:{border:"#c4b5fd",bg:"#faf5ff",text:"#6b21a8",dot:"#a855f7",bbg:"#f3e8ff"}
 };
+
 function pC(s){return !s?"#9ca3af":s>=9?"#dc2626":s>=7?"#d97706":s>=5?"#2563eb":"#6b7280";}
 function pL(s){return !s?"—":s>=9?"Immediate Focus":s>=7?"High Priority":s>=5?"Secondary":"Lower Priority";}
 function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function show(id){document.getElementById(id).classList.remove("hide");}
+function hide(id){document.getElementById(id).classList.add("hide");}
+function showScreen(id){["gate","intro","assess","results-screen"].forEach(function(s){hide(s);});show(id);}
+function totalScored(){return HOLDS.filter(function(h){var s=state.scores[h.id]||{};return s.payoff&&s.ease;}).length;}
+function fmtD(iso){try{return new Date(iso).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}catch(e){return iso;}}
 
-// ── HOLDS DATA ───────────────────────────────────────────────────────────
+document.getElementById("pw-btn").addEventListener("click", function(){
+  var val = document.getElementById("pw-in").value.trim();
+  if(val === PW){hide("gate");showScreen("intro");}
+  else{
+    document.getElementById("pw-in").value = "";
+    document.getElementById("pw-in").style.borderColor = "#fca5a5";
+    show("pw-err");
+    setTimeout(function(){document.getElementById("pw-in").style.borderColor="#d1d5db";hide("pw-err");},2000);
+  }
+});
+document.getElementById("pw-in").addEventListener("keydown", function(e){
+  if(e.key==="Enter") document.getElementById("pw-btn").click();
+});
+
 var HOLDS = [
 {id:"n1",num:"N1",matrix:"national",title:"National Campaign Chair Recruitment and Stewardship",
 note:"This hold reflects your organization's consistent readiness and structural ability to recruit and steward high-impact national chairs — not the performance of any single year's chair or campaign.",
 notInPlace:"No national campaign chair structure exists. No pipeline, no stewardship system, no institutional framework for recruiting or retaining chairs.",
 inDevelopment:"Early or inconsistent effort. A chair may have been recruited in some years but not others. Stewardship is informal. Pipeline is shallow and reactive.",
-good:"Chairs are somewhat active. Some new revenue but typically 50–75% of expected goals. Not all company opportunities consistently activated.",
+good:"Chairs are somewhat active. Some new revenue but typically 50-75% of expected goals. Not all company opportunities consistently activated.",
 better:"Chairs consistently deliver 100% of revenue goals. Strong engagement across campaign cycles. Most opportunities within each company activated.",
 best:"Chairs consistently exceed financial goals. Every fundraising, engagement, and awareness opportunity activated. Chairs actively recruit peers and expand the corporate footprint across multiple years.",
-example:"March of Dimes recruited co-chairs — the CEO of Ford and the President of the UAW. During the national kickoff, the three were in conversation with the CEO of Sears Holdings — which owned Kmart, already raising $8M. The Sears CEO stood at the dais and announced a goal of $10 million. They raised $11 million."},
+example:"March of Dimes recruited co-chairs — the CEO of Ford and the President of the UAW. During the national kickoff, the three were in conversation with the CEO of Sears Holdings. Kmart had raised $8M the prior year. The Sears CEO stood at the dais and announced a goal of $10 million. They raised $11 million."},
 {id:"n2",num:"N2",matrix:"national",title:"National Board P2P Engagement and Championship",
 note:null,
 notInPlace:"No national board exists or the board has no meaningful role in peer-to-peer.",
 inDevelopment:"A board exists but P2P engagement is minimal or inconsistent. Board members are not recruited with P2P in mind.",
 good:"Most board members participate. Several give at leadership levels. Some senior executives from large national employers recruited directly.",
 better:"Board composition intentionally engineered. Senior executives from existing partners and independently recruited employers. Board members recruit from within their own organizations.",
-best:"Board and chair recruitment coordinated as a unified corporate development strategy. Board is a self-reinforcing corporate recruitment engine reviewed annually against target employer profile.",
-example:"United Airlines CFO John Rainey was recruited to the March of Dimes national board and cultivated into the National Campaign Chairman. He engineered something no staff outreach could produce: United approached their vendors with a fundraising ask tied to an exclusive incentive — a seat on the delivery flight of a new Boeing 787. Vendors responded. United ended the year at nearly $1 million."},
+best:"Board and chair recruitment coordinated as a unified corporate development strategy. Board is a self-reinforcing corporate recruitment engine reviewed annually.",
+example:"United Airlines CFO John Rainey was recruited to the March of Dimes national board and cultivated into National Campaign Chairman. He engineered something no staff outreach could produce: United approached vendors with a fundraising ask tied to an exclusive incentive — a seat on the delivery flight of a new Boeing 787. United ended the year at nearly $1 million."},
 {id:"n3",num:"N3",matrix:"national",title:"Organizational Priority and Engagement",
 note:"Score this hold in proportion to what peer-to-peer represents as a share of your organization's total revenue.",
 notInPlace:"Peer-to-peer is not recognized as a strategic priority. It is managed as a program, not a platform.",
-inDevelopment:"Some internal recognition of P2P's importance exists but it is not reflected consistently in budget decisions, leadership attention, or external positioning.",
+inDevelopment:"Some internal recognition of P2P importance exists but it is not reflected consistently in budget decisions, leadership attention, or external positioning.",
 good:"Peer-to-peer explicitly prioritized. Budget reflects investment in growth. Senior leadership advocates internally and champions engagement with corporate partners and volunteers.",
 better:"Peer-to-peer treated as a strategic platform. CEO champions it with the board, publicly, and in resource allocation decisions proportional to the program's revenue contribution.",
 best:"Peer-to-peer holds the organizational priority its revenue scale has earned. CEO actively recruits board members, chairs, and corporate partners with P2P growth as an explicit mandate.",
 example:null},
 {id:"n4",num:"N4",matrix:"national",title:"Staff Investment, Compensation and Retention",
 note:null,
-notInPlace:"No structured compensation framework exists. Staffing is ad hoc and turnover is high. No operational support exists to protect fundraising time.",
-inDevelopment:"Compensation exists but is below market. Turnover is high. Local Geographic Leaders spend significant time on administrative tasks rather than fundraising.",
-good:"Compensation is competitive. Turnover manageable. Some operational support exists. Local Geographic Leaders spend most of their time on fundraising and relationships.",
+notInPlace:"No structured compensation framework exists. Staffing is ad hoc and turnover is high.",
+inDevelopment:"Compensation exists but is below market. Turnover is high. Local Geographic Leaders spend significant time on administrative tasks.",
+good:"Compensation is competitive. Turnover manageable. Some operational support exists.",
 better:"Compensation attracts and retains top talent at every level. Operational support structured to protect fundraising time. Retention strong enough that institutional relationships survive leadership transitions.",
-best:"Compensation at or above market at every field level. Administrative burden minimized at the Local Geographic Leader level. Retention treated as a revenue metric. Career pathways retain high performers.",
+best:"Compensation at or above market at every field level. Administrative burden minimized. Retention treated as a revenue metric. Career pathways retain high performers.",
 example:null},
 {id:"n5",num:"N5",matrix:"national",title:"Corporate Portfolio Engineering and Enterprise Activation",
-note:"A nationally standardized corporate sponsorship program — with tiered levels priced to reflect the organization's brand and program prominence — is a distinct and significant revenue stream alongside employee team engagement. National leadership sets the framework; chapters adapt tier pricing to local event scale without undermining national consistency.",
-notInPlace:"No corporate strategy exists. Corporate engagement is opportunistic. No concentration tracking, no senior champion identification, no enterprise activation planning.",
+note:"A nationally standardized corporate sponsorship program with tiered levels priced to reflect the organization's brand and program prominence is a distinct and significant revenue stream alongside employee team engagement. National leadership sets the framework; chapters adapt tier pricing to local event scale without undermining national consistency.",
+notInPlace:"No corporate strategy exists. Corporate engagement is opportunistic. No concentration tracking, no senior champion identification.",
 inDevelopment:"Some corporate relationships exist but are not actively managed or strategically developed. Relationships are often contact-level rather than executive-level.",
-good:"Defined corporate growth strategy exists. Priority sectors and companies identified with mission alignment as a key criterion. Concentration tracked. Senior champions identified within major partners.",
-better:"Portfolio actively engineered with mission alignment driving acquisition. Every major partner has a senior internal champion. Every significant employer has a defined activation plan with staff accountability.",
+good:"Defined corporate growth strategy exists. Priority sectors and companies identified. Concentration tracked. Senior champions identified within major partners.",
+better:"Portfolio actively engineered with mission alignment driving acquisition. Every major partner has a senior internal champion. Every significant employer has a defined activation plan.",
 best:"Portfolio strategy operates at national and market levels simultaneously. Concentration is a board-level risk metric. Every major partner has a multi-year elevation pathway.",
-example:"March of Dimes built one of the strongest national retail portfolios in P2P — Kmart, Publix, Famous Footwear, ACE Cash Express, and others. A dedicated national team pursued new retail partners. A separate team managed existing ones at the enterprise level. Every level of each retailer's management structure had a corresponding March of Dimes staff partner — from the senior executive down to the individual store."},
+example:"March of Dimes built one of the strongest national retail portfolios in P2P. A dedicated national team pursued new retail partners. A separate team managed existing ones at the enterprise level. Every level of each retailer's management structure had a corresponding March of Dimes staff partner."},
 {id:"n6",num:"N6",matrix:"national",title:"Training Standardization, Content and Tools",
 note:null,
 notInPlace:"No standardized training exists. Field staff are not trained consistently.",
 inDevelopment:"Some training content exists but is inconsistently delivered or not connected to performance outcomes.",
 good:"Standardized curriculum exists. Field staff trained consistently. Core tactics defined and communicated across all markets.",
-better:"Dedicated national training function delivers consistent, measurable training. Core tactics standardized, benchmarked, and monitored. Content updated based on performance data.",
+better:"Dedicated national training function delivers consistent, measurable training. Core tactics standardized, benchmarked, and monitored.",
 best:"Training is a performance management system. Staff certified against defined competency standards. Function identifies and replicates best practices from top markets in real time.",
 example:null},
 {id:"n7",num:"N7",matrix:"national",title:"Performance Benchmarking and National Standards",
@@ -237,196 +238,130 @@ notInPlace:"No national benchmarks exist. Markets are not measured against any d
 inDevelopment:"Some performance data is collected but benchmarking is informal or based solely on prior year results.",
 good:"National benchmarks exist. Markets measured against peer performance. Underperformance triggers defined follow-up.",
 better:"Performance benchmarked against both historical results and modeled capacity. Every market has a defined expectation relative to potential.",
-best:"Benchmarking is a forward-looking strategic instrument. Markets ranked against modeled potential rather than peer average alone. Organization tracks how much revenue is being left on the table and where.",
+best:"Benchmarking is a forward-looking strategic instrument. Organization tracks how much revenue is being left on the table and where.",
 example:null},
 {id:"n8",num:"N8",matrix:"national",title:"Capacity Modeling Framework and Planning Tools",
 note:null,
 notInPlace:"No capacity modeling exists. Goals are set based on prior year performance alone.",
 inDevelopment:"Some market data informs planning but there is no integrated tool or consistent methodology.",
-good:"Market data informs goal setting. High-potential underperforming markets identified. Planning incorporates both historical performance and market potential.",
-better:"Integrated planning tool models capacity using demographic, economic, and performance variables. Goals set in concert with both modeled potential and historical performance.",
-best:"Capacity modeling is a living system updated annually. Modeling drives staff deployment, resource allocation, and corporate targeting — not just goal setting.",
+good:"Market data informs goal setting. High-potential underperforming markets identified.",
+better:"Integrated planning tool models capacity using demographic, economic, and performance variables.",
+best:"Capacity modeling is a living system updated annually. Modeling drives staff deployment, resource allocation, and corporate targeting.",
 example:null},
 {id:"n9",num:"N9",matrix:"national",title:"Mission and Narrative Alignment",
 note:null,
 notInPlace:"No consistent mission narrative exists. Staff and volunteers cannot articulate impact clearly.",
 inDevelopment:"Mission messaging exists but is inconsistently applied and not embedded in fundraising conversations.",
-good:"Mission narratives embedded in training, corporate activation, and participant communications. Staff articulate impact clearly.",
+good:"Mission narratives embedded in training, corporate activation, and participant communications.",
 better:"Mission clarity is a revenue strategy. Every touchpoint connects the donor or participant to a specific, emotionally resonant impact narrative.",
-best:"Mission narrative differentiated by constituency — corporate, major donor, and participant versions each authentic, specific, and tested. Public mission clarity strong enough that corporate alignment conversations begin from shared purpose.",
+best:"Mission narrative differentiated by constituency — corporate, major donor, and participant versions each authentic, specific, and tested.",
 example:null},
 {id:"n10",num:"N10",matrix:"national",title:"National Recognition and Incentive Architecture",
 note:"Scale recognition appropriately to your program.",
 notInPlace:"No recognition architecture exists. Top performers are not systematically acknowledged or incentivized.",
 inDevelopment:"Some recognition exists but is informal, inconsistent, or not calibrated to drive specific revenue behaviors.",
-good:"Recognition tiered and meaningful. Top volunteers, top teams, and top fundraisers recognized with defined handles that reinforce engagement.",
-better:"Recognition architecture engineered to drive specific behaviors — corporate elevation, peer recruitment, increased giving. Handles calibrated to the revenue behaviors they are designed to produce.",
+good:"Recognition tiered and meaningful. Top volunteers, top teams, and top fundraisers recognized with defined handles.",
+better:"Recognition architecture engineered to drive specific behaviors. Handles calibrated to the revenue behaviors they are designed to produce.",
 best:"Recognition is a strategic retention and elevation tool. Top performers recognized in ways that reinforce internal champions and create visibility within their own organizations.",
 example:null},
 {id:"f1",num:"F1",matrix:"field",title:"Local Board Recruitment and Engagement",
 note:null,
 notInPlace:"No local board exists or the board has no meaningful role in the campaign.",
 inDevelopment:"A local board exists but engagement is minimal. Members are not recruited for P2P potential.",
-good:"Local board exists with engaged members. Most participate. Several give at leadership levels. Some large local employer representation.",
-better:"Board composition intentionally engineered. Senior executives from local and regional employers recruited directly. Board members actively recruit from their own organizations.",
-best:"Local board is a self-reinforcing corporate recruitment engine. Composition reviewed annually against a defined profile of target employers and industries.",
-example:"The CEO of Sacramento's largest birthing hospital joined the local board, became local campaign chair, and ultimately served as Sacramento board chair. He was part of a major Northern California health system with 40,000 employees. He approached his system CEO directly — who said yes and activated all locations. The Sacramento hospital alone had raised $100,000 the prior year. With the full health system engaged, the market raised $600,000."},
+good:"Local board exists with engaged members. Most participate. Several give at leadership levels.",
+better:"Board composition intentionally engineered. Senior executives from local and regional employers recruited directly.",
+best:"Local board is a self-reinforcing corporate recruitment engine. Composition reviewed annually against a defined profile of target employers.",
+example:"The CEO of Sacramento's largest birthing hospital joined the local board, became local campaign chair, and ultimately served as Sacramento board chair. He was part of a major Northern California health system with 40,000 employees. He approached his system CEO — who said yes and activated all locations. The market went from $100,000 to $600,000."},
 {id:"f2",num:"F2",matrix:"field",title:"Local Corporate and Employer Engagement",
 note:"This hold addresses both the depth of individual corporate partner relationships and the breadth of employer penetration across the market. Local event sponsorship operates alongside employee team engagement as a separate revenue stream. Chapters apply the national sponsorship framework to their market, scaling tier levels to local event size and prominence. A sponsorship program priced too low signals underconfidence and leaves revenue on the table.",
 notInPlace:"No structured corporate engagement exists at the local level.",
 inDevelopment:"Some local corporate relationships exist but are not actively managed or developed beyond a single contact.",
-good:"Existing corporate partners actively managed and renewed. Most major local employers participate with at least one significant team. Outreach structured and annual.",
-better:"Defined local corporate growth strategy exists. Priority companies identified with mission alignment as a key criterion. Senior champions cultivated within existing partners. Top team list and top employer list begin to converge.",
-best:"Local corporate portfolio actively engineered in parallel with national strategy. Every major partner has a multi-year elevation pathway. Top team list nearly synonymous with top employer list. Penetration rate tracked — not just team count but depth within each company.",
-example:"United Healthcare had some local involvement in Phoenix. Rather than managing it as a single-market relationship, the volunteer approached the executive overseeing the western United States and asked him to serve as a regional chair. He said yes — and several additional markets within his territory came on board at a leadership level."},
+good:"Existing corporate partners actively managed and renewed. Most major local employers participate with at least one significant team.",
+better:"Defined local corporate growth strategy exists. Priority companies identified with mission alignment as a key criterion. Senior champions cultivated within existing partners.",
+best:"Local corporate portfolio actively engineered in parallel with national strategy. Every major partner has a multi-year elevation pathway. Penetration rate tracked.",
+example:"United Healthcare had some local involvement in Phoenix. Rather than managing it as a single-market relationship, the volunteer approached the executive overseeing the western United States and asked him to serve as a regional chair. He said yes — and several additional markets came on board."},
 {id:"f3",num:"F3",matrix:"field",title:"Volunteer Leadership Pipeline and Succession",
 note:"This hold reflects your organization's consistent ability to develop and sustain volunteer leadership over time — not the strength of any single year's chair.",
 notInPlace:"No local campaign chair structure exists. Volunteer leadership roles are not filled systematically.",
 inDevelopment:"A chair is sometimes in place but recruitment is reactive, last-minute, or dependent on a single staff relationship.",
-good:"Campaign chair in place and functionally engaged. Volunteer leadership roles filled annually through structured recruitment. Chairs recruited at least twelve months before their event.",
-better:"Chairs consistently exceed financial expectations and recruit from their networks. Chairs confirmed at least fifteen months before their event. Defined succession plan exists.",
-best:"Chair is a strategic asset — recruits peer CEOs, opens multi-year corporate relationships, and materially changes the market's corporate ceiling over time. Next two to three chairs always in development. Outgoing chair recruits and mentors successor directly.",
-example:"The March of Dimes Houston market became the standard against which other markets were measured. At any point in the cycle, the next two to three chairs were already identified, recruited, and in development — each the CEO of a major local employer. Recruitment happened no fewer than 18 months before the event the chair would lead."},
+good:"Campaign chair in place and functionally engaged. Chairs recruited at least twelve months before their event.",
+better:"Chairs consistently exceed financial expectations and recruit from their networks. Chairs confirmed at least fifteen months before their event.",
+best:"Chair is a strategic asset. Next two to three chairs always in development. Outgoing chair recruits and mentors successor directly.",
+example:"The March of Dimes Houston market became the standard against which other markets were measured. At any point in the cycle, the next two to three chairs were already identified, recruited, and in development. Recruitment happened no fewer than 18 months before the event."},
 {id:"f4",num:"F4",matrix:"field",title:"Goal Setting Relative to Capacity",
 note:"Goal setting applies to both site-level and team-level targets.",
-notInPlace:"No structured goal-setting process exists. Revenue targets are set arbitrarily or based on incremental increases from prior year without reference to market capacity.",
+notInPlace:"No structured goal-setting process exists. Revenue targets are set arbitrarily or based on incremental increases from prior year.",
 inDevelopment:"Goals are set but based on prior year results alone, without reference to modeled capacity.",
-good:"Goals set through structured dialogue between area and local leadership. Market capacity referenced alongside historical results. Teams have defined targets.",
-better:"Goal-setting is a disciplined process. Market potential modeled using multiple data points. Gap between performance and potential explicitly quantified.",
-best:"Goals treat revenue left on the table as a cost. Market capacity ceiling defined formally. Resource allocation driven by the gap between current performance and modeled ceiling.",
+good:"Goals set through structured dialogue between area and local leadership. Market capacity referenced alongside historical results.",
+better:"Goal-setting is a disciplined process. Gap between performance and potential explicitly quantified.",
+best:"Goals treat revenue left on the table as a cost. Resource allocation driven by the gap between current performance and modeled ceiling.",
 example:null},
 {id:"f5",num:"F5",matrix:"field",title:"Performance Accountability and Course Correction",
 note:null,
 notInPlace:"No performance accountability structure exists at the local level.",
 inDevelopment:"Performance is tracked but accountability conversations are informal or occur too late to produce meaningful course correction.",
-good:"Regular performance check-ins occur between area and local leadership. Variance from goal triggers a structured conversation and a documented recovery plan.",
-better:"Accountability is systematic. Regular cadence of performance reviews at every level. Hold-specific diagnostics used to identify root cause of variance.",
-best:"Performance accountability is a management culture, not a process. Every level of leadership knows their numbers, knows the plan, and is equipped to course-correct before it's too late.",
+good:"Regular performance check-ins occur. Variance from goal triggers a structured conversation and a documented recovery plan.",
+better:"Accountability is systematic. Regular cadence of performance reviews at every level.",
+best:"Performance accountability is a management culture, not a process. Every level of leadership knows their numbers and is equipped to course-correct before it's too late.",
 example:null},
 {id:"f6",num:"F6",matrix:"field",title:"Core Tactic Focus and Field Execution",
 note:null,
 notInPlace:"No core tactical framework exists. Field execution is inconsistent and unmanaged.",
-inDevelopment:"Some core tactics are identified but execution is inconsistent. Local Program Leads are not consistently coached on quality or yield.",
-good:"Core tactics defined, communicated, and applied consistently. Local Program Leads deliver key campaign activities with reliability.",
+inDevelopment:"Some core tactics are identified but execution is inconsistent.",
+good:"Core tactics defined, communicated, and applied consistently.",
 better:"Core tactics executed with discipline and measured for effectiveness. Non-revenue activities deprioritized during peak campaign periods.",
-best:"Tactical execution is a competitive advantage. Local Program Leads are highly skilled, coached to yield benchmarks, and adapt intelligently within the framework. Every tactic measured for return.",
+best:"Tactical execution is a competitive advantage. Every tactic measured for return.",
 example:null},
 {id:"f7",num:"F7",matrix:"field",title:"Training Application and Staff Development",
 note:null,
 notInPlace:"No training is applied at the local level. Staff development does not exist.",
-inDevelopment:"Training is attended but not consistently applied. Local Geographic Leaders do not reinforce training in regular staff interactions.",
-good:"National training applied consistently at the local level. Local Program Leads attend required training and implement core content.",
-better:"Training application monitored and coached. Staff development individualized — high performers stretched, others receive specific coaching plans.",
-best:"Training application is a managed performance system. Local Program Leads developed as future leaders. The best local markets are talent development engines for the broader organization.",
+inDevelopment:"Training is attended but not consistently applied.",
+good:"National training applied consistently at the local level.",
+better:"Training application monitored and coached. Staff development individualized.",
+best:"Training application is a managed performance system. The best local markets are talent development engines for the broader organization.",
 example:null},
 {id:"f8",num:"F8",matrix:"field",title:"Participant Yield Optimization",
 note:null,
 notInPlace:"Participant yield is not tracked. No fundraising ask strategies are in place.",
-inDevelopment:"Some yield tracking exists but fundraising coaching is minimal and re-enrollment of prior participants is not a defined strategy.",
-good:"Participant yield tracked and benchmarked. Core fundraising ask strategies in place. Top volunteers, top teams, and top fundraisers identified, stewarded, and recognized.",
-better:"Yield optimization is a structured program. Fundraising coaching delivered at key campaign moments. Re-enrollment of prior participants is a defined and staffed strategy.",
-best:"Participant yield managed as a segmented portfolio. Top, mid-tier, and lapsed participants each receive differentiated strategies. Average yield improvement compounds annually.",
+inDevelopment:"Some yield tracking exists but fundraising coaching is minimal.",
+good:"Participant yield tracked and benchmarked. Core fundraising ask strategies in place.",
+better:"Yield optimization is a structured program. Re-enrollment of prior participants is a defined and staffed strategy.",
+best:"Participant yield managed as a segmented portfolio. Average yield improvement compounds annually.",
 example:null},
 {id:"f9",num:"F9",matrix:"field",title:"Survivor, Ambassador and Community Engagement",
 note:null,
 notInPlace:"Survivors and community members have no visible role in the campaign.",
-inDevelopment:"Some survivor presence exists at events but engagement is not structured, year-round, or connected to fundraising goals.",
-good:"Survivors and community members present and visible. Their stories shared in fundraising communications and event programming.",
-better:"Survivor engagement structured and year-round. Ambassadors developed as active fundraisers and recruiters — not just story sources.",
-best:"Survivor and community engagement is an acquisition and retention strategy. Ambassador role formalized with defined fundraising goals and recognition tied to performance.",
+inDevelopment:"Some survivor presence exists at events but engagement is not structured or year-round.",
+good:"Survivors and community members present and visible. Their stories shared in fundraising communications.",
+better:"Survivor engagement structured and year-round. Ambassadors developed as active fundraisers.",
+best:"Survivor and community engagement is an acquisition and retention strategy. Ambassador role formalized with defined fundraising goals.",
 example:null},
 {id:"f10",num:"F10",matrix:"field",title:"Local Recognition and Volunteer Stewardship",
 note:null,
 notInPlace:"No recognition structure exists. Top volunteers and fundraisers are not acknowledged.",
-inDevelopment:"Some recognition occurs but it is informal, inconsistent, or event-focused rather than year-round.",
-good:"Recognition meaningful and consistent. Top volunteers and fundraisers acknowledged in ways that reinforce continued engagement. Stewardship is year-round.",
-better:"Recognition tiered and behavior-specific. Stewardship experiences for top volunteers distinctive enough to create aspiration among emerging leaders.",
+inDevelopment:"Some recognition occurs but it is informal, inconsistent, or event-focused.",
+good:"Recognition meaningful and consistent. Stewardship is year-round.",
+better:"Recognition tiered and behavior-specific. Stewardship experiences distinctive enough to create aspiration among emerging leaders.",
 best:"Recognition and stewardship engineered as retention and elevation tools. Top volunteers recognized in ways that create visibility within their own organizations.",
 example:null},
 {id:"f11",num:"F11",matrix:"field",title:"Local Mission and Narrative Alignment",
 note:null,
 notInPlace:"No consistent mission narrative is used locally. Staff and volunteers cannot clearly articulate impact.",
-inDevelopment:"Some mission messaging exists but is not consistently embedded in fundraising conversations, corporate pitches, or event programming.",
+inDevelopment:"Some mission messaging exists but is not consistently embedded in fundraising conversations.",
 good:"Mission narratives consistently embedded in local fundraising conversations, corporate pitches, and event programming.",
-better:"Mission narrative localized — connecting national impact to specific community outcomes. Local stories actively sourced and shared in cultivation and stewardship.",
+better:"Mission narrative localized — connecting national impact to specific community outcomes.",
 best:"Local mission narrative differentiated by constituency — corporate, volunteer, and participant versions each authentic, specific, and tested.",
-example:"While leading the Los Angeles March for Babies, a search for newsletter content surfaced a little girl who had already raised $10,000. The registration email traced back to an NBC Universal address. The father was the President of Universal Pictures — his daughter had signed up on her own, driven entirely by personal mission connection. Over time the family raised over $120,000 as a family team."}
+example:"While leading the Los Angeles March for Babies, a search for newsletter content surfaced a little girl who had already raised $10,000. The father was the President of Universal Pictures. Over time the family raised over $120,000 as a family team."}
 ];
 
-var SEC_NAT = {type:"section",id:"sec-nat",matrix:"national",title:"National Matrix",subtitle:"10 Holds — Strategic & Relational",desc:"These holds address the relationships and strategic infrastructure that only national leadership can build and sustain.",guidance:[{icon:"🏛",role:"National leader",text:"Score each hold based on your organization's consistent performance across all markets and campaign cycles — not your best year or your best market."},{icon:"📍",role:"Chapter or market leader",text:"These holds reflect the national infrastructure your chapter operates within. Score them based on what you observe from your position — the support, tools, and strategic direction you receive."}]};
-var SEC_FLD = {type:"section",id:"sec-fld",matrix:"field",title:"Field Matrix",subtitle:"11 Holds — Operational & Execution",desc:"These holds address the operational and relational discipline that determines whether your market performs at its capacity.",guidance:[{icon:"🏛",role:"National leader",text:"Score each hold based on how your average market performs — not your best market."},{icon:"📍",role:"Chapter or market leader",text:"Score each hold specifically for your own market. Be honest about where you are, not where you aspire to be."},{icon:"🔍",role:"National leader assessing a specific market",text:"Score each hold based on the specific market you are evaluating."}]};
+var SEC_NAT = {type:"section",id:"sec-nat",matrix:"national",title:"National Matrix",subtitle:"10 Holds — Strategic and Relational",desc:"These holds address the relationships and strategic infrastructure that only national leadership can build and sustain.",guidance:[{icon:"🏛",role:"National leader",text:"Score each hold based on your organization's consistent performance across all markets and campaign cycles — not your best year or your best market."},{icon:"📍",role:"Chapter or market leader",text:"These holds reflect the national infrastructure your chapter operates within. Score them based on what you observe from your position."}]};
+var SEC_FLD = {type:"section",id:"sec-fld",matrix:"field",title:"Field Matrix",subtitle:"11 Holds — Operational and Execution",desc:"These holds address the operational and relational discipline that determines whether your market performs at its capacity.",guidance:[{icon:"🏛",role:"National leader",text:"Score each hold based on how your average market performs — not your best market."},{icon:"📍",role:"Chapter or market leader",text:"Score each hold specifically for your own market. Be honest about where you are, not where you aspire to be."},{icon:"🔍",role:"National leader assessing a specific market",text:"Score each hold based on the specific market you are evaluating."}]};
 var SEQUENCE = [SEC_NAT].concat(HOLDS.filter(function(h){return h.matrix==="national";})).concat([SEC_FLD]).concat(HOLDS.filter(function(h){return h.matrix==="field";}));
 
-// ── HELPERS ──────────────────────────────────────────────────────────────
-function show(id){document.getElementById(id).classList.remove("hide");}
-function hide(id){document.getElementById(id).classList.add("hide");}
-function showScreen(id){["gate","intro","assess","results-screen"].forEach(function(s){hide(s);});show(id);}
-function totalScored(){return HOLDS.filter(function(h){var s=state.scores[h.id]||{};return s.payoff&&s.ease;}).length;}
-function getTotal(id){var s=state.scores[id]||{};return(s.payoff&&s.ease)?s.payoff+s.ease:null;}
-function fmtD(iso){try{return new Date(iso).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}catch(e){return iso;}}
-
-// ── GATE ─────────────────────────────────────────────────────────────────
-function checkPw(){
-  var val=document.getElementById("pw-in").value.trim();
-  if(val===PW){hide("gate");showScreen("intro");}
-  else{
-    document.getElementById("pw-in").value="";
-    document.getElementById("pw-in").style.borderColor="#fca5a5";
-    show("pw-err");
-    setTimeout(function(){document.getElementById("pw-in").style.borderColor="#d1d5db";hide("pw-err");},2000);
-  }
-}
-
-// ── AIRTABLE ─────────────────────────────────────────────────────────────
-async function findRecord(org,person){
-  var formula=encodeURIComponent('AND({org}="'+org+'",{person}="'+person+'")');
-  var res=await fetch(AT_URL+"?filterByFormula="+formula,{headers:{"Authorization":"Bearer "+AT_TOKEN}});
-  var data=await res.json();
-  return(data.records&&data.records.length)?data.records[0]:null;
-}
-
-async function doSave(){
-  var org=state.org.trim();var person=state.person.trim();
-  if(!org||!person){alert("Please enter organization name and your name first.");return;}
-  var btn=document.getElementById("save-btn");
-  btn.textContent="Saving…";btn.disabled=true;
-  try{
-    var fields={org:org,person:person,savedAt:new Date().toISOString(),scores:JSON.stringify(state.scores)};
-    var existing=await findRecord(org,person);
-    var url=AT_URL;var method="POST";var body={records:[{fields:fields}]};
-    if(existing){url=AT_URL+"/"+existing.id;method="PATCH";body={fields:fields};}
-    var res=await fetch(url,{method:method,headers:AT_HDR,body:JSON.stringify(body)});
-    var data=await res.json();
-    if(data.error)throw new Error(data.error.message);
-    if(data.id)state.atRecordId=data.id;
-    var msg=document.getElementById("save-msg");
-    msg.textContent="✓ Saved — "+new Date().toLocaleTimeString();
-    setTimeout(function(){msg.textContent="";},4000);
-  }catch(e){alert("Save error: "+e.message);}
-  btn.textContent="Save Assessment";btn.disabled=false;
-}
-
-async function doLoad(){
-  var org=state.org.trim();var person=state.person.trim();
-  if(!org||!person){alert("Please enter organization name and your name first.");return;}
-  try{
-    var rec=await findRecord(org,person);
-    if(!rec){alert("No saved assessment found for "+person+" at "+org+".");return;}
-    var sc=JSON.parse(rec.fields.scores||"{}");
-    state.scores=sc;state.atRecordId=rec.id;
-    var msg=document.getElementById("save-msg");
-    msg.textContent="✓ Loaded — "+fmtD(rec.fields.savedAt);
-    setTimeout(function(){msg.textContent="";},4000);
-    renderJumpNav();
-    updateProgress();
-  }catch(e){alert("Load error: "+e.message);}
-}
-
-// ── ASSESSMENT ───────────────────────────────────────────────────────────
 function goAssess(){
   var org=document.getElementById("org-in").value.trim();
   var person=document.getElementById("person-in").value.trim();
-  if(!org||!person){alert("Please enter organization name and your name before starting.");return;}
+  if(!org||!person){alert("Please enter organization name and your name first.");return;}
   state.org=org;state.person=person;
   showScreen("assess");
   renderSeqItem();
@@ -453,9 +388,8 @@ function updateProgress(){
   document.getElementById("prog-pct").textContent=pct+"%";
   var item=SEQUENCE[state.seqIdx];
   var isSec=item.type==="section";
-  var hold=isSec?null:item;
-  document.getElementById("prog-label").textContent=isSec?(item.title+" — "+item.subtitle):(hold.num+": "+(hold.matrix==="national"?"National":"Field")+" Matrix");
-  document.getElementById("nav-label").textContent=isSec?(item.matrix==="national"?"National Matrix":"Field Matrix"):(hold?hold.num:"");
+  document.getElementById("prog-label").textContent=isSec?(item.title+" — "+item.subtitle):(item.num+": "+(item.matrix==="national"?"National":"Field")+" Matrix");
+  document.getElementById("nav-label").textContent=isSec?(item.matrix==="national"?"National Matrix":"Field Matrix"):item.num;
   document.getElementById("nav-scored").textContent=sc+" of "+total+" scored";
   document.getElementById("assess-sub").textContent=state.org+(state.person?" · "+state.person:"");
   document.getElementById("next-btn").textContent=state.seqIdx===SEQUENCE.length-1?"View Results →":"Next →";
@@ -468,12 +402,14 @@ function renderJumpNav(){
     var si=SEQUENCE.findIndex(function(sq){return sq.id===h.id;});
     var sc=state.scores[h.id]||{};
     var done=sc.payoff&&sc.ease;
-    var cur=!((SEQUENCE[state.seqIdx]||{}).type==="section")&&(SEQUENCE[state.seqIdx]||{}).id===h.id;
+    var item=SEQUENCE[state.seqIdx];
+    var cur=item&&!item.type&&item.id===h.id;
     var rk=sc.rating;
     var dotColor=cur?"#1e40af":done&&rk?RS[rk].dot:done?"#93c5fd":"#d1d5db";
     var borderColor=cur?"#1e40af":"#e5e7eb";
     var bg=cur?"#eff6ff":"#f9fafb";
-    html+='<button onclick="jumpTo('+si+')" style="display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:6px;border:1px solid '+borderColor+';background:'+bg+';color:'+(cur?"#1e40af":"#374151")+';font-size:12px;font-family:Georgia,serif;font-weight:'+(cur?"bold":"normal")+';" title="'+esc(h.title)+'"><span style="width:7px;height:7px;border-radius:50%;background:'+dotColor+';display:inline-block;flex-shrink:0;"></span>'+h.num+'</button>';
+    var color=cur?"#1e40af":"#374151";
+    html+='<button onclick="jumpTo('+si+')" style="display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:6px;border:1px solid '+borderColor+';background:'+bg+';color:'+color+';font-size:12px;font-family:Georgia,serif;font-weight:'+(cur?"bold":"normal")+';"><span style="width:7px;height:7px;border-radius:50%;background:'+dotColor+';display:inline-block;flex-shrink:0;"></span>'+h.num+'</button>';
   });
   document.getElementById("jump-nav").innerHTML=html;
 }
@@ -482,8 +418,10 @@ function renderSeqItem(){
   var item=SEQUENCE[state.seqIdx];
   var content=document.getElementById("assess-content");
   if(item.type==="section"){
-    var guidanceHTML=item.guidance.map(function(g){return '<div style="display:flex;gap:14px;padding:14px 16px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;margin-bottom:8px;"><span style="font-size:20px;flex-shrink:0;">'+g.icon+'</span><div><div style="font-size:13px;font-weight:bold;color:#111827;margin-bottom:4px;">'+esc(g.role)+'</div><div style="font-size:14px;color:#374151;line-height:1.5;">'+esc(g.text)+'</div></div></div>';}).join('');
     var color=item.matrix==="national"?"#1e40af":"#0f766e";
+    var guidanceHTML=item.guidance.map(function(g){
+      return '<div style="display:flex;gap:14px;padding:14px 16px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;margin-bottom:8px;"><span style="font-size:20px;flex-shrink:0;">'+g.icon+'</span><div><div style="font-size:13px;font-weight:bold;color:#111827;margin-bottom:4px;">'+esc(g.role)+'</div><div style="font-size:14px;color:#374151;line-height:1.5;">'+esc(g.text)+'</div></div></div>';
+    }).join('');
     content.innerHTML='<div style="background:#fff;border-radius:12px;border:3px solid '+color+';overflow:hidden;"><div style="background:'+color+';padding:28px 32px 24px;"><div style="font-size:12px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">GBB Diagnostic Framework</div><h2 style="margin:0 0 6px;font-size:26px;font-weight:700;color:#fff;">'+esc(item.title)+'</h2><div style="font-size:14px;color:rgba(255,255,255,0.8);">'+esc(item.subtitle)+'</div></div><div style="padding:24px 32px 28px;"><p style="margin:0 0 20px;font-size:16px;color:#111827;line-height:1.6;">'+esc(item.desc)+'</p><p style="margin:0 0 14px;font-size:13px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;">How to Score This Matrix</p>'+guidanceHTML+'</div></div>';
   } else {
     renderHold(item,content);
@@ -492,54 +430,63 @@ function renderSeqItem(){
 
 function renderHold(hold,container){
   var s=state.scores[hold.id]||{};
-  var rating=s.rating||null;var payoff=s.payoff||null;var ease=s.ease||null;
+  var rating=s.rating||null;
+  var payoff=s.payoff||null;
+  var ease=s.ease||null;
   var total=(payoff&&ease)?payoff+ease:null;
   var borderColor=rating?RS[rating].border:"#e5e7eb";
 
   var ratingsHTML=RORDER.map(function(rk){
     var st=RS[rk];var sel=rating===rk;
-    return '<button onclick="setRating(\''+hold.id+'\',\''+(sel?"":rk)+'\')" style="width:100%;padding:12px 16px;border-radius:8px;border:1px solid '+(sel?st.border:"#e5e7eb")+';background:'+(sel?st.bg:"transparent")+';cursor:pointer;text-align:left;margin-bottom:8px;"><div style="display:flex;align-items:flex-start;gap:12px;"><div style="width:12px;height:12px;border-radius:50%;background:'+(sel?st.dot:"#d1d5db")+';margin-top:3px;flex-shrink:0;"></div><div><span style="font-size:14px;font-weight:bold;color:'+(sel?st.text:"#374151")+';">'+RLABELS[rk]+'&nbsp;&nbsp;</span><span style="font-size:14px;color:'+(sel?st.text:"#374151")+';line-height:1.5;">'+esc(hold[rk])+'</span></div></div></button>';
+    var selStr=sel?"true":"false";
+    return '<button onclick="setRating(\''+hold.id+'\',\''+rk+'\','+selStr+')" style="width:100%;padding:12px 16px;border-radius:8px;border:1px solid '+(sel?st.border:"#e5e7eb")+';background:'+(sel?st.bg:"transparent")+';cursor:pointer;text-align:left;margin-bottom:8px;"><div style="display:flex;align-items:flex-start;gap:12px;"><div style="width:12px;height:12px;border-radius:50%;background:'+(sel?st.dot:"#d1d5db")+';margin-top:3px;flex-shrink:0;"></div><div><span style="font-size:14px;font-weight:bold;color:'+(sel?st.text:"#374151")+';">'+RLABELS[rk]+'&nbsp;&nbsp;</span><span style="font-size:14px;color:'+(sel?st.text:"#374151")+';line-height:1.5;">'+esc(hold[rk])+'</span></div></div></button>';
   }).join('');
 
-  var payoffBtns=[1,2,3,4,5].map(function(n){var a=payoff&&payoff>=n;return '<button onclick="setPayoff(\''+hold.id+'\','+(a&&payoff===n?'null':n)+')" class="score-btn'+(a?' active-p':'')" style="flex:1;height:40px;border:1px solid '+(a?"#dc2626":"#d1d5db")+';border-radius:6px;cursor:pointer;background:'+(a?"#dc2626":"#f9fafb")+';color:'+(a?"#fff":"#6b7280")+';font-weight:bold;font-size:14px;font-family:Georgia,serif;">'+n+'</button>';}).join('');
-  var easeBtns=[1,2,3,4,5].map(function(n){var a=ease&&ease>=n;return '<button onclick="setEase(\''+hold.id+'\','+(a&&ease===n?'null':n)+')" style="flex:1;height:40px;border:1px solid '+(a?"#2563eb":"#d1d5db")+';border-radius:6px;cursor:pointer;background:'+(a?"#2563eb":"#f9fafb")+';color:'+(a?"#fff":"#6b7280")+';font-weight:bold;font-size:14px;font-family:Georgia,serif;">'+n+'</button>';}).join('');
-
-  var scoreBar=total?'<div style="padding:14px 28px;background:#f9fafb;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:15px;color:#374151;">Priority Score: <strong style="color:'+pC(total)+';font-size:18px;">'+total+'/10</strong></span><span style="font-size:13px;color:'+pC(total)+';font-weight:bold;text-transform:uppercase;letter-spacing:0.05em;">'+pL(total)+'</span></div>':'';
-
-  var exampleHTML='';
-  if(hold.example){
-    exampleHTML='<div style="border-top:1px solid #f3f4f6;"><button onclick="toggleExample(\''+hold.id+'\')" style="width:100%;padding:14px 28px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left;"><span style="width:20px;height:20px;border-radius:4px;border:1px solid #bfdbfe;background:#f9fafb;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span id="ex-arrow-'+hold.id+'" style="color:#3b82f6;font-size:10px;">▶</span></span><span style="font-size:13px;color:#3b82f6;text-transform:uppercase;letter-spacing:0.1em;">What This Looks Like</span></button><div id="ex-content-'+hold.id+'" class="hide" style="margin:0 28px 20px;padding:16px 18px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;border-left:3px solid #3b82f6;"><p style="margin:0;font-size:14px;color:#1f2937;line-height:1.7;font-style:italic;">'+esc(hold.example)+'</p></div></div>';
+  var payoffBtns="";
+  for(var n=1;n<=5;n++){
+    var a=payoff&&payoff>=n;
+    payoffBtns+='<button onclick="setScore(\''+hold.id+'\',\'payoff\','+n+')" style="flex:1;height:40px;border:1px solid '+(a?"#dc2626":"#d1d5db")+';border-radius:6px;cursor:pointer;background:'+(a?"#dc2626":"#f9fafb")+';color:'+(a?"#fff":"#6b7280")+';font-weight:bold;font-size:14px;font-family:Georgia,serif;">'+n+'</button>';
   }
 
-  var noteHTML=hold.note?'<p style="margin:10px 0 0;font-size:14px;color:#374151;font-style:italic;line-height:1.5;">'+esc(hold.note)+'</p>':'';
-  var totalBox=total?'<div style="min-width:60px;height:60px;border-radius:10px;background:#f9fafb;border:2px solid '+pC(total)+';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:22px;font-weight:bold;color:'+pC(total)+';line-height:1;">'+total+'</span><span style="font-size:10px;color:#9ca3af;text-transform:uppercase;">/10</span></div>':'';
+  var easeBtns="";
+  for(var n=1;n<=5;n++){
+    var a=ease&&ease>=n;
+    easeBtns+='<button onclick="setScore(\''+hold.id+'\',\'ease\','+n+')" style="flex:1;height:40px;border:1px solid '+(a?"#2563eb":"#d1d5db")+';border-radius:6px;cursor:pointer;background:'+(a?"#2563eb":"#f9fafb")+';color:'+(a?"#fff":"#6b7280")+';font-weight:bold;font-size:14px;font-family:Georgia,serif;">'+n+'</button>';
+  }
 
-  container.innerHTML='<div style="background:#fff;border-radius:12px;border:1px solid '+borderColor+';overflow:hidden;transition:border-color 0.2s;"><div style="padding:24px 28px 18px;border-bottom:1px solid #f3f4f6;display:flex;align-items:flex-start;gap:16px;"><div style="flex:1;"><div style="font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">'+esc(hold.num)+' · '+(hold.matrix==="national"?"National Matrix":"Field Matrix")+'</div><h2 style="margin:0;font-size:20px;color:#111827;font-weight:700;line-height:1.3;">'+esc(hold.title)+'</h2>'+noteHTML+'</div>'+totalBox+'</div><div style="padding:20px 28px;border-bottom:1px solid #f3f4f6;"><p style="margin:0 0 12px;font-size:13px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;">Current Rating</p>'+ratingsHTML+'</div><div style="padding:20px 28px;border-bottom:1px solid #f3f4f6;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;"><div><p style="margin:0 0 10px;font-size:13px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;">Payoff — Revenue Impact</p><div style="display:flex;gap:6px;">'+payoffBtns+'</div><p style="margin:6px 0 0;font-size:12px;color:#6b7280;">1 = Low · 5 = Highest</p></div><div><p style="margin:0 0 10px;font-size:13px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;">Ease of Implementation</p><div style="display:flex;gap:6px;">'+easeBtns+'</div><p style="margin:6px 0 0;font-size:12px;color:#6b7280;">1 = Hardest · 5 = Easiest</p></div></div></div>'+scoreBar+exampleHTML+'</div>';
-}
+  var scoreBar=total?'<div style="padding:14px 28px;background:#f9fafb;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:15px;color:#374151;">Priority Score: <strong style="color:'+pC(total)+';font-size:18px;">'+total+'/10</strong></span><span style="font-size:13px;color:'+pC(total)+';font-weight:bold;text-transform:uppercase;">'+pL(total)+'</span></div>':"";
 
-function setRating(id,val){
-  state.scores[id]=state.scores[id]||{};
-  state.scores[id].rating=val||null;
-  renderSeqItem();updateProgress();
-}
-function setPayoff(id,val){
-  state.scores[id]=state.scores[id]||{};
-  state.scores[id].payoff=val?Number(val):null;
-  renderSeqItem();updateProgress();
-}
-function setEase(id,val){
-  state.scores[id]=state.scores[id]||{};
-  state.scores[id].ease=val?Number(val):null;
-  renderSeqItem();updateProgress();
-}
-function toggleExample(id){
-  var content=document.getElementById("ex-content-"+id);
-  var arrow=document.getElementById("ex-arrow-"+id);
-  if(content.classList.contains("hide")){content.classList.remove("hide");arrow.style.transform="rotate(90deg)";}
-  else{content.classList.add("hide");arrow.style.transform="";}
+  var exampleHTML="";
+  if(hold.example){
+    exampleHTML='<div style="border-top:1px solid #f3f4f6;"><button onclick="toggleEx(\''+hold.id+'\')" style="width:100%;padding:14px 28px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left;"><span style="width:20px;height:20px;border-radius:4px;border:1px solid #bfdbfe;background:#f9fafb;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span id="ex-arrow-'+hold.id+'" style="color:#3b82f6;font-size:10px;">&#9658;</span></span><span style="font-size:13px;color:#3b82f6;text-transform:uppercase;letter-spacing:0.1em;">What This Looks Like</span></button><div id="ex-content-'+hold.id+'" class="hide" style="margin:0 28px 20px;padding:16px 18px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;border-left:3px solid #3b82f6;"><p style="margin:0;font-size:14px;color:#1f2937;line-height:1.7;font-style:italic;">'+esc(hold.example)+'</p></div></div>';
+  }
+
+  var noteHTML=hold.note?'<p style="margin:10px 0 0;font-size:14px;color:#374151;font-style:italic;line-height:1.5;">'+esc(hold.note)+'</p>':"";
+  var totalBox=total?'<div style="min-width:60px;height:60px;border-radius:10px;background:#f9fafb;border:2px solid '+pC(total)+';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:22px;font-weight:bold;color:'+pC(total)+';line-height:1;">'+total+'</span><span style="font-size:10px;color:#9ca3af;text-transform:uppercase;">/10</span></div>':"";
+
+  container.innerHTML='<div style="background:#fff;border-radius:12px;border:1px solid '+borderColor+';overflow:hidden;"><div style="padding:24px 28px 18px;border-bottom:1px solid #f3f4f6;display:flex;align-items:flex-start;gap:16px;"><div style="flex:1;"><div style="font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">'+esc(hold.num)+' · '+(hold.matrix==="national"?"National Matrix":"Field Matrix")+'</div><h2 style="margin:0;font-size:20px;color:#111827;font-weight:700;line-height:1.3;">'+esc(hold.title)+'</h2>'+noteHTML+'</div>'+totalBox+'</div><div style="padding:20px 28px;border-bottom:1px solid #f3f4f6;"><p style="margin:0 0 12px;font-size:13px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;">Current Rating</p>'+ratingsHTML+'</div><div style="padding:20px 28px;border-bottom:1px solid #f3f4f6;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;"><div><p style="margin:0 0 10px;font-size:13px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;">Payoff — Revenue Impact</p><div style="display:flex;gap:6px;">'+payoffBtns+'</div><p style="margin:6px 0 0;font-size:12px;color:#6b7280;">1 = Low · 5 = Highest</p></div><div><p style="margin:0 0 10px;font-size:13px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;">Ease of Implementation</p><div style="display:flex;gap:6px;">'+easeBtns+'</div><p style="margin:6px 0 0;font-size:12px;color:#6b7280;">1 = Hardest · 5 = Easiest</p></div></div></div>'+scoreBar+exampleHTML+'</div>';
 }
 
-// ── RESULTS ──────────────────────────────────────────────────────────────
+function setRating(id,rk,alreadySelected){
+  state.scores[id]=state.scores[id]||{};
+  state.scores[id].rating=alreadySelected?null:rk;
+  renderSeqItem();updateProgress();
+}
+
+function setScore(id,field,val){
+  state.scores[id]=state.scores[id]||{};
+  var cur=state.scores[id][field];
+  state.scores[id][field]=(cur===val)?null:val;
+  renderSeqItem();updateProgress();
+}
+
+function toggleEx(id){
+  var c=document.getElementById("ex-content-"+id);
+  var a=document.getElementById("ex-arrow-"+id);
+  if(c.classList.contains("hide")){c.classList.remove("hide");a.style.transform="rotate(90deg)";}
+  else{c.classList.add("hide");a.style.transform="";}
+}
+
 function showResults(){
   showScreen("results-screen");
   document.getElementById("results-sub").textContent=state.org+(state.person?" · "+state.person:"");
@@ -551,28 +498,66 @@ function renderResultsTable(prefix,holds){
   var rows=holds.map(function(h,i){
     var s=state.scores[h.id]||{};
     var t=(s.payoff&&s.ease)?s.payoff+s.ease:0;
-    var ro=RORDER.find(function(r){return r===s.rating;});
     return{id:h.id,num:(prefix==="nat"?"N":"F")+(i+1),title:h.title,rating:s.rating||null,payoff:s.payoff||null,ease:s.ease||null,total:t};
   }).sort(function(a,b){return b.total-a.total;});
-
   var scored=rows.filter(function(r){return r.total>0;});
   var unscored=rows.filter(function(r){return r.total===0;});
-
   var html=scored.map(function(r){
     var st=r.rating?RS[r.rating]:null;
-    var ratingBadge=r.rating?'<span style="font-size:11px;padding:2px 7px;border-radius:4px;background:'+(st?st.bbg:"#f3f4f6")+';color:'+(st?st.text:"#374151")+';border:1px solid '+(st?st.border:"#d1d5db")+';">'+RLABELS[r.rating]+'</span>':'';
-    return '<div onclick="jumpToHold(\''+r.id+'\')" style="background:#fff;border-radius:8px;border:1px solid '+(r.rating?RS[r.rating].border:"#e5e7eb")+';padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:8px;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow=\'0 2px 8px rgba(0,0,0,0.1)\'" onmouseout="this.style.boxShadow=\'none\'"><div style="min-width:44px;height:44px;border-radius:8px;background:#f9fafb;border:2px solid '+pC(r.total)+';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:17px;font-weight:bold;color:'+pC(r.total)+';line-height:1;">'+r.total+'</span><span style="font-size:9px;color:#9ca3af;text-transform:uppercase;">/10</span></div><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;"><span style="font-size:11px;color:#6b7280;font-weight:bold;">'+r.num+'</span>'+ratingBadge+'<span style="font-size:11px;color:'+pC(r.total)+';font-weight:bold;">'+pL(r.total)+'</span></div><div style="font-size:14px;color:#111827;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(r.title)+'</div></div><div style="display:flex;gap:12px;flex-shrink:0;"><div style="text-align:center;"><div style="font-size:16px;font-weight:bold;color:#dc2626;">'+( r.payoff||"—")+'</div><div style="font-size:10px;color:#9ca3af;text-transform:uppercase;">Payoff</div></div><div style="text-align:center;"><div style="font-size:16px;font-weight:bold;color:#2563eb;">'+(r.ease||"—")+'</div><div style="font-size:10px;color:#9ca3af;text-transform:uppercase;">Ease</div></div></div></div>';
-  }).join('');
-
+    var badge=r.rating?'<span style="font-size:11px;padding:2px 7px;border-radius:4px;background:'+(st?st.bbg:"#f3f4f6")+';color:'+(st?st.text:"#374151")+';border:1px solid '+(st?st.border:"#d1d5db")+';">'+RLABELS[r.rating]+'</span>':"";
+    return '<div onclick="jumpToHold(\''+r.id+'\')" style="background:#fff;border-radius:8px;border:1px solid '+(r.rating&&RS[r.rating]?RS[r.rating].border:"#e5e7eb")+';padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:8px;" onmouseover="this.style.boxShadow=\'0 2px 8px rgba(0,0,0,0.1)\'" onmouseout="this.style.boxShadow=\'none\'"><div style="min-width:44px;height:44px;border-radius:8px;background:#f9fafb;border:2px solid '+pC(r.total)+';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:17px;font-weight:bold;color:'+pC(r.total)+';line-height:1;">'+r.total+'</span><span style="font-size:9px;color:#9ca3af;text-transform:uppercase;">/10</span></div><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;"><span style="font-size:11px;color:#6b7280;font-weight:bold;">'+r.num+'</span>'+badge+'<span style="font-size:11px;color:'+pC(r.total)+';font-weight:bold;">'+pL(r.total)+'</span></div><div style="font-size:14px;color:#111827;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(r.title)+'</div></div><div style="display:flex;gap:12px;flex-shrink:0;"><div style="text-align:center;"><div style="font-size:16px;font-weight:bold;color:#dc2626;">'+(r.payoff||"—")+'</div><div style="font-size:10px;color:#9ca3af;text-transform:uppercase;">Payoff</div></div><div style="text-align:center;"><div style="font-size:16px;font-weight:bold;color:#2563eb;">'+(r.ease||"—")+'</div><div style="font-size:10px;color:#9ca3af;text-transform:uppercase;">Ease</div></div></div></div>';
+  }).join("");
   if(unscored.length){html+='<div style="padding:10px 14px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;"><span style="font-size:12px;color:#9ca3af;">Not yet scored: '+unscored.map(function(r){return r.num;}).join(", ")+'</span></div>';}
   if(!scored.length){html='<p style="color:#9ca3af;font-style:italic;font-size:14px;">Complete holds to populate this summary.</p>';}
-
   document.getElementById("results-"+prefix).innerHTML=html;
 }
 
 function jumpToHold(id){
   var idx=SEQUENCE.findIndex(function(s){return s.id===id;});
   if(idx>=0){state.seqIdx=idx;showScreen("assess");renderSeqItem();updateProgress();}
+}
+
+async function findRecord(org,person){
+  var formula=encodeURIComponent('AND({org}="'+org+'",{person}="'+person+'")');
+  var res=await fetch(AT_URL+"?filterByFormula="+formula,{headers:{"Authorization":"Bearer "+AT_TOKEN}});
+  var data=await res.json();
+  return(data.records&&data.records.length)?data.records[0]:null;
+}
+
+async function doSave(){
+  var org=document.getElementById("org-in").value.trim()||state.org;
+  var person=document.getElementById("person-in").value.trim()||state.person;
+  if(!org||!person){alert("Please enter organization name and your name first.");return;}
+  var btn=document.getElementById("save-btn");
+  btn.textContent="Saving...";btn.disabled=true;
+  try{
+    var fields={org:org,person:person,savedAt:new Date().toISOString(),scores:JSON.stringify(state.scores)};
+    var existing=await findRecord(org,person);
+    var url=AT_URL;var method="POST";var body={records:[{fields:fields}]};
+    if(existing){url=AT_URL+"/"+existing.id;method="PATCH";body={fields:fields};}
+    var res=await fetch(url,{method:method,headers:{"Authorization":"Bearer "+AT_TOKEN,"Content-Type":"application/json"},body:JSON.stringify(body)});
+    var data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    var msg=document.getElementById("save-msg");
+    msg.textContent="Saved — "+new Date().toLocaleTimeString();
+    setTimeout(function(){msg.textContent="";},4000);
+  }catch(e){alert("Save error: "+e.message);}
+  btn.textContent="Save Assessment";btn.disabled=false;
+}
+
+async function doLoad(){
+  var org=document.getElementById("org-in").value.trim();
+  var person=document.getElementById("person-in").value.trim();
+  if(!org||!person){alert("Please enter organization name and your name first.");return;}
+  try{
+    var rec=await findRecord(org,person);
+    if(!rec){alert("No saved assessment found for "+person+" at "+org+".");return;}
+    state.scores=JSON.parse(rec.fields.scores||"{}");
+    state.org=org;state.person=person;
+    var msg=document.getElementById("save-msg");
+    msg.textContent="Loaded — "+fmtD(rec.fields.savedAt);
+    setTimeout(function(){msg.textContent="";},4000);
+  }catch(e){alert("Load error: "+e.message);}
 }
 </script>
 </body>
