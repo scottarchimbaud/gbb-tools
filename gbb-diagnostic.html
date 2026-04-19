@@ -65,7 +65,8 @@ input::placeholder{color:#9ca3af;}
       <p style="margin:0 0 6px;font-size:14px;font-weight:bold;color:#78350f;">About the Rating Scale</p>
       <p style="margin:0;font-size:14px;color:#78350f;line-height:1.6;">Each hold is rated: <strong>Not in Place → In Development → Good → Better → Best in Class</strong>.</p>
     </div>
-    <button onclick="goAssess()" style="width:100%;padding:14px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;">Begin Assessment →</button>
+    <button onclick="goAssess()" style="width:100%;padding:14px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;margin-bottom:12px;">Begin Assessment →</button>
+    <button onclick="loadSample()" style="width:100%;padding:12px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;color:#374151;font-size:14px;">Preview Sample Data →</button>
   </div>
 </div>
 
@@ -357,6 +358,20 @@ example:"While leading the Los Angeles March for Babies, a search for newsletter
 var SEC_NAT = {type:"section",id:"sec-nat",matrix:"national",title:"National Matrix",subtitle:"10 Holds — Strategic and Relational",desc:"These holds address the relationships and strategic infrastructure that only national leadership can build and sustain.",guidance:[{icon:"🏛",role:"National leader",text:"Score each hold based on your organization's consistent performance across all markets and campaign cycles — not your best year or your best market."},{icon:"📍",role:"Chapter or market leader",text:"These holds reflect the national infrastructure your chapter operates within. Score them based on what you observe from your position."}]};
 var SEC_FLD = {type:"section",id:"sec-fld",matrix:"field",title:"Field Matrix",subtitle:"11 Holds — Operational and Execution",desc:"These holds address the operational and relational discipline that determines whether your market performs at its capacity.",guidance:[{icon:"🏛",role:"National leader",text:"Score each hold based on how your average market performs — not your best market."},{icon:"📍",role:"Chapter or market leader",text:"Score each hold specifically for your own market. Be honest about where you are, not where you aspire to be."},{icon:"🔍",role:"National leader assessing a specific market",text:"Score each hold based on the specific market you are evaluating."}]};
 var SEQUENCE = [SEC_NAT].concat(HOLDS.filter(function(h){return h.matrix==="national";})).concat([SEC_FLD]).concat(HOLDS.filter(function(h){return h.matrix==="field";}));
+
+function loadSample(){
+  var sampleRatings=["good","better","best","good","better","inDevelopment","better","good","better","good","good","better","best","good","better","inDevelopment","good","better","good","better","good"];
+  var samplePayoff=[5,5,4,3,5,4,3,4,3,4,4,5,5,3,4,4,3,3,4,3,3];
+  var sampleEase=[3,2,3,4,2,4,4,3,4,3,3,2,3,4,3,3,4,3,3,4,4];
+  HOLDS.forEach(function(h,i){
+    state.scores[h.id]={rating:sampleRatings[i],payoff:samplePayoff[i],ease:sampleEase[i]};
+  });
+  state.org="Sample Organization";
+  state.person="Demo User";
+  document.getElementById("org-in").value="Sample Organization";
+  document.getElementById("person-in").value="Demo User";
+  showResults();
+}
 
 function goAssess(){
   var org=document.getElementById("org-in").value.trim();
