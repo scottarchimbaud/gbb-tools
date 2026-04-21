@@ -171,8 +171,7 @@ async function loadOrg(){
   if(!org)return;
   hide("load-err");
   try{
-    var query=encodeURIComponent('filterByFormula='+encodeURIComponent('{org}="'+org+'"'));
-    var res=await fetch(WORKER_URL+"?path=&query="+query,{method:"GET",headers:{"X-Service":"airtable"}});
+    var res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Service":"airtable"},body:JSON.stringify({method:"GET",filter:'{org}="'+org+'"'})});
     var data=await res.json();
     if(!data.records||!data.records.length){
       var errEl=document.getElementById("load-err");
