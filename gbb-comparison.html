@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -20,7 +19,6 @@ input::placeholder{color:#9ca3af;}
 <body>
 
 <!-- GATE -->
-
 <div id="gate" style="min-height:100vh;background:#1e40af;display:flex;align-items:center;justify-content:center;padding:24px;">
   <div style="background:#fff;border-radius:12px;padding:40px 36px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center;">
     <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Campaign Architecture · Enterprise Engineering</div>
@@ -34,7 +32,6 @@ input::placeholder{color:#9ca3af;}
 </div>
 
 <!-- LOAD SCREEN -->
-
 <div id="load-screen" class="hide">
   <div style="background:#1e40af;padding:20px 24px;">
     <div style="max-width:960px;margin:0 auto;">
@@ -57,15 +54,31 @@ input::placeholder{color:#9ca3af;}
       <div id="role-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
       <button onclick="resetRoles()" style="margin-top:10px;padding:6px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;">Reset to Defaults</button>
     </div>
-    <div style="background:#fffbeb;border-radius:8px;border:1px solid #fcd34d;padding:14px 18px;">
-      <p style="font-weight:bold;color:#78350f;margin-bottom:4px;font-size:13px;">How this works</p>
+    <div style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:18px 22px;margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <div>
+          <h3 style="margin:0;font-size:14px;color:#111827;font-weight:700;">Role Titles for Reports</h3>
+          <p style="margin:3px 0 0;font-size:13px;color:#6b7280;">Used in both generated reports</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span id="roles-std-label" style="font-size:13px;color:#1e40af;font-weight:bold;">Standard</span>
+          <button onclick="toggleRoles()" id="roles-toggle" style="width:44px;height:24px;border-radius:12px;border:none;padding:0;position:relative;background:#d1d5db;">
+            <span id="roles-knob" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></span>
+          </button>
+          <span id="roles-custom-label" style="font-size:13px;color:#6b7280;">Custom</span>
+        </div>
+      </div>
+      <div id="roles-panel" style="display:none;margin-top:14px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="roles-grid"></div>
+        <button onclick="resetRoles()" style="margin-top:10px;padding:6px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;">Reset to Defaults</button>
+      </div>
+    </div>
       <p style="color:#78350f;line-height:1.6;font-size:13px;">Each person completes the GBB Diagnostic Tool independently and saves their assessment. This tool loads all saved assessments for an organization and displays them side by side — revealing alignment, divergence, and the holds where conversation is most needed.</p>
     </div>
   </div>
 </div>
 
 <!-- RESULTS SCREEN -->
-
 <div id="results-screen" class="hide">
   <div style="background:#1e40af;padding:20px 24px;">
     <div style="max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
@@ -83,72 +96,69 @@ input::placeholder{color:#9ca3af;}
   </div>
   <div style="max-width:960px;margin:0 auto;padding:28px 24px 60px;">
 
-```
-<!-- Executive Report -->
-<div id="exec-box" class="hide" style="background:#1e40af;border-radius:10px;padding:26px 30px;margin-bottom:22px;box-shadow:0 4px 16px rgba(30,64,175,0.3);">
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-    <div>
-      <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;">Campaign Architecture · For Executive Review</div>
-      <h2 id="exec-title" style="margin:0 0 3px;font-size:18px;font-weight:700;color:#fff;"></h2>
-      <p id="exec-sub" style="margin:0;font-size:13px;color:#bfdbfe;"></p>
+    <!-- Executive Report -->
+    <div id="exec-box" class="hide" style="background:#1e40af;border-radius:10px;padding:26px 30px;margin-bottom:22px;box-shadow:0 4px 16px rgba(30,64,175,0.3);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div>
+          <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;">Campaign Architecture · For Executive Review</div>
+          <h2 id="exec-title" style="margin:0 0 3px;font-size:18px;font-weight:700;color:#fff;"></h2>
+          <p id="exec-sub" style="margin:0;font-size:13px;color:#bfdbfe;"></p>
+        </div>
+        <button onclick="document.getElementById('exec-box').classList.add('hide')" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:12px;padding:5px 10px;">Dismiss</button>
+      </div>
+      <div id="exec-loading" class="hide" style="display:flex;align-items:center;gap:12px;padding:20px 0;">
+        <div class="spin" style="width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;"></div>
+        <span style="font-size:14px;color:#bfdbfe;font-style:italic;">Analyzing alignment gaps and revenue impact…</span>
+      </div>
+      <div id="exec-content" class="hide" style="background:rgba(255,255,255,0.07);border-radius:8px;padding:22px 26px;">
+        <div id="exec-text" style="font-size:15px;color:#e0eaff;line-height:1.9;white-space:pre-wrap;"></div>
+        <div style="font-size:12px;color:#93c5fd;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.15);">Campaign Architecture · Scott Archimbaud · scott@scottarchconsultancy.com · 917-868-0745</div>
+      </div>
     </div>
-    <button onclick="document.getElementById('exec-box').classList.add('hide')" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:12px;padding:5px 10px;">Dismiss</button>
-  </div>
-  <div id="exec-loading" class="hide" style="display:flex;align-items:center;gap:12px;padding:20px 0;">
-    <div class="spin" style="width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;"></div>
-    <span style="font-size:14px;color:#bfdbfe;font-style:italic;">Analyzing alignment gaps and revenue impact…</span>
-  </div>
-  <div id="exec-content" class="hide" style="background:rgba(255,255,255,0.07);border-radius:8px;padding:22px 26px;">
-    <div id="exec-text" style="font-size:15px;color:#e0eaff;line-height:1.9;white-space:pre-wrap;"></div>
-    <div style="font-size:12px;color:#93c5fd;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.15);">Campaign Architecture · Scott Archimbaud · scott@scottarchconsultancy.com · 917-868-0745</div>
-  </div>
-</div>
 
-<!-- Diagnostic Summary -->
-<div id="rep-box" class="hide" style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:26px 30px;margin-bottom:22px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-    <div>
-      <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;">Campaign Architecture · GBB Diagnostic</div>
-      <h2 id="rep-title" style="margin:0;font-size:18px;font-weight:700;color:#111827;"></h2>
+    <!-- Diagnostic Summary -->
+    <div id="rep-box" class="hide" style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:26px 30px;margin-bottom:22px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div>
+          <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;">Campaign Architecture · GBB Diagnostic</div>
+          <h2 id="rep-title" style="margin:0;font-size:18px;font-weight:700;color:#111827;"></h2>
+        </div>
+        <button onclick="document.getElementById('rep-box').classList.add('hide')" style="background:transparent;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;padding:5px 10px;">Dismiss</button>
+      </div>
+      <div id="rep-loading" class="hide" style="display:flex;align-items:center;gap:12px;padding:20px 0;">
+        <div class="spin" style="width:20px;height:20px;border:2px solid #e5e7eb;border-top-color:#1e40af;"></div>
+        <span style="font-size:14px;color:#6b7280;font-style:italic;">Analyzing assessment data…</span>
+      </div>
+      <div id="rep-text" style="font-size:15px;color:#1f2937;line-height:1.9;white-space:pre-wrap;"></div>
+      <div id="rep-foot" class="hide" style="font-size:12px;color:#9ca3af;margin-top:14px;padding-top:12px;border-top:1px solid #f3f4f6;">Campaign Architecture · Scott Archimbaud · scott@scottarchconsultancy.com · 917-868-0745</div>
     </div>
-    <button onclick="document.getElementById('rep-box').classList.add('hide')" style="background:transparent;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;padding:5px 10px;">Dismiss</button>
-  </div>
-  <div id="rep-loading" class="hide" style="display:flex;align-items:center;gap:12px;padding:20px 0;">
-    <div class="spin" style="width:20px;height:20px;border:2px solid #e5e7eb;border-top-color:#1e40af;"></div>
-    <span style="font-size:14px;color:#6b7280;font-style:italic;">Analyzing assessment data…</span>
-  </div>
-  <div id="rep-text" style="font-size:15px;color:#1f2937;line-height:1.9;white-space:pre-wrap;"></div>
-  <div id="rep-foot" class="hide" style="font-size:12px;color:#9ca3af;margin-top:14px;padding-top:12px;border-top:1px solid #f3f4f6;">Campaign Architecture · Scott Archimbaud · scott@scottarchconsultancy.com · 917-868-0745</div>
-</div>
 
-<div id="resp-cards" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;"></div>
+    <div id="resp-cards" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;"></div>
 
-<div id="mis-banner" class="hide" style="background:#fef2f2;border-radius:8px;border:1px solid #fca5a5;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
-  <span style="font-size:18px;">⚡</span>
-  <span id="mis-text" style="font-size:14px;color:#991b1b;"></span>
-</div>
+    <div id="mis-banner" class="hide" style="background:#fef2f2;border-radius:8px;border:1px solid #fca5a5;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px;">⚡</span>
+      <span id="mis-text" style="font-size:14px;color:#991b1b;"></span>
+    </div>
 
-<div style="margin-bottom:28px;">
-  <div style="background:#1e40af;border-radius:8px 8px 0 0;padding:12px 20px;">
-    <span style="font-size:14px;font-weight:700;color:#fff;">National Matrix</span>
-    <span style="font-size:12px;color:#93c5fd;margin-left:10px;">N1 – N10</span>
-  </div>
-  <div id="nat-rows" style="background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;"></div>
-</div>
+    <div style="margin-bottom:28px;">
+      <div style="background:#1e40af;border-radius:8px 8px 0 0;padding:12px 20px;">
+        <span style="font-size:14px;font-weight:700;color:#fff;">National Matrix</span>
+        <span style="font-size:12px;color:#93c5fd;margin-left:10px;">N1 – N10</span>
+      </div>
+      <div id="nat-rows" style="background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;"></div>
+    </div>
 
-<div style="margin-bottom:28px;">
-  <div style="background:#0f766e;border-radius:8px 8px 0 0;padding:12px 20px;">
-    <span style="font-size:14px;font-weight:700;color:#fff;">Field Matrix</span>
-    <span style="font-size:12px;color:#99f6e4;margin-left:10px;">F1 – F11</span>
-  </div>
-  <div id="field-rows" style="background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;"></div>
-</div>
+    <div style="margin-bottom:28px;">
+      <div style="background:#0f766e;border-radius:8px 8px 0 0;padding:12px 20px;">
+        <span style="font-size:14px;font-weight:700;color:#fff;">Field Matrix</span>
+        <span style="font-size:12px;color:#99f6e4;margin-left:10px;">F1 – F11</span>
+      </div>
+      <div id="field-rows" style="background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;"></div>
+    </div>
 
-<div style="margin-top:32px;padding-top:20px;border-top:1px solid #e5e7eb;text-align:center;">
-  <p style="font-size:13px;color:#6b7280;">Scott Archimbaud · Campaign Architecture · scott@scottarchconsultancy.com · 917-868-0745</p>
-</div>
-```
-
+    <div style="margin-top:32px;padding-top:20px;border-top:1px solid #e5e7eb;text-align:center;">
+      <p style="font-size:13px;color:#6b7280;">Scott Archimbaud · Campaign Architecture · scott@scottarchconsultancy.com · 917-868-0745</p>
+    </div>
   </div>
 </div>
 
@@ -161,6 +171,45 @@ var AT_URL = "https://api.airtable.com/v0/" + AT_BASE + "/" + AT_TABLE;
 
 var DROLES = {ceo:"CEO / President",cdo:"Chief Development Officer",nce:"National Campaign Executive",rd:"Regional VP",ad:"Area Director",lgl:"Local Geographic Leader",lpl:"Local Program Lead"};
 var roles = JSON.parse(JSON.stringify(DROLES));
+var useCustomRoles = false;
+
+function toggleRoles(){
+  useCustomRoles=!useCustomRoles;
+  var panel=document.getElementById("roles-panel");
+  var knob=document.getElementById("roles-knob");
+  var toggle=document.getElementById("roles-toggle");
+  var stdLabel=document.getElementById("roles-std-label");
+  var customLabel=document.getElementById("roles-custom-label");
+  if(useCustomRoles){panel.style.display="block";toggle.style.background="#1e40af";knob.style.left="23px";stdLabel.style.color="#6b7280";stdLabel.style.fontWeight="normal";customLabel.style.color="#1e40af";customLabel.style.fontWeight="bold";buildRolesGrid();}
+  else{panel.style.display="none";toggle.style.background="#d1d5db";knob.style.left="3px";stdLabel.style.color="#1e40af";stdLabel.style.fontWeight="bold";customLabel.style.color="#6b7280";customLabel.style.fontWeight="normal";}
+}
+
+function buildRolesGrid(){
+  var grid=document.getElementById("roles-grid");
+  var html="";
+  Object.keys(DROLES).forEach(function(k){
+    html+='<div><label style="display:block;font-size:11px;color:#9ca3af;margin-bottom:3px;">'+DROLES[k]+'</label><input data-rolekey="'+k+'" type="text" value="'+esc(roles[k])+'" style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:Georgia,serif;"/></div>';
+  });
+  grid.innerHTML=html;
+  document.querySelectorAll("[data-rolekey]").forEach(function(inp){inp.addEventListener("input",function(){roles[this.dataset.rolekey]=this.value;});});
+}
+
+function resetRoles(){roles=JSON.parse(JSON.stringify(DROLES));buildRolesGrid();}
+
+function doEmailReport(){
+  if(!sessions)return;
+  var org=sessions[0]?sessions[0].org:"Organization";
+  var date=new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+  var rText=document.getElementById("rep-text").textContent;
+  var eText=document.getElementById("exec-text").textContent;
+  var lines=["GBB DIAGNOSTIC — COMPARISON REPORT","Campaign Architecture","=".repeat(50),"","Organization: "+org,"Date: "+date,"Respondents: "+sessions.map(function(s){return s.person;}).join(", "),""];
+  if(eText){lines.push("EXECUTIVE REPORT — TOP FIVE RECOMMENDATIONS","=".repeat(50),"",eText,"");}
+  if(rText){lines.push("DIAGNOSTIC SUMMARY","=".repeat(50),"",rText,"");}
+  lines.push("—","Scott Archimbaud | Campaign Architecture","scott@scottarchconsultancy.com | 917-868-0745");
+  var sub="GBB Comparison Report — "+org;
+  window.location.href="mailto:?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(lines.join("\n"));
+}
+
 var sessions = null;
 
 var RORDER = ["notInPlace","inDevelopment","good","better","best"];
@@ -449,6 +498,5 @@ async function doExec(){
   btn.textContent="Executive Report";btn.disabled=false;
 }
 </script>
-
 </body>
 </html>
