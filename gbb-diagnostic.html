@@ -47,14 +47,18 @@ input::placeholder{color:#9ca3af;}
   <div class="wrap">
     <div class="card">
       <h2 style="margin:0 0 16px;font-size:17px;color:#111827;font-weight:700;">Assessment Details</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
         <div>
           <label style="display:block;font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Organization</label>
           <input id="org-in" type="text" placeholder="Enter organization" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;"/>
         </div>
         <div>
-          <label style="display:block;font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Completed By</label>
+          <label style="display:block;font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Your Name</label>
           <input id="person-in" type="text" placeholder="Enter your name" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;"/>
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Your Title</label>
+          <input id="title-in" type="text" placeholder="Enter your title" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;"/>
         </div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
@@ -209,10 +213,49 @@ input::placeholder{color:#9ca3af;}
 
 <script>
 var PW = "FLW";
-var AT_TOKEN = "patRxZBAR6wuXsHMN.41a4bd14d79483cb776f73d19f7b0afc22a9f142c60b1b8bd4ba689fa5c043f8";
-var AT_BASE = "appcepfmeJ97ulWuZ";
-var AT_TABLE = "tbl9BfE2fPYJWL7oH";
-var AT_URL = "https://api.airtable.com/v0/" + AT_BASE + "/" + AT_TABLE;
+var WORKER_URL = "https://sparkling-truth-7db6.scott-archimbaud.workers.dev";
+
+async function findRecord(org,person){
+  var query=encodeURIComponent('AND({org}="'+org+'",{person}="'+person+'")');
+  var res=await fetch(WORKER_URL+"?path=&query=filterByFormula%3D"+query,{method:"GET",headers:{"X-Service":"airtable"}});
+  var data=await res.json();
+  return(data.records&&data.records.length)?data.records[0]:null;
+}
+
+async function doSave(){
+  var org=document.getElementById("org-in").value.trim()||state.org;
+  var name=document.getElementById("person-in").value.trim();
+  var title=document.getElementById("title-in").value.trim();
+  var person=name?(title?name+", "+title:name):state.person;
+  if(!org||!person){alert("Please enter organization name and your name first.");return;}
+  var btn=document.getElementById("save-btn");btn.textContent="Saving...";btn.disabled=true;
+  try{
+    var fields={org:org,person:person,savedAt:new Date().toISOString(),scores:JSON.stringify(state.scores)};
+    var existing=await findRecord(org,person);
+    var path=existing?existing.id:"";
+    var method=existing?"PATCH":"POST";
+    var body=existing?JSON.stringify({fields:fields}):JSON.stringify({records:[{fields:fields}]});
+    var res=await fetch(WORKER_URL+"?path="+path,{method:method,headers:{"Content-Type":"application/json","X-Service":"airtable"},body:body});
+    var data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    var msg=document.getElementById("save-msg");msg.textContent="Saved — "+new Date().toLocaleTimeString();
+    setTimeout(function(){msg.textContent="";},4000);
+  }catch(e){alert("Save error: "+e.message);}
+  btn.textContent="Save Assessment";btn.disabled=false;
+}
+
+async function doLoad(){
+  var org=document.getElementById("org-in").value.trim();
+  var person=document.getElementById("person-in").value.trim();
+  if(!org||!person){alert("Please enter organization name and your name first.");return;}
+  try{
+    var rec=await findRecord(org,person);
+    if(!rec){alert("No saved assessment found for "+person+" at "+org+".");return;}
+    state.scores=JSON.parse(rec.fields.scores||"{}");state.org=org;state.person=person;
+    var msg=document.getElementById("save-msg");msg.textContent="Loaded — "+fmtD(rec.fields.savedAt);
+    setTimeout(function(){msg.textContent="";},4000);
+  }catch(e){alert("Load error: "+e.message);}
+}
 
 var state = {org:"",person:"",scores:{},seqIdx:0};
 var apMinScore = 7;
@@ -472,9 +515,11 @@ var SEQUENCE=[SEC_NAT].concat(HOLDS.filter(function(h){return h.matrix==="nation
 
 function goAssess(){
   var org=document.getElementById("org-in").value.trim();
-  var person=document.getElementById("person-in").value.trim();
-  if(!org||!person){alert("Please enter organization name and your name first.");return;}
-  state.org=org;state.person=person;
+  var name=document.getElementById("person-in").value.trim();
+  var title=document.getElementById("title-in").value.trim();
+  if(!org||!name){alert("Please enter organization name and your name first.");return;}
+  state.org=org;
+  state.person=title?name+", "+title:name;
   showScreen("assess");renderSeqItem();renderJumpNav();updateProgress();
 }
 
@@ -701,7 +746,9 @@ async function findRecord(org,person){
 
 async function doSave(){
   var org=document.getElementById("org-in").value.trim()||state.org;
-  var person=document.getElementById("person-in").value.trim()||state.person;
+  var name=document.getElementById("person-in").value.trim();
+  var title=document.getElementById("title-in").value.trim();
+  var person=name?(title?name+", "+title:name):state.person;
   if(!org||!person){alert("Please enter organization name and your name first.");return;}
   var btn=document.getElementById("save-btn");btn.textContent="Saving...";btn.disabled=true;
   try{
