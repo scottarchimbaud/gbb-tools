@@ -164,10 +164,48 @@ input::placeholder{color:#9ca3af;}
 
 <script>
 var PW = "FLW";
-var AT_TOKEN = "patRxZBAR6wuXsHMN.41a4bd14d79483cb776f73d19f7b0afc22a9f142c60b1b8bd4ba689fa5c043f8";
-var AT_BASE = "appcepfmeJ97ulWuZ";
-var AT_TABLE = "tbl9BfE2fPYJWL7oH";
-var AT_URL = "https://api.airtable.com/v0/" + AT_BASE + "/" + AT_TABLE;
+var WORKER_URL = "https://sparkling-truth-7db6.scott-archimbaud.workers.dev";
+
+async function loadOrg(){
+  var org=document.getElementById("org-in").value.trim();
+  if(!org)return;
+  hide("load-err");
+  try{
+    var query=encodeURIComponent('filterByFormula='+encodeURIComponent('{org}="'+org+'"'));
+    var res=await fetch(WORKER_URL+"?path=&query="+query,{method:"GET",headers:{"X-Service":"airtable"}});
+    var data=await res.json();
+    if(!data.records||!data.records.length){
+      var errEl=document.getElementById("load-err");
+      errEl.textContent="No saved assessments found for that organization.";
+      show("load-err");return;
+    }
+    var ss=[];
+    for(var i=0;i<data.records.length;i++){
+      var f=data.records[i].fields;
+      try{ss.push({person:f.person||"Unknown",org:f.org||org,savedAt:f.savedAt,scores:JSON.parse(f.scores||"{}")});}catch(e){}
+    }
+    if(!ss.length){
+      var errEl=document.getElementById("load-err");
+      errEl.textContent="Could not read saved assessments.";
+      show("load-err");return;
+    }
+    sessions=ss.sort(function(a,b){return a.person.localeCompare(b.person);});
+    showResults();
+  }catch(e){
+    var errEl=document.getElementById("load-err");
+    errEl.textContent="Error: "+e.message;
+    show("load-err");
+  }
+}
+
+async function callAPI(prompt,maxTok){
+  var res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Service":"anthropic"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:maxTok,temperature:0.2,messages:[{role:"user",content:prompt}]})});
+  var data=await res.json();
+  if(data.error)throw new Error(data.error.message);
+  var out="";
+  if(data.content){for(var i=0;i<data.content.length;i++){if(data.content[i].type==="text")out+=data.content[i].text;}}
+  return out;
+}
 
 var DROLES = {ceo:"CEO / President",cdo:"Chief Development Officer",nce:"National Campaign Executive",rd:"Regional VP",ad:"Area Director",lgl:"Local Geographic Leader",lpl:"Local Program Lead"};
 var roles = JSON.parse(JSON.stringify(DROLES));
