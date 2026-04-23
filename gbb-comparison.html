@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -18,20 +19,18 @@ input::placeholder{color:#9ca3af;}
 </head>
 <body>
 
-<!-- GATE -->
 <div id="gate" style="min-height:100vh;background:#1e40af;display:flex;align-items:center;justify-content:center;padding:24px;">
   <div style="background:#fff;border-radius:12px;padding:40px 36px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center;">
-    <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Campaign Architecture · Enterprise Engineering</div>
+    <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Campaign Architecture</div>
     <h1 style="margin:0 0 6px;font-size:22px;font-weight:700;color:#111827;">GBB Comparison Tool</h1>
     <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">Enter your access code to continue.</p>
     <input id="pw-in" type="password" placeholder="Access code" style="width:100%;padding:12px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;margin-bottom:10px;text-align:center;letter-spacing:0.2em;display:block;"/>
     <p id="pw-err" class="hide" style="font-size:13px;color:#dc2626;margin-bottom:8px;">Incorrect — please try again.</p>
-    <button onclick="checkPw()" style="width:100%;padding:13px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;">Enter</button>
+    <button id="pw-btn" style="width:100%;padding:13px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;">Enter</button>
     <p style="margin:20px 0 0;font-size:12px;color:#d1d5db;">Scott Archimbaud · Campaign Architecture</p>
   </div>
 </div>
 
-<!-- LOAD SCREEN -->
 <div id="load-screen" class="hide">
   <div style="background:#1e40af;padding:20px 24px;">
     <div style="max-width:960px;margin:0 auto;">
@@ -49,36 +48,37 @@ input::placeholder{color:#9ca3af;}
       <button onclick="loadSample()" style="width:100%;padding:11px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;color:#374151;font-size:14px;display:block;">Preview Sample — Charity X</button>
       <p id="load-err" class="hide" style="margin-top:10px;font-size:13px;color:#dc2626;"></p>
     </div>
-    <div style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:18px 22px;margin-bottom:16px;">
-      <h3 style="margin:0 0 12px;font-size:14px;color:#111827;font-weight:700;">Role Titles for Reports</h3>
-      <div id="role-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
-      <button onclick="resetRoles()" style="margin-top:10px;padding:6px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;">Reset to Defaults</button>
+
+```
+<div style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:18px 22px;margin-bottom:16px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+    <div>
+      <h3 style="margin:0;font-size:14px;color:#111827;font-weight:700;">Role Titles for Reports</h3>
+      <p style="margin:3px 0 0;font-size:13px;color:#6b7280;">Used in both generated reports</p>
     </div>
-    <div style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:18px 22px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-        <div>
-          <h3 style="margin:0;font-size:14px;color:#111827;font-weight:700;">Role Titles for Reports</h3>
-          <p style="margin:3px 0 0;font-size:13px;color:#6b7280;">Used in both generated reports</p>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span id="roles-std-label" style="font-size:13px;color:#1e40af;font-weight:bold;">Standard</span>
-          <button onclick="toggleRoles()" id="roles-toggle" style="width:44px;height:24px;border-radius:12px;border:none;padding:0;position:relative;background:#d1d5db;">
-            <span id="roles-knob" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></span>
-          </button>
-          <span id="roles-custom-label" style="font-size:13px;color:#6b7280;">Custom</span>
-        </div>
-      </div>
-      <div id="roles-panel" style="display:none;margin-top:14px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="roles-grid"></div>
-        <button onclick="resetRoles()" style="margin-top:10px;padding:6px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;">Reset to Defaults</button>
-      </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span id="roles-std-label" style="font-size:13px;color:#1e40af;font-weight:bold;">Standard</span>
+      <button onclick="toggleRoles()" id="roles-toggle" style="width:44px;height:24px;border-radius:12px;border:none;padding:0;position:relative;background:#d1d5db;">
+        <span id="roles-knob" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></span>
+      </button>
+      <span id="roles-custom-label" style="font-size:13px;color:#6b7280;">Custom</span>
     </div>
-      <p style="color:#78350f;line-height:1.6;font-size:13px;">Each person completes the GBB Diagnostic Tool independently and saves their assessment. This tool loads all saved assessments for an organization and displays them side by side — revealing alignment, divergence, and the holds where conversation is most needed.</p>
-    </div>
+  </div>
+  <div id="roles-panel" style="display:none;margin-top:14px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="roles-grid"></div>
+    <button onclick="resetRoles()" style="margin-top:10px;padding:6px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;">Reset to Defaults</button>
   </div>
 </div>
 
-<!-- RESULTS SCREEN -->
+<div style="background:#fffbeb;border-radius:8px;border:1px solid #fcd34d;padding:14px 18px;">
+  <p style="font-weight:bold;color:#78350f;margin-bottom:4px;font-size:13px;">How this works</p>
+  <p style="color:#78350f;line-height:1.6;font-size:13px;">Each person completes the GBB Diagnostic Tool independently and saves their assessment. This tool loads all saved assessments for an organization and displays them side by side — revealing alignment, divergence, and the holds where conversation is most needed.</p>
+</div>
+```
+
+  </div>
+</div>
+
 <div id="results-screen" class="hide">
   <div style="background:#1e40af;padding:20px 24px;">
     <div style="max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
@@ -88,6 +88,7 @@ input::placeholder{color:#9ca3af;}
         <div id="hdr-sub" style="font-size:13px;color:#bfdbfe;margin-top:2px;"></div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button onclick="doEmailReport()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">✉ Email Reports</button>
         <button id="btn-exec" onclick="doExec()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;font-weight:bold;">Executive Report</button>
         <button id="btn-rep" onclick="doReport()" style="padding:7px 14px;background:#fff;border:none;border-radius:6px;color:#1e40af;font-size:13px;font-weight:bold;">Diagnostic Summary</button>
         <button onclick="newSearch()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">New Search</button>
@@ -96,157 +97,79 @@ input::placeholder{color:#9ca3af;}
   </div>
   <div style="max-width:960px;margin:0 auto;padding:28px 24px 60px;">
 
-    <!-- Executive Report -->
-    <div id="exec-box" class="hide" style="background:#1e40af;border-radius:10px;padding:26px 30px;margin-bottom:22px;box-shadow:0 4px 16px rgba(30,64,175,0.3);">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;">Campaign Architecture · For Executive Review</div>
-          <h2 id="exec-title" style="margin:0 0 3px;font-size:18px;font-weight:700;color:#fff;"></h2>
-          <p id="exec-sub" style="margin:0;font-size:13px;color:#bfdbfe;"></p>
-        </div>
-        <button onclick="document.getElementById('exec-box').classList.add('hide')" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:12px;padding:5px 10px;">Dismiss</button>
-      </div>
-      <div id="exec-loading" class="hide" style="display:flex;align-items:center;gap:12px;padding:20px 0;">
-        <div class="spin" style="width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;"></div>
-        <span style="font-size:14px;color:#bfdbfe;font-style:italic;">Analyzing alignment gaps and revenue impact…</span>
-      </div>
-      <div id="exec-content" class="hide" style="background:rgba(255,255,255,0.07);border-radius:8px;padding:22px 26px;">
-        <div id="exec-text" style="font-size:15px;color:#e0eaff;line-height:1.9;white-space:pre-wrap;"></div>
-        <div style="font-size:12px;color:#93c5fd;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.15);">Campaign Architecture · Scott Archimbaud · scott@scottarchconsultancy.com · 917-868-0745</div>
-      </div>
+```
+<div id="exec-box" class="hide" style="background:#1e40af;border-radius:10px;padding:26px 30px;margin-bottom:22px;box-shadow:0 4px 16px rgba(30,64,175,0.3);">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+    <div>
+      <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;">Campaign Architecture · For Executive Review</div>
+      <h2 id="exec-title" style="margin:0 0 3px;font-size:18px;font-weight:700;color:#fff;"></h2>
+      <p id="exec-sub" style="margin:0;font-size:13px;color:#bfdbfe;"></p>
     </div>
+    <button onclick="document.getElementById('exec-box').classList.add('hide')" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:12px;padding:5px 10px;">Dismiss</button>
+  </div>
+  <div id="exec-loading" class="hide" style="display:flex;align-items:center;gap:12px;padding:20px 0;">
+    <div class="spin" style="width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;"></div>
+    <span style="font-size:14px;color:#bfdbfe;font-style:italic;">Analyzing alignment gaps and revenue impact…</span>
+  </div>
+  <div id="exec-content" class="hide" style="background:rgba(255,255,255,0.07);border-radius:8px;padding:22px 26px;">
+    <div id="exec-text" style="font-size:15px;color:#e0eaff;line-height:1.9;white-space:pre-wrap;"></div>
+    <div style="font-size:12px;color:#93c5fd;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.15);">Campaign Architecture · Scott Archimbaud · scott@scottarchconsultancy.com · 917-868-0745</div>
+  </div>
+</div>
 
-    <!-- Diagnostic Summary -->
-    <div id="rep-box" class="hide" style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:26px 30px;margin-bottom:22px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;">Campaign Architecture · GBB Diagnostic</div>
-          <h2 id="rep-title" style="margin:0;font-size:18px;font-weight:700;color:#111827;"></h2>
-        </div>
-        <button onclick="document.getElementById('rep-box').classList.add('hide')" style="background:transparent;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;padding:5px 10px;">Dismiss</button>
-      </div>
-      <div id="rep-loading" class="hide" style="display:flex;align-items:center;gap:12px;padding:20px 0;">
-        <div class="spin" style="width:20px;height:20px;border:2px solid #e5e7eb;border-top-color:#1e40af;"></div>
-        <span style="font-size:14px;color:#6b7280;font-style:italic;">Analyzing assessment data…</span>
-      </div>
-      <div id="rep-text" style="font-size:15px;color:#1f2937;line-height:1.9;white-space:pre-wrap;"></div>
-      <div id="rep-foot" class="hide" style="font-size:12px;color:#9ca3af;margin-top:14px;padding-top:12px;border-top:1px solid #f3f4f6;">Campaign Architecture · Scott Archimbaud · scott@scottarchconsultancy.com · 917-868-0745</div>
+<div id="rep-box" class="hide" style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:26px 30px;margin-bottom:22px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+    <div>
+      <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;">Campaign Architecture · GBB Diagnostic</div>
+      <h2 id="rep-title" style="margin:0;font-size:18px;font-weight:700;color:#111827;"></h2>
     </div>
+    <button onclick="document.getElementById('rep-box').classList.add('hide')" style="background:transparent;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;padding:5px 10px;">Dismiss</button>
+  </div>
+  <div id="rep-loading" class="hide" style="display:flex;align-items:center;gap:12px;padding:20px 0;">
+    <div class="spin" style="width:20px;height:20px;border:2px solid #e5e7eb;border-top-color:#1e40af;"></div>
+    <span style="font-size:14px;color:#6b7280;font-style:italic;">Analyzing assessment data…</span>
+  </div>
+  <div id="rep-text" style="font-size:15px;color:#1f2937;line-height:1.9;white-space:pre-wrap;"></div>
+  <div id="rep-foot" class="hide" style="font-size:12px;color:#9ca3af;margin-top:14px;padding-top:12px;border-top:1px solid #f3f4f6;">Campaign Architecture · Scott Archimbaud · scott@scottarchconsultancy.com · 917-868-0745</div>
+</div>
 
-    <div id="resp-cards" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;"></div>
+<div id="resp-cards" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;"></div>
 
-    <div id="mis-banner" class="hide" style="background:#fef2f2;border-radius:8px;border:1px solid #fca5a5;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
-      <span style="font-size:18px;">⚡</span>
-      <span id="mis-text" style="font-size:14px;color:#991b1b;"></span>
-    </div>
+<div id="mis-banner" class="hide" style="background:#fef2f2;border-radius:8px;border:1px solid #fca5a5;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+  <span style="font-size:18px;">⚡</span>
+  <span id="mis-text" style="font-size:14px;color:#991b1b;"></span>
+</div>
 
-    <div style="margin-bottom:28px;">
-      <div style="background:#1e40af;border-radius:8px 8px 0 0;padding:12px 20px;">
-        <span style="font-size:14px;font-weight:700;color:#fff;">National Matrix</span>
-        <span style="font-size:12px;color:#93c5fd;margin-left:10px;">N1 – N10</span>
-      </div>
-      <div id="nat-rows" style="background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;"></div>
-    </div>
+<div style="margin-bottom:28px;">
+  <div style="background:#1e40af;border-radius:8px 8px 0 0;padding:12px 20px;">
+    <span style="font-size:14px;font-weight:700;color:#fff;">National Matrix</span>
+    <span style="font-size:12px;color:#93c5fd;margin-left:10px;">N1 – N10</span>
+  </div>
+  <div id="nat-rows" style="background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;"></div>
+</div>
 
-    <div style="margin-bottom:28px;">
-      <div style="background:#0f766e;border-radius:8px 8px 0 0;padding:12px 20px;">
-        <span style="font-size:14px;font-weight:700;color:#fff;">Field Matrix</span>
-        <span style="font-size:12px;color:#99f6e4;margin-left:10px;">F1 – F11</span>
-      </div>
-      <div id="field-rows" style="background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;"></div>
-    </div>
+<div style="margin-bottom:28px;">
+  <div style="background:#0f766e;border-radius:8px 8px 0 0;padding:12px 20px;">
+    <span style="font-size:14px;font-weight:700;color:#fff;">Field Matrix</span>
+    <span style="font-size:12px;color:#99f6e4;margin-left:10px;">F1 – F11</span>
+  </div>
+  <div id="field-rows" style="background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;"></div>
+</div>
 
-    <div style="margin-top:32px;padding-top:20px;border-top:1px solid #e5e7eb;text-align:center;">
-      <p style="font-size:13px;color:#6b7280;">Scott Archimbaud · Campaign Architecture · scott@scottarchconsultancy.com · 917-868-0745</p>
-    </div>
+<div style="margin-top:32px;padding-top:20px;border-top:1px solid #e5e7eb;text-align:center;">
+  <p style="font-size:13px;color:#6b7280;">Scott Archimbaud · Campaign Architecture · scott@scottarchconsultancy.com · 917-868-0745</p>
+</div>
+```
+
   </div>
 </div>
 
 <script>
 var PW = "FLW";
 var WORKER_URL = "https://sparkling-truth-7db6.scott-archimbaud.workers.dev";
-
-async function loadOrg(){
-  var org=document.getElementById("org-in").value.trim();
-  if(!org)return;
-  hide("load-err");
-  try{
-    var res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Service":"airtable"},body:JSON.stringify({method:"GET",filter:'{org}="'+org+'"'})});
-    var data=await res.json();
-    if(!data.records||!data.records.length){
-      var errEl=document.getElementById("load-err");
-      errEl.textContent="No saved assessments found for that organization.";
-      show("load-err");return;
-    }
-    var ss=[];
-    for(var i=0;i<data.records.length;i++){
-      var f=data.records[i].fields;
-      try{ss.push({person:f.person||"Unknown",org:f.org||org,savedAt:f.savedAt,scores:JSON.parse(f.scores||"{}")});}catch(e){}
-    }
-    if(!ss.length){
-      var errEl=document.getElementById("load-err");
-      errEl.textContent="Could not read saved assessments.";
-      show("load-err");return;
-    }
-    sessions=ss.sort(function(a,b){return a.person.localeCompare(b.person);});
-    showResults();
-  }catch(e){
-    var errEl=document.getElementById("load-err");
-    errEl.textContent="Error: "+e.message;
-    show("load-err");
-  }
-}
-
-async function callAPI(prompt,maxTok){
-  var res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Service":"anthropic"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:maxTok,temperature:0.2,messages:[{role:"user",content:prompt}]})});
-  var data=await res.json();
-  if(data.error)throw new Error(data.error.message);
-  var out="";
-  if(data.content){for(var i=0;i<data.content.length;i++){if(data.content[i].type==="text")out+=data.content[i].text;}}
-  return out;
-}
-
 var DROLES = {ceo:"CEO / President",cdo:"Chief Development Officer",nce:"National Campaign Executive",rd:"Regional VP",ad:"Area Director",lgl:"Local Geographic Leader",lpl:"Local Program Lead"};
 var roles = JSON.parse(JSON.stringify(DROLES));
 var useCustomRoles = false;
-
-function toggleRoles(){
-  useCustomRoles=!useCustomRoles;
-  var panel=document.getElementById("roles-panel");
-  var knob=document.getElementById("roles-knob");
-  var toggle=document.getElementById("roles-toggle");
-  var stdLabel=document.getElementById("roles-std-label");
-  var customLabel=document.getElementById("roles-custom-label");
-  if(useCustomRoles){panel.style.display="block";toggle.style.background="#1e40af";knob.style.left="23px";stdLabel.style.color="#6b7280";stdLabel.style.fontWeight="normal";customLabel.style.color="#1e40af";customLabel.style.fontWeight="bold";buildRolesGrid();}
-  else{panel.style.display="none";toggle.style.background="#d1d5db";knob.style.left="3px";stdLabel.style.color="#1e40af";stdLabel.style.fontWeight="bold";customLabel.style.color="#6b7280";customLabel.style.fontWeight="normal";}
-}
-
-function buildRolesGrid(){
-  var grid=document.getElementById("roles-grid");
-  var html="";
-  Object.keys(DROLES).forEach(function(k){
-    html+='<div><label style="display:block;font-size:11px;color:#9ca3af;margin-bottom:3px;">'+DROLES[k]+'</label><input data-rolekey="'+k+'" type="text" value="'+esc(roles[k])+'" style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:Georgia,serif;"/></div>';
-  });
-  grid.innerHTML=html;
-  document.querySelectorAll("[data-rolekey]").forEach(function(inp){inp.addEventListener("input",function(){roles[this.dataset.rolekey]=this.value;});});
-}
-
-function resetRoles(){roles=JSON.parse(JSON.stringify(DROLES));buildRolesGrid();}
-
-function doEmailReport(){
-  if(!sessions)return;
-  var org=sessions[0]?sessions[0].org:"Organization";
-  var date=new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
-  var rText=document.getElementById("rep-text").textContent;
-  var eText=document.getElementById("exec-text").textContent;
-  var lines=["GBB DIAGNOSTIC — COMPARISON REPORT","Campaign Architecture","=".repeat(50),"","Organization: "+org,"Date: "+date,"Respondents: "+sessions.map(function(s){return s.person;}).join(", "),""];
-  if(eText){lines.push("EXECUTIVE REPORT — TOP FIVE RECOMMENDATIONS","=".repeat(50),"",eText,"");}
-  if(rText){lines.push("DIAGNOSTIC SUMMARY","=".repeat(50),"",rText,"");}
-  lines.push("—","Scott Archimbaud | Campaign Architecture","scott@scottarchconsultancy.com | 917-868-0745");
-  var sub="GBB Comparison Report — "+org;
-  window.location.href="mailto:?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(lines.join("\n"));
-}
-
 var sessions = null;
 
 var RORDER = ["notInPlace","inDevelopment","good","better","best"];
@@ -300,81 +223,50 @@ function getRating(s,id){return s.scores[id]?s.scores[id].rating:null;}
 function getScore(s,id){var sc=s.scores[id];return sc&&sc.payoff&&sc.ease?sc.payoff+sc.ease:null;}
 function fmtD(iso){try{return new Date(iso).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}catch(e){return iso;}}
 
-document.getElementById("pw-in").addEventListener("keydown",function(e){if(e.key==="Enter")checkPw();});
+document.getElementById("pw-btn").addEventListener("click",function(){
+  var v=document.getElementById("pw-in").value.trim();
+  if(v===PW){hide("gate");show("load-screen");}
+  else{document.getElementById("pw-in").value="";document.getElementById("pw-in").style.borderColor="#fca5a5";show("pw-err");setTimeout(function(){document.getElementById("pw-in").style.borderColor="#d1d5db";hide("pw-err");},2000);}
+});
+document.getElementById("pw-in").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("pw-btn").click();});
 document.getElementById("org-in").addEventListener("keydown",function(e){if(e.key==="Enter")loadOrg();});
 
-function checkPw(){
-  var v=document.getElementById("pw-in").value.trim();
-  if(v===PW){hide("gate");showLoad();}
-  else{
-    document.getElementById("pw-in").value="";
-    document.getElementById("pw-in").style.borderColor="#fca5a5";
-    show("pw-err");
-    setTimeout(function(){document.getElementById("pw-in").style.borderColor="#d1d5db";hide("pw-err");},2000);
-  }
+function toggleRoles(){
+  useCustomRoles=!useCustomRoles;
+  var panel=document.getElementById("roles-panel");
+  var knob=document.getElementById("roles-knob");
+  var toggle=document.getElementById("roles-toggle");
+  var stdLabel=document.getElementById("roles-std-label");
+  var customLabel=document.getElementById("roles-custom-label");
+  if(useCustomRoles){panel.style.display="block";toggle.style.background="#1e40af";knob.style.left="23px";stdLabel.style.color="#6b7280";stdLabel.style.fontWeight="normal";customLabel.style.color="#1e40af";customLabel.style.fontWeight="bold";buildRolesGrid();}
+  else{panel.style.display="none";toggle.style.background="#d1d5db";knob.style.left="3px";stdLabel.style.color="#1e40af";stdLabel.style.fontWeight="bold";customLabel.style.color="#6b7280";customLabel.style.fontWeight="normal";}
 }
 
-function showLoad(){hide("results-screen");show("load-screen");buildRoleGrid();}
+function buildRolesGrid(){
+  var grid=document.getElementById("roles-grid");var html="";
+  Object.keys(DROLES).forEach(function(k){html+='<div><label style="display:block;font-size:11px;color:#9ca3af;margin-bottom:3px;">'+DROLES[k]+'</label><input data-rolekey="'+k+'" type="text" value="'+esc(roles[k])+'" style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:Georgia,serif;"/></div>';});
+  grid.innerHTML=html;
+  document.querySelectorAll("[data-rolekey]").forEach(function(inp){inp.addEventListener("input",function(){roles[this.dataset.rolekey]=this.value;});});
+}
+
+function resetRoles(){roles=JSON.parse(JSON.stringify(DROLES));buildRolesGrid();}
 function newSearch(){hide("results-screen");show("load-screen");}
-
-function buildRoleGrid(){
-  var keys=Object.keys(DROLES);
-  var html="";
-  for(var i=0;i<keys.length;i++){
-    var k=keys[i];
-    html+='<div><label style="display:block;font-size:11px;color:#9ca3af;margin-bottom:3px;">'+esc(DROLES[k])+'</label><input data-role="'+k+'" type="text" value="'+esc(roles[k])+'" style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:Georgia,serif;"/></div>';
-  }
-  document.getElementById("role-grid").innerHTML=html;
-  var inputs=document.querySelectorAll("[data-role]");
-  for(var i=0;i<inputs.length;i++){
-    inputs[i].addEventListener("input",function(){roles[this.dataset.role]=this.value;});
-  }
-}
-
-function resetRoles(){
-  var keys=Object.keys(DROLES);
-  for(var i=0;i<keys.length;i++){roles[keys[i]]=DROLES[keys[i]];}
-  buildRoleGrid();
-}
-
-function loadSample(){
-  sessions=SAMPLE;
-  showResults();
-}
+function loadSample(){sessions=SAMPLE;showResults();}
 
 async function loadOrg(){
   var org=document.getElementById("org-in").value.trim();
   if(!org)return;
   hide("load-err");
   try{
-    var slug=org.toLowerCase().replace(/[^a-z0-9]/g,"-").slice(0,30);
-    var formula=encodeURIComponent('FIND("'+slug+'",LOWER({org}))');
-    var res=await fetch(AT_URL+"?filterByFormula="+encodeURIComponent('{org}="'+org+'"'),{headers:{"Authorization":"Bearer "+AT_TOKEN}});
+    var res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Service":"airtable"},body:JSON.stringify({method:"GET",filter:'{org}="'+org+'"'})});
     var data=await res.json();
-    if(!data.records||!data.records.length){
-      var errEl=document.getElementById("load-err");
-      errEl.textContent="No saved assessments found for that organization.";
-      show("load-err");
-      return;
-    }
+    if(!data.records||!data.records.length){var errEl=document.getElementById("load-err");errEl.textContent="No saved assessments found for that organization.";show("load-err");return;}
     var ss=[];
-    for(var i=0;i<data.records.length;i++){
-      var f=data.records[i].fields;
-      try{ss.push({person:f.person||"Unknown",org:f.org||org,savedAt:f.savedAt,scores:JSON.parse(f.scores||"{}")});}catch(e){}
-    }
-    if(!ss.length){
-      var errEl=document.getElementById("load-err");
-      errEl.textContent="Could not read saved assessments.";
-      show("load-err");
-      return;
-    }
+    for(var i=0;i<data.records.length;i++){var f=data.records[i].fields;try{ss.push({person:f.person||"Unknown",org:f.org||org,savedAt:f.savedAt,scores:JSON.parse(f.scores||"{}")});}catch(e){}}
+    if(!ss.length){var errEl=document.getElementById("load-err");errEl.textContent="Could not read saved assessments.";show("load-err");return;}
     sessions=ss.sort(function(a,b){return a.person.localeCompare(b.person);});
     showResults();
-  }catch(e){
-    var errEl=document.getElementById("load-err");
-    errEl.textContent="Error: "+e.message;
-    show("load-err");
-  }
+  }catch(e){var errEl=document.getElementById("load-err");errEl.textContent="Error: "+e.message;show("load-err");}
 }
 
 function getMisalign(id){
@@ -394,16 +286,13 @@ function getSpread(id){
 }
 
 function showResults(){
-  hide("load-screen");
-  show("results-screen");
+  hide("load-screen");show("results-screen");
   hide("exec-box");hide("rep-box");
-
   var org=sessions[0]?sessions[0].org:"";
   document.getElementById("hdr-sub").textContent=org+" · "+sessions.length+" respondent"+(sessions.length!==1?"s":"");
   document.getElementById("exec-title").textContent="Top Five Recommendations — "+org;
   document.getElementById("exec-sub").textContent="Prepared for the "+roles.ceo+", "+roles.cdo+", and "+roles.nce;
   document.getElementById("rep-title").textContent="Diagnostic Summary — "+org;
-
   var cards="";
   for(var i=0;i<sessions.length;i++){
     var s=sessions[i];
@@ -411,13 +300,9 @@ function showResults(){
     cards+='<div style="background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:12px 16px;flex:1 1 160px;"><div style="font-size:13px;font-weight:bold;color:#111827;margin-bottom:2px;">'+esc(s.person)+'</div><div style="font-size:12px;color:#6b7280;margin-bottom:4px;">'+esc(fmtD(s.savedAt))+'</div><div style="font-size:12px;color:#374151;">'+scored+'/'+HOLDS.length+' holds scored</div></div>';
   }
   document.getElementById("resp-cards").innerHTML=cards;
-
   var mc=HOLDS.filter(function(h){return getMisalign(h.id);}).length;
-  if(mc>0){
-    document.getElementById("mis-text").innerHTML="<strong>"+mc+" hold"+(mc!==1?"s":"")+"</strong> show significant rating misalignment — your highest-value conversation starters.";
-    show("mis-banner");
-  }else{hide("mis-banner");}
-
+  if(mc>0){document.getElementById("mis-text").innerHTML="<strong>"+mc+" hold"+(mc!==1?"s":"")+"</strong> show significant rating misalignment — your highest-value conversation starters.";show("mis-banner");}
+  else{hide("mis-banner");}
   document.getElementById("nat-rows").innerHTML=HOLDS.filter(function(h){return h.matrix==="national";}).map(function(h,i){return holdRow(h,i);}).join("");
   document.getElementById("field-rows").innerHTML=HOLDS.filter(function(h){return h.matrix==="field";}).map(function(h,i){return holdRow(h,i);}).join("");
 }
@@ -428,35 +313,27 @@ function holdRow(hold,hi){
   var scs=sessions.map(function(s){return getScore(s,hold.id);}).filter(Boolean);
   var sp=scs.length>1?Math.max.apply(null,scs)-Math.min.apply(null,scs):0;
   var avg=scs.length?Math.round(scs.reduce(function(a,b){return a+b;},0)/scs.length*10)/10:null;
-  var flagged=mis||sp>=3;
-
   var badges=sessions.map(function(s,i){
     var r=getRating(s,hold.id);
     var b=r?('<span style="font-size:12px;padding:3px 9px;border-radius:5px;background:'+RS[r].bg+';color:'+RS[r].tx+';border:1px solid '+RS[r].bd+';white-space:nowrap;">'+RLABELS[r]+'</span>'):('<span style="font-size:12px;padding:3px 9px;border-radius:5px;background:#f9fafb;color:#9ca3af;border:1px solid #e5e7eb;">Not scored</span>');
     return '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><span style="font-size:11px;color:#9ca3af;white-space:nowrap;">'+esc(s.person)+'</span>'+b+'</div>';
   }).join("");
-
   var avgBox="";
-  if(avg!==null&&sessions.length>1){
-    avgBox='<div style="display:flex;flex-direction:column;align-items:center;gap:3px;margin-left:8px;padding-left:12px;border-left:1px solid #e5e7eb;"><span style="font-size:11px;color:#9ca3af;">Avg</span><div style="width:40px;height:40px;border-radius:8px;background:#f9fafb;border:2px solid '+pC(avg)+';display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-size:14px;font-weight:bold;color:'+pC(avg)+';line-height:1;">'+avg+'</span><span style="font-size:8px;color:#9ca3af;text-transform:uppercase;">/10</span></div><span style="font-size:10px;color:'+pC(avg)+';font-weight:bold;">'+pL(avg)+'</span></div>';
-  }
-
+  if(avg!==null&&sessions.length>1){avgBox='<div style="display:flex;flex-direction:column;align-items:center;gap:3px;margin-left:8px;padding-left:12px;border-left:1px solid #e5e7eb;"><span style="font-size:11px;color:#9ca3af;">Avg</span><div style="width:40px;height:40px;border-radius:8px;background:#f9fafb;border:2px solid '+pC(avg)+';display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-size:14px;font-weight:bold;color:'+pC(avg)+';line-height:1;">'+avg+'</span><span style="font-size:8px;color:#9ca3af;text-transform:uppercase;">/10</span></div><span style="font-size:10px;color:'+pC(avg)+';font-weight:bold;">'+pL(avg)+'</span></div>';}
   var valid=sessions.map(function(s,i){return{name:s.person,sc:getScore(s,hold.id),i:i};}).filter(function(x){return x.sc!==null;});
   var track="";
   if(valid.length>1){
     var mn=Math.min.apply(null,valid.map(function(x){return x.sc;}));
     var mx=Math.max.apply(null,valid.map(function(x){return x.sc;}));
-    var tsp=mx-mn;
-    var W=150;
+    var tsp=mx-mn;var W=150;
     function pos(v){return Math.round((v-2)/8*W);}
     var spBadge=tsp>=3?'<span style="font-size:11px;padding:1px 7px;border-radius:4px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;font-weight:bold;">Gap: '+tsp+' pts</span>':tsp>0?'<span style="font-size:11px;padding:1px 7px;border-radius:4px;background:#f0fdf4;color:#166534;border:1px solid #86efac;">Spread: '+tsp+' pt'+(tsp!==1?"s":"")+'</span>':'<span style="font-size:11px;padding:1px 7px;border-radius:4px;background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;">Agreement</span>';
     var dots=valid.map(function(x){return '<div style="position:absolute;top:6px;left:'+(pos(x.sc)-5)+'px;width:11px;height:11px;border-radius:50%;background:'+DC[x.i%DC.length]+';border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>';}).join("");
     var leg=valid.map(function(x){return '<span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#374151;"><span style="width:8px;height:8px;border-radius:50%;background:'+DC[x.i%DC.length]+';display:inline-block;"></span>'+esc(x.name)+': <strong style="color:'+pC(x.sc)+';">'+x.sc+'/10</strong></span>';}).join("");
     track='<div style="margin-top:10px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;">Score Range</span>'+spBadge+'</div><div style="position:relative;height:28px;width:'+(W+16)+'px;"><div style="position:absolute;top:11px;left:0;width:'+W+'px;height:3px;background:#e5e7eb;border-radius:2px;"><div style="position:absolute;left:'+pos(mn)+'px;width:'+Math.max(pos(mx)-pos(mn),1)+'px;height:100%;background:#93c5fd;border-radius:2px;"></div></div>'+dots+'</div><div style="display:flex;gap:10px;flex-wrap:wrap;">'+leg+'</div></div>';
   }
-
   var flags=(mis?'<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#fef2f2;color:#991b1b;border:1px solid #fca5a5;font-weight:bold;">Rating Gap</span> ':'')+( sp>=3?'<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;font-weight:bold;">Score Gap</span>':"");
-  return '<div style="border-top:'+(hi===0?"none":"1px solid #f3f4f6")+';background:'+(flagged?"#fffbfb":"#fff")+';padding:16px 20px;"><div style="display:flex;gap:12px;flex-wrap:wrap;"><span style="font-size:12px;font-weight:bold;color:#6b7280;min-width:34px;padding-top:2px;">'+hold.num+'</span><div style="flex:1;min-width:180px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;"><span style="font-size:14px;color:#111827;font-weight:600;">'+esc(hold.title)+'</span>'+flags+'</div><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;margin-bottom:4px;">'+badges+avgBox+'</div>'+track+'</div></div></div>';
+  return '<div style="border-top:'+(hi===0?"none":"1px solid #f3f4f6")+';background:'+((mis||sp>=3)?"#fffbfb":"#fff")+';padding:16px 20px;"><div style="display:flex;gap:12px;flex-wrap:wrap;"><span style="font-size:12px;font-weight:bold;color:#6b7280;min-width:34px;padding-top:2px;">'+hold.num+'</span><div style="flex:1;min-width:180px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;"><span style="font-size:14px;color:#111827;font-weight:600;">'+esc(hold.title)+'</span>'+flags+'</div><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;margin-bottom:4px;">'+badges+avgBox+'</div>'+track+'</div></div></div>';
 }
 
 function buildCtx(){
@@ -464,8 +341,7 @@ function buildCtx(){
   var resp=sessions.map(function(s){return s.person;}).join(", ");
   var rGaps=[],sGaps=[],topArr=[];
   for(var i=0;i<HOLDS.length;i++){
-    var h=HOLDS[i];
-    var rats=[],scs=[];
+    var h=HOLDS[i];var rats=[],scs=[];
     for(var j=0;j<sessions.length;j++){var ri=rIdx(getRating(sessions[j],h.id));if(ri>=0)rats.push(ri);var sc=getScore(sessions[j],h.id);if(sc)scs.push(sc);}
     if(rats.length>1&&Math.max.apply(null,rats)-Math.min.apply(null,rats)>=2)rGaps.push(h.num);
     if(scs.length>1&&Math.max.apply(null,scs)-Math.min.apply(null,scs)>=3)sGaps.push(h.num);
@@ -473,19 +349,13 @@ function buildCtx(){
     topArr.push({num:h.num,avg:avg});
   }
   topArr.sort(function(a,b){return b.avg-a.avg;});
-  return {
-    org:org,resp:resp,
-    rGaps:rGaps.join(" ")||"none",
-    sGaps:sGaps.join(" ")||"none",
-    top:topArr.slice(0,5).map(function(x){return x.num+"="+x.avg;}).join(" "),
-    rl:Object.keys(roles).map(function(k){return roles[k];}).join(", ")
-  };
+  return{org:org,resp:resp,rGaps:rGaps.join(" ")||"none",sGaps:sGaps.join(" ")||"none",top:topArr.slice(0,5).map(function(x){return x.num+"="+x.avg;}).join(" "),rl:Object.keys(roles).map(function(k){return roles[k];}).join(", ")};
 }
 
 async function callAPI(prompt,maxTok){
-  var res=await fetch("https://sparkling-truth-7db6.scott-archimbaud.workers.dev",{
+  var res=await fetch(WORKER_URL,{
     method:"POST",
-    headers:{"Content-Type":"application/json"},
+    headers:{"Content-Type":"application/json","X-Service":"anthropic"},
     body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:maxTok,temperature:0.2,messages:[{role:"user",content:prompt}]})
   });
   var data=await res.json();
@@ -496,44 +366,39 @@ async function callAPI(prompt,maxTok){
 }
 
 async function doReport(){
-  var btn=document.getElementById("btn-rep");
-  btn.textContent="Generating…";btn.disabled=true;
-  show("rep-box");hide("rep-foot");
-  document.getElementById("rep-text").textContent="";
-  show("rep-loading");
+  var btn=document.getElementById("btn-rep");btn.textContent="Generating…";btn.disabled=true;
+  show("rep-box");hide("rep-foot");document.getElementById("rep-text").textContent="";show("rep-loading");
   var c=buildCtx();
   var p="P2P consultant. Org:"+c.org+". Respondents:"+c.resp+". Roles:"+c.rl+". Rating gaps:"+c.rGaps+". Score gaps:"+c.sGaps+". Top holds:"+c.top+". Write 3-4 paragraph diagnostic summary. Open with what ratings collectively suggest. Identify most significant misalignment and role-based reasons. Note shared agreements and gaps. Close with priority direction. Direct consultant voice, no headers, no bullets.";
-  try{
-    var text=await callAPI(p,900);
-    hide("rep-loading");
-    document.getElementById("rep-text").textContent=text||"Could not generate.";
-    show("rep-foot");
-  }catch(e){
-    hide("rep-loading");
-    document.getElementById("rep-text").textContent="Error: "+e.message;
-  }
+  try{var text=await callAPI(p,900);hide("rep-loading");document.getElementById("rep-text").textContent=text||"Could not generate.";show("rep-foot");}
+  catch(e){hide("rep-loading");document.getElementById("rep-text").textContent="Error: "+e.message;}
   btn.textContent="Diagnostic Summary";btn.disabled=false;
 }
 
 async function doExec(){
-  var btn=document.getElementById("btn-exec");
-  btn.textContent="Generating…";btn.disabled=true;
-  show("exec-box");hide("exec-content");
-  show("exec-loading");
+  var btn=document.getElementById("btn-exec");btn.textContent="Generating…";btn.disabled=true;
+  show("exec-box");hide("exec-content");show("exec-loading");
   var c=buildCtx();
   var p="P2P consultant. Org:"+c.org+". Respondents:"+c.resp+". Roles:"+c.rl+". Priority holds:"+c.top+". Rating gaps:"+c.rGaps+". Score gaps:"+c.sGaps+". Write executive report for "+roles.ceo+", "+roles.cdo+", "+roles.nce+". Give exactly 5 numbered recommendations. Each: short bold title, 2-3 sentences on alignment gap, 2-3 sentences on specific action and revenue rationale. End with one closing paragraph to executive team. No bullets. Direct.";
-  try{
-    var text=await callAPI(p,1200);
-    hide("exec-loading");
-    document.getElementById("exec-text").textContent=text||"Could not generate.";
-    show("exec-content");
-  }catch(e){
-    hide("exec-loading");
-    document.getElementById("exec-text").textContent="Error: "+e.message;
-    show("exec-content");
-  }
+  try{var text=await callAPI(p,1200);hide("exec-loading");document.getElementById("exec-text").textContent=text||"Could not generate.";show("exec-content");}
+  catch(e){hide("exec-loading");document.getElementById("exec-text").textContent="Error: "+e.message;show("exec-content");}
   btn.textContent="Executive Report";btn.disabled=false;
 }
+
+function doEmailReport(){
+  if(!sessions)return;
+  var org=sessions[0]?sessions[0].org:"Organization";
+  var date=new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+  var rText=document.getElementById("rep-text").textContent;
+  var eText=document.getElementById("exec-text").textContent;
+  var lines=["GBB DIAGNOSTIC — COMPARISON REPORT","Campaign Architecture","=".repeat(50),"","Organization: "+org,"Date: "+date,"Respondents: "+sessions.map(function(s){return s.person;}).join(", "),""];
+  if(eText){lines.push("EXECUTIVE REPORT — TOP FIVE RECOMMENDATIONS","=".repeat(50),"",eText,"");}
+  if(rText){lines.push("DIAGNOSTIC SUMMARY","=".repeat(50),"",rText,"");}
+  lines.push("—","Scott Archimbaud | Campaign Architecture","scott@scottarchconsultancy.com | 917-868-0745");
+  var sub="GBB Comparison Report — "+org;
+  window.location.href="mailto:?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(lines.join("\n"));
+}
 </script>
+
 </body>
 </html>
