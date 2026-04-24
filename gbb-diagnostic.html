@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -21,6 +22,7 @@ input::placeholder{color:#9ca3af;}
 <body>
 
 <!-- GATE -->
+
 <div id="gate" style="min-height:100vh;background:#1e40af;display:flex;align-items:center;justify-content:center;padding:24px;">
   <div style="background:#fff;border-radius:12px;padding:40px 36px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center;">
     <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Campaign Architecture</div>
@@ -34,6 +36,7 @@ input::placeholder{color:#9ca3af;}
 </div>
 
 <!-- INTRO -->
+
 <div id="intro" class="hide">
   <div class="hdr">
     <div class="hdr-inner" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
@@ -69,37 +72,41 @@ input::placeholder{color:#9ca3af;}
       </div>
     </div>
 
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-        <div>
-          <h3 style="margin:0;font-size:15px;color:#111827;font-weight:700;">Role Titles</h3>
-          <p style="margin:3px 0 0;font-size:13px;color:#6b7280;">Used throughout the assessment and action plan</p>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span id="roles-std-label" style="font-size:13px;color:#1e40af;font-weight:bold;">Standard</span>
-          <button onclick="toggleRoles()" id="roles-toggle" style="width:44px;height:24px;border-radius:12px;border:none;padding:0;position:relative;background:#d1d5db;">
-            <span id="roles-knob" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></span>
-          </button>
-          <span id="roles-custom-label" style="font-size:13px;color:#6b7280;">Custom</span>
-        </div>
-      </div>
-      <div id="roles-panel" class="hide" style="margin-top:16px;">
-        <p style="margin:0 0 12px;font-size:13px;color:#374151;font-style:italic;">Enter your organization's role titles to personalize the assessment.</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;" id="roles-grid"></div>
-        <button onclick="resetRoles()" style="margin-top:10px;padding:6px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;">Reset to Defaults</button>
-      </div>
+```
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+    <div>
+      <h3 style="margin:0;font-size:15px;color:#111827;font-weight:700;">Role Titles</h3>
+      <p style="margin:3px 0 0;font-size:13px;color:#6b7280;">Used throughout the assessment and action plan</p>
     </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span id="roles-std-label" style="font-size:13px;color:#1e40af;font-weight:bold;">Standard</span>
+      <button onclick="toggleRoles()" id="roles-toggle" style="width:44px;height:24px;border-radius:12px;border:none;padding:0;position:relative;background:#d1d5db;">
+        <span id="roles-knob" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></span>
+      </button>
+      <span id="roles-custom-label" style="font-size:13px;color:#6b7280;">Custom</span>
+    </div>
+  </div>
+  <div id="roles-panel" class="hide" style="margin-top:16px;">
+    <p style="margin:0 0 12px;font-size:13px;color:#374151;font-style:italic;">Enter your organization's role titles to personalize the assessment.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;" id="roles-grid"></div>
+    <button onclick="resetRoles()" style="margin-top:10px;padding:6px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;">Reset to Defaults</button>
+  </div>
+</div>
 
-    <div style="background:#fffbeb;border-radius:8px;border:1px solid #fcd34d;padding:16px 20px;margin-bottom:20px;">
-      <p style="margin:0 0 6px;font-size:14px;font-weight:bold;color:#78350f;">About the Rating Scale</p>
-      <p style="margin:0;font-size:14px;color:#78350f;line-height:1.6;">Each hold is rated: <strong>Not in Place → In Development → Good → Better → Best in Class</strong>.</p>
-    </div>
-    <button onclick="goAssess()" style="width:100%;padding:14px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;margin-bottom:12px;">Begin Assessment →</button>
-    <button onclick="loadSample()" style="width:100%;padding:12px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;color:#374151;font-size:14px;">Preview Sample Data →</button>
+<div style="background:#fffbeb;border-radius:8px;border:1px solid #fcd34d;padding:16px 20px;margin-bottom:20px;">
+  <p style="margin:0 0 6px;font-size:14px;font-weight:bold;color:#78350f;">About the Rating Scale</p>
+  <p style="margin:0;font-size:14px;color:#78350f;line-height:1.6;">Each hold is rated: <strong>Not in Place → In Development → Good → Better → Best in Class</strong>.</p>
+</div>
+<button onclick="goAssess()" style="width:100%;padding:14px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;margin-bottom:12px;">Begin Assessment →</button>
+<button onclick="loadSample()" style="width:100%;padding:12px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;color:#374151;font-size:14px;">Preview Sample Data →</button>
+```
+
   </div>
 </div>
 
 <!-- ASSESSMENT -->
+
 <div id="assess" class="hide">
   <div class="hdr">
     <div class="hdr-inner">
@@ -143,6 +150,7 @@ input::placeholder{color:#9ca3af;}
 </div>
 
 <!-- RESULTS -->
+
 <div id="results-screen" class="hide">
   <div class="hdr">
     <div class="hdr-inner" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
@@ -179,6 +187,7 @@ input::placeholder{color:#9ca3af;}
 </div>
 
 <!-- ACTION PLAN -->
+
 <div id="action-screen" class="hide">
   <div class="hdr">
     <div class="hdr-inner" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
@@ -339,9 +348,9 @@ function buildRolesGrid(){
 function resetRoles(){customRoles=JSON.parse(JSON.stringify(DROLES));buildRolesGrid();}
 
 function loadSample(){
-  var sampleRatings=["better","good","inDevelopment","better","best","notInPlace","good","inDevelopment","better","good","inDevelopment","better","good","notInPlace","better","inDevelopment","good","better","notInPlace","good","inDevelopment"];
-  var samplePayoff=[5,4,5,3,5,4,3,5,3,4,5,5,4,5,4,4,3,3,5,3,4];
-  var sampleEase=[3,3,2,4,2,3,4,2,4,3,2,2,3,2,3,3,4,3,2,4,3];
+  var sampleRatings=["better","good","inDevelopment","better","best","notInPlace","good","inDevelopment","better","good","inDevelopment","better","good","notInPlace","better","notInPlace","good","inDevelopment","notInPlace","inDevelopment","notInPlace"];
+  var samplePayoff=[5,4,5,3,5,4,3,5,3,4,5,5,4,5,4,3,3,3,4,3,3];
+  var sampleEase=[3,3,2,4,2,3,4,2,4,3,2,2,3,2,3,4,4,3,4,4,4];
   HOLDS.forEach(function(h,i){state.scores[h.id]={rating:sampleRatings[i],payoff:samplePayoff[i],ease:sampleEase[i]};});
   state.org="Sample Organization";state.person="Demo User";
   document.getElementById("org-in").value="Sample Organization";
@@ -775,5 +784,6 @@ async function doLoad(){
   }catch(e){alert("Load error: "+e.message);}
 }
 </script>
+
 </body>
 </html>
