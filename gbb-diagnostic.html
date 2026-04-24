@@ -349,8 +349,8 @@ function resetRoles(){customRoles=JSON.parse(JSON.stringify(DROLES));buildRolesG
 
 function loadSample(){
   var sampleRatings=["better","good","inDevelopment","better","best","notInPlace","good","inDevelopment","better","good","inDevelopment","better","good","notInPlace","better","notInPlace","good","inDevelopment","notInPlace","inDevelopment","notInPlace"];
-  var samplePayoff=[5,4,5,3,5,4,3,5,3,4,5,5,4,5,4,3,3,3,4,3,3];
-  var sampleEase=[3,3,2,4,2,3,4,2,4,3,2,2,3,2,3,4,4,3,4,4,4];
+  var samplePayoff=[5,5,5,4,5,4,3,5,4,4,5,5,4,5,4,3,3,3,3,2,2];
+  var sampleEase=[5,4,2,4,2,1,2,2,3,2,2,3,2,1,2,2,2,2,1,2,2];
   HOLDS.forEach(function(h,i){state.scores[h.id]={rating:sampleRatings[i],payoff:samplePayoff[i],ease:sampleEase[i]};});
   state.org="Sample Organization";state.person="Demo User";
   document.getElementById("org-in").value="Sample Organization";
