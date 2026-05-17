@@ -775,11 +775,9 @@ function generateNarrative(){
   var g2=allScored.slice(size,size*2);
   var g3=allScored.slice(size*2);
 
-  function desc(arr){
-    return arr.map(function(h){return h.hold.title+" ("+RLABELS[h.rating]+")"}).join(", ");
-  }
-
-  var sys="You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience. Write in direct, experienced prose as a peer speaking to a senior leader. One paragraph only — no bullets, no headers, no numerical scores. Use 'you' and 'your program'.";
+  var holdSummary=allScored.map(function(item,i){
+    return (i+1)+". "+item.hold.title+" — "+RLABELS[item.rating];
+  }).join("\n");
 
   function apiCall(content){
     return fetch("https://api.anthropic.com/v1/messages",{
@@ -787,8 +785,8 @@ function generateNarrative(){
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
         model:"claude-sonnet-4-20250514",
-        max_tokens:300,
-        system:sys,
+        max_tokens:1200,
+        system:"You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience including running a $100M national P2P program across 1,200 markets. You deliver assessments as a trusted advisor — candid, constructive, and encouraging. You acknowledge what is working, frame gaps as opportunities for iteration, and inspire confidence in the path forward. No bullets. No headers. No numerical scores.",
         messages:[{role:"user",content:content}]
       })
     }).then(function(r){return r.json();}).then(function(d){
@@ -798,23 +796,15 @@ function generateNarrative(){
     });
   }
 
-  var p1=apiCall("You have just completed a GBB Diagnostic with the senior leader of "+org+". Write ONE paragraph (80-100 words) opening your verbal assessment. Describe the overall pattern the GBB results reveal. You must mention each of these holds by name: "+desc(g1)+". Write as if speaking directly to them.");
+  var prompt="You have just completed a GBB Diagnostic with the senior leader of "+org+". Here are all "+n+" holds scored, from highest to lowest priority:\n\n"+holdSummary+"\n\nWrite a single integrated assessment — 4 paragraphs that flow as one continuous verbal delivery, the way a seasoned consultant speaks after reviewing results in a room. The tone should be positive yet honest — the way a trusted advisor delivers a candid assessment. Acknowledge what is working. Frame gaps as opportunities and areas for iteration, not failures. Be direct about priorities without being discouraging. Every hold must appear somewhere in the narrative. Lead with what matters most and wind down naturally through the remaining holds. Write directly to the senior leader as 'you'. Sound like someone who has seen this pattern many times, believes in the program's potential, and knows exactly what it will take to get there.";
 
-  var p2=apiCall("Continuing your GBB Diagnostic debrief for "+org+". Write ONE paragraph (80-100 words) going deeper into how the program's gaps compound each other. You must mention each of these holds by name: "+desc(g2)+". Connect them to the issues you raised in your opening.");
-
-  var p3=g3.length?apiCall("Continuing your GBB Diagnostic debrief for "+org+". Write ONE paragraph (80-100 words) addressing the remaining holds. You must mention each of these holds by name: "+desc(g3)+". Acknowledge what is working and wind down naturally toward a close."):Promise.resolve("");
-
-  var p4=apiCall("Close your GBB Diagnostic debrief for "+org+". Write ONE paragraph (60-80 words) with a clear sequencing recommendation — where to start given everything covered, what comes next, and why that order matters.");
-
-  Promise.all([p1,p2,p3,p4])
-  .then(function(paras){
-    var html='<div style="background:#fffbeb;border:1px solid #fcd34d;border-left:4px solid #b8972e;border-radius:10px;padding:24px 28px;margin-bottom:8px;">'+
+  apiCall(prompt)
+  .then(function(text){
+    var paragraphs=text.trim().split(/\n\n+/).filter(function(p){return p.trim();});
+    narDiv.innerHTML='<div style="background:#fffbeb;border:1px solid #fcd34d;border-left:4px solid #b8972e;border-radius:10px;padding:24px 28px;margin-bottom:8px;">'+
       '<div style="font-size:11px;color:#b8972e;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px;font-weight:bold;">Your GBB Program Assessment</div>'+
-      paras.filter(Boolean).map(function(p){
-        return '<p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.8;font-style:italic;">'+p+'</p>';
-      }).join('')+
+      paragraphs.map(function(p){return '<p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.8;font-style:italic;">'+p+'</p>';}).join('')+
     '</div>';
-    narDiv.innerHTML=html;
   })
   .catch(function(){
     var fallback=allScored.map(function(item){
