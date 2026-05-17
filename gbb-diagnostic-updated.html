@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GBB Diagnostic™ — Campaign Architecture™</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Georgia,serif;background:#f3f4f6;color:#111827;font-size:14px;}
+.hide{display:none!important;}
+button{cursor:pointer;font-family:Georgia,serif;}
+button:focus{outline:none;}
+input{font-family:Georgia,serif;}
+input::placeholder{color:#9ca3af;}
+.hdr{background:#1e40af;padding:20px 24px;}
+.hdr-inner{max-width:860px;margin:0 auto;}
+.wrap{max-width:860px;margin:0 auto;padding:28px 24px 60px;}
+.card{background:#fff;border-radius:10px;border:1px solid #e5e7eb;padding:24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+</style>
+</head>
+<body>
+
+<!-- GATE -->
+<div id="gate" style="min-height:100vh;background:#1e40af;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:#fff;border-radius:12px;padding:40px 36px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center;">
+    <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Campaign Architecture&#8482;</div>
+    <h1 style="margin:0 0 6px;font-size:22px;font-weight:700;color:#111827;">GBB Diagnostic Tool&#8482;</h1>
+    <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">Enter your access code to continue.</p>
+    <input id="pw-in" type="password" placeholder="Access code" style="width:100%;padding:12px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;margin-bottom:10px;text-align:center;letter-spacing:0.2em;display:block;"/>
+    <p id="pw-err" class="hide" style="font-size:13px;color:#dc2626;margin-bottom:8px;">Incorrect — please try again.</p>
+    <button id="pw-btn" style="width:100%;padding:13px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;">Enter</button>
+    <p style="margin:20px 0 0;font-size:12px;color:#d1d5db;">Scott Archimbaud &middot; Campaign Architecture&#8482;</p>
+  </div>
+</div>
+
+<!-- INTRO -->
+<div id="intro" class="hide">
+  <div class="hdr">
+    <div class="hdr-inner" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px;">Campaign Architecture&#8482;</div>
+        <div style="font-size:20px;font-weight:700;color:#fff;">Good / Better / Best Diagnostic&#8482;</div>
+      </div>
+      <button onclick="goAssess()" style="padding:9px 18px;background:#fff;border:none;border-radius:6px;color:#1e40af;font-size:13px;font-weight:bold;">Begin Assessment &#8594;</button>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="card">
+      <h2 style="margin:0 0 16px;font-size:17px;color:#111827;font-weight:700;">Assessment Details</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div>
+          <label style="display:block;font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Organization</label>
+          <input id="org-in" type="text" placeholder="Enter organization" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;"/>
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Your Name</label>
+          <input id="person-in" type="text" placeholder="Enter your name" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;"/>
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Your Title</label>
+          <input id="title-in" type="text" placeholder="Enter your title" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;"/>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button onclick="doSave()" id="save-btn" style="padding:9px 18px;border-radius:6px;border:1px solid #3b82f6;background:#eff6ff;color:#1e40af;font-size:13px;font-weight:bold;">Save Assessment</button>
+        <button onclick="doLoad()" style="padding:9px 18px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#374151;font-size:13px;">Load Saved</button>
+        <button onclick="doEmailResults()" style="padding:9px 18px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#374151;font-size:13px;">&#9993; Email Results</button>
+        <span id="save-msg" style="font-size:13px;color:#166534;"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <div>
+          <h3 style="margin:0;font-size:15px;color:#111827;font-weight:700;">Role Titles</h3>
+          <p style="margin:3px 0 0;font-size:13px;color:#6b7280;">Used throughout the assessment and action plan</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span id="roles-std-label" style="font-size:13px;color:#1e40af;font-weight:bold;">Standard</span>
+          <button onclick="toggleRoles()" id="roles-toggle" style="width:44px;height:24px;border-radius:12px;border:none;padding:0;position:relative;background:#d1d5db;">
+            <span id="roles-knob" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></span>
+          </button>
+          <span id="roles-custom-label" style="font-size:13px;color:#6b7280;">Custom</span>
+        </div>
+      </div>
+      <div id="roles-panel" class="hide" style="margin-top:16px;">
+        <p style="margin:0 0 12px;font-size:13px;color:#374151;font-style:italic;">Enter your organization's role titles to personalize the assessment.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;" id="roles-grid"></div>
+        <button onclick="resetRoles()" style="margin-top:10px;padding:6px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;color:#6b7280;font-size:12px;">Reset to Defaults</button>
+      </div>
+    </div>
+
+    <div style="background:#fffbeb;border-radius:8px;border:1px solid #fcd34d;padding:16px 20px;margin-bottom:20px;">
+      <p style="margin:0 0 6px;font-size:14px;font-weight:bold;color:#78350f;">About the Rating Scale</p>
+      <p style="margin:0;font-size:14px;color:#78350f;line-height:1.6;">Each hold is rated: <strong>Not in Place &#8594; In Development &#8594; Good &#8594; Better &#8594; Best in Class</strong>.</p>
+    </div>
+    <button onclick="goAssess()" style="width:100%;padding:14px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:bold;margin-bottom:12px;">Begin Assessment &#8594;</button>
+    <button onclick="loadSample()" style="width:100%;padding:12px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;color:#374151;font-size:14px;">Preview Sample Data &#8594;</button>
+  </div>
+</div>
+
+<!-- ASSESSMENT -->
+<div id="assess" class="hide">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:14px;">
+        <div>
+          <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px;">Campaign Architecture&#8482;</div>
+          <div style="font-size:20px;font-weight:700;color:#fff;">Good / Better / Best Diagnostic&#8482;</div>
+          <div id="assess-sub" style="font-size:13px;color:#bfdbfe;margin-top:2px;"></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="showScreen('intro')" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Setup</button>
+          <button onclick="showResults()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Results</button>
+          <button onclick="showAction()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Action Plan</button>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+        <span id="prog-label" style="font-size:12px;color:#93c5fd;"></span>
+        <span id="prog-pct" style="font-size:12px;color:#93c5fd;"></span>
+      </div>
+      <div style="height:6px;background:rgba(255,255,255,0.2);border-radius:3px;overflow:hidden;">
+        <div id="prog-bar" style="height:100%;width:0%;background:#93c5fd;border-radius:3px;transition:width 0.4s;"></div>
+      </div>
+      <div id="dot-nav" style="display:flex;gap:3px;margin-top:8px;flex-wrap:wrap;"></div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div id="assess-content"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:16px;">
+      <button onclick="goPrev()" style="padding:12px 24px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;color:#374151;font-weight:bold;">&#8592; Previous</button>
+      <div style="font-size:13px;color:#6b7280;text-align:center;">
+        <div id="nav-label" style="font-weight:bold;color:#374151;"></div>
+        <div id="nav-scored" style="font-size:12px;margin-top:2px;"></div>
+      </div>
+      <button onclick="goNext()" id="next-btn" style="padding:12px 24px;background:#1e40af;border:none;border-radius:8px;color:#fff;font-weight:bold;">Next &#8594;</button>
+    </div>
+    <div class="card" style="margin-top:24px;padding:14px 18px;">
+      <p style="font-size:12px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Jump to Hold</p>
+      <div id="jump-nav" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results-screen" class="hide">
+  <div class="hdr">
+    <div class="hdr-inner" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px;">Campaign Architecture&#8482;</div>
+        <div style="font-size:20px;font-weight:700;color:#fff;">Assessment Results</div>
+        <div id="results-sub" style="font-size:13px;color:#bfdbfe;margin-top:2px;"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button onclick="showScreen('assess');state.seqIdx=1;renderSeqItem();renderJumpNav();updateProgress();" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Continue</button>
+        <button onclick="showAction()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Action Plan</button>
+        <button onclick="doEmailResults()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">&#9993; Email</button>
+        <button onclick="doSave()" style="padding:7px 14px;background:#fff;border:none;border-radius:6px;color:#1e40af;font-size:13px;font-weight:bold;">Save</button>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="card" style="padding:14px 18px;display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center;">
+      <span style="font-size:13px;color:#374151;font-weight:bold;">Priority Score:</span>
+      <span style="font-size:13px;"><strong style="color:#dc2626;">9&#8211;10</strong> Immediate Focus</span>
+      <span style="font-size:13px;"><strong style="color:#d97706;">7&#8211;8</strong> High Priority</span>
+      <span style="font-size:13px;"><strong style="color:#2563eb;">5&#8211;6</strong> Secondary</span>
+      <span style="font-size:13px;"><strong style="color:#6b7280;">&lt;5</strong> Lower Priority</span>
+    </div>
+    <h2 style="font-size:18px;font-weight:700;color:#111827;margin:20px 0 14px;padding-bottom:10px;border-bottom:1px solid #e5e7eb;">National Matrix &#8212; Priority Summary</h2>
+    <div id="results-nat" style="margin-bottom:32px;"></div>
+    <h2 style="font-size:18px;font-weight:700;color:#111827;margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid #e5e7eb;">Field Matrix &#8212; Priority Summary</h2>
+    <div id="results-field" style="margin-bottom:32px;"></div>
+    <div style="margin-top:40px;padding-top:20px;border-top:1px solid #e5e7eb;">
+      <p style="font-size:13px;color:#374151;font-weight:bold;">Scott Archimbaud &middot; Campaign Architecture&#8482;</p>
+      <p style="font-size:13px;color:#6b7280;">scott@scottarchconsultancy.com &middot; 917-868-0745 &middot; &#169; 2026 Campaign Architecture&#8482;</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACTION PLAN -->
+<div id="action-screen" class="hide">
+  <div class="hdr">
+    <div class="hdr-inner" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px;">Campaign Architecture&#8482;</div>
+        <div style="font-size:20px;font-weight:700;color:#fff;">Organizational Action Plan</div>
+        <div id="action-sub" style="font-size:13px;color:#bfdbfe;margin-top:2px;"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button onclick="showResults()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Results</button>
+        <button onclick="doEmailAction()" style="padding:7px 14px;background:#fff;border:none;border-radius:6px;color:#1e40af;font-size:13px;font-weight:bold;">&#9993; Email Action Plan</button>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="card" style="padding:16px 20px;margin-bottom:20px;">
+      <p style="font-size:13px;color:#374151;font-weight:bold;margin-bottom:10px;">Filter</p>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;">
+        <div>
+          <p style="font-size:12px;color:#6b7280;margin-bottom:6px;">Minimum Priority Score</p>
+          <div id="ap-min-btns" style="display:flex;gap:6px;"></div>
+        </div>
+      </div>
+    </div>
+    <div id="action-content"></div>
+    <div style="margin-top:32px;padding-top:20px;border-top:1px solid #e5e7eb;">
+      <p style="font-size:13px;color:#374151;font-weight:bold;">Scott Archimbaud &middot; Campaign Architecture&#8482;</p>
+      <p style="font-size:13px;color:#6b7280;">scott@scottarchconsultancy.com &middot; 917-868-0745 &middot; &#169; 2026 Campaign Architecture&#8482;</p>
+    </div>
+  </div>
+</div>
+
+<script>
+var PW = "FLW";
+var WORKER_URL = "https://sparkling-truth-7db6.scott-archimbaud.workers.dev";
+
+async function findRecord(org,person){
+  var res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Service":"airtable"},body:JSON.stringify({method:"GET",filter:'AND({org}="'+org+'",{person}="'+person+'")'})});
+  var data=await res.json();
+  return(data.records&&data.records.length)?data.records[0]:null;
+}
+
+async function doSave(){
+  var org=document.getElementById("org-in").value.trim()||state.org;
+  var name=document.getElementById("person-in").value.trim();
+  var title=document.getElementById("title-in").value.trim();
+  var person=name?(title?name+", "+title:name):state.person;
+  if(!org||!person){alert("Please enter organization name and your name first.");return;}
+  var btn=document.getElementById("save-btn");btn.textContent="Saving...";btn.disabled=true;
+  try{
+    var fields={org:org,person:person,savedAt:new Date().toISOString(),scores:JSON.stringify(state.scores)};
+    var existing=await findRecord(org,person);
+    var body=existing?{method:"PATCH",recordId:existing.id,fields:fields}:{method:"POST",fields:fields};
+    var res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Service":"airtable"},body:JSON.stringify(body)});
+    var data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    var msg=document.getElementById("save-msg");msg.textContent="Saved — "+new Date().toLocaleTimeString();
+    setTimeout(function(){msg.textContent="";},4000);
+  }catch(e){alert("Save error: "+e.message);}
+  btn.textContent="Save Assessment";btn.disabled=false;
+}
+
+async function doLoad(){
+  var org=document.getElementById("org-in").value.trim();
+  var person=document.getElementById("person-in").value.trim();
+  if(!org||!person){alert("Please enter organization name and your name first.");return;}
+  try{
+    var rec=await findRecord(org,person);
+    if(!rec){alert("No saved assessment found for "+person+" at "+org+".");return;}
+    state.scores=JSON.parse(rec.fields.scores||"{}");state.org=org;state.person=person;
+    var msg=document.getElementById("save-msg");msg.textContent="Loaded — "+fmtD(rec.fields.savedAt);
+    setTimeout(function(){msg.textContent="";},4000);
+  }catch(e){alert("Load error: "+e.message);}
+}
+
+var state={org:"",person:"",scores:{},seqIdx:0};
+var apMinScore=7;
+var DROLES={ceo:"CEO / President",cdo:"Chief Development Officer",nce:"National Campaign Executive",field:"Field Leadership",rd:"Regional VP",ad:"Area Director",lgl:"Local Geographic Leader",lpl:"Local Program Lead"};
+var customRoles=JSON.parse(JSON.stringify(DROLES));
+var useCustomRoles=false;
+function getRole(k){return useCustomRoles?(customRoles[k]||DROLES[k]):DROLES[k];}
+var RORDER=["notInPlace","inDevelopment","good","better","best"];
+var RLABELS={notInPlace:"Not in Place",inDevelopment:"In Development",good:"Good",better:"Better",best:"Best in Class"};
+var RS={
+  notInPlace:{border:"#d1d5db",bg:"#f9fafb",text:"#374151",dot:"#9ca3af",bbg:"#f3f4f6"},
+  inDevelopment:{border:"#fcd34d",bg:"#fffbeb",text:"#92400e",dot:"#f59e0b",bbg:"#fef3c7"},
+  good:{border:"#86efac",bg:"#f0fdf4",text:"#166534",dot:"#22c55e",bbg:"#dcfce7"},
+  better:{border:"#93c5fd",bg:"#eff6ff",text:"#1e40af",dot:"#3b82f6",bbg:"#dbeafe"},
+  best:{border:"#c4b5fd",bg:"#faf5ff",text:"#6b21a8",dot:"#a855f7",bbg:"#f3e8ff"}
+};
+var NROLES=["ceo","cdo","nce","field"];
+var FROLES=["rd","ad","lgl","lpl"];
+
+var TASKS={
+n1:{ceo:"Personally identify and recruit the next National Campaign Chair for {org}. Confirm the recruitment timeline is no less than 12 months before campaign launch.",cdo:"Develop and maintain a National Campaign Chair prospect pipeline for {org} — at least three qualified candidates identified and in cultivation at all times.",nce:"Build a Chair onboarding and stewardship calendar for {org}'s current chair. Define specific activation milestones, company asks, and recognition moments.",field:"Identify current corporate partners or community leaders in your market who have the organizational standing to serve as a national-level chair for {org}.",rd:"Surface local corporate leaders with national employer relationships who could serve as national chair prospects for {org}.",ad:"Identify market-level executives engaged with {org} who have cross-market corporate relationships that could elevate to a national chair conversation.",lgl:"Flag any significant volunteer leaders in your market who have relationships with national employers that could support a chair conversation.",lpl:"Maintain strong relationships with current campaign volunteers who could be developed into future leadership candidates."},
+n2:{ceo:"Personally recruit at least one senior corporate executive to {org}'s national board this cycle. Target employers with national footprints not yet in the portfolio.",cdo:"Audit the current national board composition for {org}. Identify gaps in corporate sector representation and build a recruitment plan to close them.",nce:"Design a national board P2P engagement plan — specific asks, team goals, and recognition moments for each board member this cycle.",field:"Identify senior local executives engaged with {org} whose companies have national headquarters relationships that could support a national board conversation.",rd:null,ad:null,lgl:null,lpl:null},
+n3:{ceo:"Publicly champion {org}'s P2P program in at least three external contexts this quarter — board meetings, partner conversations, public forums.",cdo:"Prepare a board-ready summary of {org}'s P2P revenue contribution and growth opportunity. Present it at the next board meeting.",nce:"Document {org}'s P2P program position relative to mission and total revenue. Prepare a one-page internal brief for leadership alignment.",field:"Understand and be able to articulate where {org}'s P2P program stands as an organizational priority.",rd:"Ensure your regional leadership is aligned on the strategic priority of P2P for {org}.",ad:null,lgl:null,lpl:null},
+n4:{ceo:"Review {org}'s P2P staff compensation benchmarks against market. Authorize a plan to close any gaps within the next budget cycle.",cdo:"Conduct a retention risk assessment for {org}'s P2P field team. Identify the three staff most at risk of departure and develop a retention plan for each.",nce:"Audit administrative burden on {org}'s Local Geographic Leaders. Identify the top three tasks consuming non-fundraising time and propose solutions.",field:"Document the top three administrative tasks that most consistently pull you away from fundraising activity. Submit to your Area Director with a proposed solution for each.",rd:"Assess retention risk across your regional team. Flag any staff at risk to the CDO.",ad:"Review your team's administrative burden. Identify tasks that could be centralized or automated.",lgl:"Track how your time is allocated across fundraising, administrative, and operational tasks this week. Share results with your Area Director.",lpl:null},
+n5:{ceo:"Make at least two personal calls to senior executives at {org}'s largest corporate partners this cycle. The goal is relationship reinforcement, not a transactional ask.",cdo:"Review {org}'s corporate portfolio concentration. Ensure no single partner exceeds 20% of total P2P revenue. Build a diversification plan if needed.",nce:"Build an enterprise activation plan for {org}'s top five corporate partners — define the penetration gap at each and assign staff accountability for closing it.",field:"Identify three local companies in your market that have national headquarters relationships that could be elevated through a national corporate conversation.",rd:"Identify cross-market corporate relationships in your region. Develop a plan to activate them at the regional level.",ad:"Map the corporate partner landscape in your area. Identify which partners have the highest gap between current performance and potential.",lgl:"Maintain active relationships with the senior point of contact at each major corporate partner. Ensure every significant employer has a team captain with a stretch goal.",lpl:null},
+n6:{ceo:null,cdo:null,nce:"Audit {org}'s current training curriculum against field performance data. Identify the two tactics where training gaps are producing the largest revenue variance.",field:null,rd:"Ensure all field staff in your region have completed required training for the current cycle.",ad:"Confirm your Local Program Leads have completed all required training. Reinforce the top two core tactics in your next team meeting.",lgl:"Complete all required training for the current cycle. Implement at least two core tactics within 30 days of training completion.",lpl:"Complete required training. Apply core content in your market within 30 days of completion."},
+n7:{ceo:null,cdo:"Review {org}'s current benchmarking methodology. Ensure it measures potential, not just peer performance.",nce:"Publish the current performance benchmark report for {org}. Identify the five highest-gap markets and assign accountability for a recovery conversation.",field:"Know your market's benchmarks and how your performance compares. Be prepared to discuss variance in your next area review.",rd:"Review your region's performance against national benchmarks. Identify the two highest-gap markets and schedule a structured accountability conversation.",ad:"Review benchmark data for your area. Identify underperforming markets relative to both peer average and modeled capacity.",lgl:"Know your market's benchmark goals and how you are tracking against them at all times.",lpl:"Track your key metrics weekly against stated benchmarks. Flag variances to your LGL immediately."},
+n8:{ceo:null,cdo:"Lead the annual capacity modeling process for {org}. Ensure every market has a defined ceiling and that goals are set in reference to it.",nce:"Develop the planning tools that operationalize {org}'s capacity modeling framework. Ensure every Area Director can use them independently.",field:"Engage constructively in the annual planning process. Bring local market knowledge that improves the accuracy of capacity models.",rd:null,ad:null,lgl:null,lpl:null},
+n9:{ceo:"Personally deliver {org}'s mission narrative in at least one corporate partner conversation this cycle.",cdo:"Audit {org}'s mission narrative across all major touchpoints. Ensure corporate, volunteer, and participant versions are differentiated and tested.",nce:"Develop a mission narrative training module for {org}'s field staff. Ensure every Local Geographic Leader can deliver all three constituency versions.",field:"Ensure your market's mission narrative is localized — connecting national impact to a specific community outcome.",rd:null,ad:null,lgl:"Develop a local mission story that connects {org}'s national mission to a specific community impact. Use it in every corporate conversation this cycle.",lpl:"Know at least one specific local impact story for {org} and use it in every significant donor or volunteer conversation."},
+n10:{ceo:null,cdo:"Review {org}'s recognition architecture against peer programs. Identify the two top-performing handles and the two that are underutilized.",nce:"Audit current recognition utilization for {org}. Identify which handles are performing and which are not being used at the local level.",field:"Know {org}'s recognition handles and ensure your market's top performers are enrolled in the appropriate program.",rd:null,ad:"Ensure your area's top volunteers and fundraisers are enrolled in the appropriate recognition programs.",lgl:"Identify the top five volunteers and fundraisers in your market and ensure they are recognized at every appropriate milestone.",lpl:"Know your top five fundraisers and ensure they are recognized at every appropriate moment."},
+f1:{ceo:null,cdo:"Ensure {org}'s field team has a clear framework for local board recruitment. Review board composition in the top five markets.",nce:null,field:null,rd:"Review local board composition across your top three markets. Identify gaps in corporate sector representation.",ad:"Personally assist your Local Geographic Leaders in identifying and recruiting at least one senior executive to the local board this cycle.",lgl:"Identify three senior executives in your market who would strengthen {org}'s local board. Make at least one recruitment conversation happen this quarter.",lpl:"Support board engagement activities. Know who is on the local board and be prepared to assist with stewardship."},
+f2:{ceo:null,cdo:"Review corporate penetration rates in {org}'s top ten markets. Identify which markets have the largest gap between employer size and team performance.",nce:null,field:null,rd:"Review your region's corporate partner landscape. Identify three companies with cross-market relationships that could be elevated.",ad:"Ensure every major local employer in your area has an active relationship with {org}'s local team.",lgl:"Map the top 20 employers in your market. Ensure each has been approached and that every active partner has a senior champion.",lpl:"Maintain active contact with your top five corporate team captains. Understand their company's internal fundraising culture."},
+f3:{ceo:null,cdo:"Ensure {org}'s top ten markets each have a campaign chair confirmed for the next cycle.",nce:null,field:null,rd:"Ensure every market in your region has a campaign chair confirmed for the next cycle at least 12 months in advance.",ad:"Confirm that your Local Geographic Leaders have campaign chairs recruited and that succession planning is underway for the following cycle.",lgl:"Confirm your current campaign chair's goals and activation plan. Begin identifying the next chair candidate.",lpl:"Support your campaign chair's engagement. Ensure they have the information, materials, and staff support they need to succeed."},
+f4:{ceo:null,cdo:"Lead {org}'s annual goal-setting process. Ensure every market has goals set against both historical performance and modeled capacity.",nce:null,field:null,rd:"Lead your region's goal-setting conversations. Ensure every market goal is anchored in capacity data, not just prior year performance.",ad:"Conduct goal-setting conversations with each Local Geographic Leader. Ensure team-level targets are set alongside market-level goals.",lgl:"Own your market goal. Ensure every significant team captain has a stretch target and understands the rationale behind it.",lpl:"Know your top team goals and coach team captains toward them. Flag teams that are significantly under-goal early."},
+f5:{ceo:null,cdo:"Establish a regular performance review cadence with your Regional Directors. Ensure accountability conversations are scheduled, not reactive.",nce:null,field:null,rd:"Hold weekly performance reviews with your Area Directors during campaign season. Ensure every underperforming market has a documented recovery plan.",ad:"Hold weekly performance check-ins with your Local Geographic Leaders. Identify underperformers early and document a course-correction plan.",lgl:"Track your market performance weekly. If you are trending below goal at any major checkpoint, proactively surface the variance and your recovery plan.",lpl:"Track your individual metrics daily during peak campaign season. Flag any team or participant trending significantly below goal."},
+f6:{ceo:null,cdo:null,nce:null,field:null,rd:"Ensure core tactics are being executed consistently across all markets in your region. Review execution quality with each Area Director this cycle.",ad:"Conduct a core tactic audit in each of your markets. Identify which tactics are being executed well and which are being skipped or deprioritized.",lgl:"Audit your own time allocation this week. Calculate the percentage spent on revenue-generating tactics versus administrative or non-revenue activities.",lpl:"Execute all core tactics for this point in the campaign cycle. Report completion rates to your LGL weekly."},
+f7:{ceo:null,cdo:null,nce:null,field:null,rd:"Ensure all Local Program Leads in your region have completed required training and are applying it in the field.",ad:"Review training completion across your area. Develop individual coaching plans for any staff not consistently applying core content.",lgl:"Hold at least one dedicated coaching conversation with each Local Program Lead this cycle focused on training application.",lpl:"Identify the one training skill you most need to develop this cycle. Create a 30-day application plan and share it with your LGL."},
+f8:{ceo:null,cdo:null,nce:null,field:null,rd:"Review participant yield data across your region. Identify the top three markets with the largest gap between participant count and average fundraising.",ad:"Ensure your Local Program Leads have a segmented outreach strategy for top, mid-tier, and lapsed participants.",lgl:"Develop a personal stewardship plan for your top 20 fundraisers. Contact each of them personally at least once before the event.",lpl:"Know your top 10 fundraisers by name and their goals. Personally coach each of them toward a stretch fundraising target."},
+f9:{ceo:null,cdo:null,nce:null,field:null,rd:null,ad:"Ensure each of your markets has at least one community ambassador who is an active fundraiser, not just a story source.",lgl:"Identify three survivor or community ambassador candidates in your market. Make contact and assess their interest in an active fundraising role.",lpl:"Incorporate at least one mission story from a local survivor or ambassador in every significant donor or volunteer conversation."},
+f10:{ceo:null,cdo:null,nce:null,field:null,rd:null,ad:"Audit recognition utilization in your area. Identify any top volunteers not enrolled in appropriate recognition programs.",lgl:"Personally steward your top five volunteers outside of event day — a call, a handwritten note, or a meaningful acknowledgment.",lpl:"Ensure every top fundraiser in your market receives a personal acknowledgment at every major campaign milestone."},
+f11:{ceo:null,cdo:null,nce:null,field:null,rd:null,ad:null,lgl:"Develop a market-specific mission narrative for {org} that connects the national mission to a specific local impact. Use it in every corporate conversation.",lpl:"Know at least one specific local impact story for {org}. Use it in every donor conversation and volunteer recruitment pitch."}
+};
+
+function pC(s){return !s?"#9ca3af":s>=9?"#dc2626":s>=7?"#d97706":s>=5?"#2563eb":"#6b7280";}
+function pL(s){return !s?"—":s>=9?"Immediate Focus":s>=7?"High Priority":s>=5?"Secondary":"Lower Priority";}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function show(id){document.getElementById(id).classList.remove("hide");}
+function hide(id){document.getElementById(id).classList.add("hide");}
+function showScreen(id){["gate","intro","assess","results-screen","action-screen"].forEach(function(s){hide(s);});show(id);}
+function totalScored(){return HOLDS.filter(function(h){var s=state.scores[h.id]||{};return s.payoff&&s.ease;}).length;}
+function fmtD(iso){try{return new Date(iso).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}catch(e){return iso;}}
+function resTask(t,org){if(!t)return null;return t.replace(/\{org\}/g,org||"your organization");}
+
+document.getElementById("pw-btn").addEventListener("click",function(){
+  var val=document.getElementById("pw-in").value.trim();
+  if(val===PW){hide("gate");showScreen("intro");}
+  else{document.getElementById("pw-in").value="";document.getElementById("pw-in").style.borderColor="#fca5a5";show("pw-err");setTimeout(function(){document.getElementById("pw-in").style.borderColor="#d1d5db";hide("pw-err");},2000);}
+});
+document.getElementById("pw-in").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("pw-btn").click();});
+
+function toggleRoles(){
+  useCustomRoles=!useCustomRoles;
+  var panel=document.getElementById("roles-panel");
+  var knob=document.getElementById("roles-knob");
+  var toggle=document.getElementById("roles-toggle");
+  var stdLabel=document.getElementById("roles-std-label");
+  var customLabel=document.getElementById("roles-custom-label");
+  if(useCustomRoles){panel.classList.remove("hide");toggle.style.background="#1e40af";knob.style.left="23px";stdLabel.style.color="#6b7280";stdLabel.style.fontWeight="normal";customLabel.style.color="#1e40af";customLabel.style.fontWeight="bold";buildRolesGrid();}
+  else{panel.classList.add("hide");toggle.style.background="#d1d5db";knob.style.left="3px";stdLabel.style.color="#1e40af";stdLabel.style.fontWeight="bold";customLabel.style.color="#6b7280";customLabel.style.fontWeight="normal";}
+}
+
+function buildRolesGrid(){
+  var grid=document.getElementById("roles-grid");
+  var html="";
+  Object.keys(DROLES).forEach(function(k){
+    html+='<div><label style="display:block;font-size:11px;color:#9ca3af;margin-bottom:3px;">'+DROLES[k]+'</label><input data-rolekey="'+k+'" type="text" value="'+esc(customRoles[k])+'" style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:Georgia,serif;"/></div>';
+  });
+  grid.innerHTML=html;
+  document.querySelectorAll("[data-rolekey]").forEach(function(inp){inp.addEventListener("input",function(){customRoles[this.dataset.rolekey]=this.value;});});
+}
+
+function resetRoles(){customRoles=JSON.parse(JSON.stringify(DROLES));buildRolesGrid();}
+
+function loadSample(){
+  var sampleRatings=["better","good","inDevelopment","better","best","notInPlace","good","inDevelopment","better","good","inDevelopment","better","good","notInPlace","better","notInPlace","good","inDevelopment","notInPlace","inDevelopment","notInPlace"];
+  var samplePayoff=[5,5,5,4,5,4,3,5,4,4,5,5,4,5,4,3,3,3,3,2,2];
+  var sampleEase=[5,4,2,4,2,1,2,2,3,2,2,3,2,1,2,2,2,2,1,2,2];
+  HOLDS.forEach(function(h,i){state.scores[h.id]={rating:sampleRatings[i],payoff:samplePayoff[i],ease:sampleEase[i]};});
+  state.org="Sample Organization";state.person="Demo User";
+  document.getElementById("org-in").value="Sample Organization";
+  document.getElementById("person-in").value="Demo User";
+  showResults();
+}
+
+var HOLDS=[
+{id:"n1",num:"N1",matrix:"national",title:"National Campaign Chair Recruitment and Stewardship",
+note:"This hold reflects your organization's consistent readiness and structural ability to recruit and steward high-impact national chairs — not the performance of any single year's chair or campaign.",
+notInPlace:"No national campaign chair structure exists. No pipeline, no stewardship system, no institutional framework for recruiting or retaining chairs.",
+inDevelopment:"Early or inconsistent effort. A chair may have been recruited in some years but not others. Stewardship is informal. Pipeline is shallow and reactive.",
+good:"Chairs are somewhat active. Some new revenue but typically 50-75% of expected goals. Not all company opportunities consistently activated.",
+better:"Chairs consistently deliver 100% of revenue goals. Strong engagement across campaign cycles. Most opportunities within each company activated.",
+best:"Chairs consistently exceed financial goals. Every fundraising, engagement, and awareness opportunity activated. Chairs actively recruit peers and expand the corporate footprint across multiple years.",
+narrative:{
+notInPlace:"The absence of a national chair structure is not a volunteer leadership gap — it is a corporate development gap, a board engagement gap, and a brand gap all at once. The national chair's role is not ceremonial. It is the mechanism by which your organization enters rooms at the highest levels of corporate America that your staff cannot otherwise access, and makes asks that carry a weight your staff cannot otherwise provide. Without it, you are asking your team to do work that can only be done by someone with the organizational standing and peer relationships to open those doors.",
+inDevelopment:"Early and inconsistent national chair recruitment is more dangerous than having no structure at all, because it creates the illusion of progress while the real infrastructure never gets built. A chair recruited three months before an event is not a national chair — they are a figurehead, and the corporate community knows it. The power of this role comes entirely from the cultivation window: the extended period before the event when they are opening doors at the executive level, making peer-to-peer introductions, and activating their national corporate network on your behalf. If that window is not being used, you have a title without a strategy, and you are getting a fraction of the value this hold can produce.",
+good:"A functioning national chair puts you well ahead of most organizations, and you should build on that foundation intentionally. The honest question at this level is whether your chair is delivering on the full potential of their national network or just on the easy asks within their own company. Most Good chairs are generous with their own organization and polite with everyone else's. Best in Class national chairs are strategically aggressive — they identify the vendors, partners, and peers in their network who should be in your portfolio and they make those calls personally. That is the standard you need to set, and the conversation you need to have with every chair before they take the role.",
+better:"National chairs who consistently deliver and recruit from their networks are genuinely valuable assets, and you should be treating them as such over the long term. The strongest chair relationships do not end when the event does — the outgoing chair stays engaged as a mentor and recruiter for years afterward. When you build that kind of continuity into the national chair role, the corporate relationships compound rather than reset with each transition, and the pipeline sustains itself without depending on any single staff relationship.",
+best:"A self-sustaining national chair pipeline where outgoing chairs recruit and mentor their successors is one of the hardest things to construct in this business and one of the most valuable. What you have built compounds over time in ways that no staff-driven outreach strategy can replicate. The risk at this level is institutional memory — if the staff relationships that sustain the cultivation process turn over, the pipeline can erode faster than anyone expects. Document the process, build it into your leadership onboarding, and make sure every new CDO understands exactly what they are inheriting and what it takes to protect it."},
+example:"March of Dimes recruited co-chairs — the CEO of Ford and the President of the UAW. During the national kickoff, the three were in conversation with the CEO of Sears Holdings. Kmart had raised $8M the prior year. The Sears CEO stood at the dais and announced a goal of $10 million. They raised $11 million."},
+{id:"n2",num:"N2",matrix:"national",title:"National Board P2P Engagement and Championship",note:null,
+notInPlace:"No national board exists or the board has no meaningful role in peer-to-peer.",
+inDevelopment:"A board exists but P2P engagement is minimal or inconsistent. Board members are not recruited with P2P in mind.",
+good:"Most board members participate. Several give at leadership levels. Some senior executives from large national employers recruited directly.",
+better:"Board composition intentionally engineered. Senior executives from existing partners and independently recruited employers. Board members recruit from within their own organizations.",
+best:"Board and chair recruitment coordinated as a unified corporate development strategy. Board is a self-reinforcing corporate recruitment engine reviewed annually.",
+narrative:{
+notInPlace:"A P2P program without national board engagement is missing one of its most powerful structural advantages. The board is not just a governance body — it is a curated network of senior executives who have already said yes to your mission. When they are recruited with P2P in mind and activated with clear asks, they become a corporate development engine that your staff cannot replicate on its own. Without that activation, you are asking staff to open doors that should be opened by people with the organizational standing to do it — and those doors do not open the same way.",
+inDevelopment:"Board members who are not recruited with P2P in mind will almost never become P2P champions on their own. They joined for the mission, the governance role, or the relationship — and unless someone explicitly connects their board membership to a fundraising ask with a clear goal and a defined activation plan, most of them will write a check and consider their obligation fulfilled. The move from In Development to Good is not a board culture change — it is a recruitment criteria change. Start screening new board candidates for their P2P potential and their willingness to make asks, and you will have a structurally different board within a few years.",
+good:"Most board members participating and several giving at leadership levels reflects years of intentional cultivation and is a real achievement. The next level is composition engineering — looking at your board not just as individuals but as a portfolio, and asking what sectors, companies, and corporate relationships are missing. The strongest national boards are not collections of generous people. They are deliberately constructed networks with coverage across the industries and employer relationships that matter most to your program's growth.",
+better:"Coordinating board and chair recruitment as a unified strategy is sophisticated work, and it produces results that neither track can produce independently. The organizations that operate at this level understand that a board member who becomes a national chair is worth significantly more than they were as a board member alone — and they build the cultivation pathway to make that transition happen intentionally. The next iteration is treating board composition as a living strategy rather than a stable roster, actively managing transitions to ensure every seat is contributing to P2P growth.",
+best:"A self-reinforcing corporate recruitment engine at the board level is extraordinarily rare and genuinely powerful. At this level your board is not just supporting the program — it is actively growing it, recruiting new corporate partners, and creating peer-to-peer leadership development that no staff outreach can replicate. The discipline required to sustain this is significant — it requires intentional succession planning for board leadership, regular composition review, and organizational leadership that understands managing the board is as important as managing the field."},
+example:"United Airlines CFO John Rainey was recruited to the March of Dimes national board and cultivated into National Campaign Chairman. He engineered something no staff outreach could produce: United approached vendors with a fundraising ask tied to a seat on the delivery flight of a new Boeing 787. United ended the year at nearly $1 million."},
+{id:"n3",num:"N3",matrix:"national",title:"Organizational Priority and Engagement",
+note:"Score this hold in proportion to what peer-to-peer represents as a share of your organization's total revenue.",
+notInPlace:"Peer-to-peer is not recognized as a strategic priority. It is managed as a program, not a platform.",
+inDevelopment:"Some internal recognition of P2P importance exists but it is not reflected consistently in budget decisions, leadership attention, or external positioning.",
+good:"Peer-to-peer explicitly prioritized. Budget reflects investment in growth. Senior leadership advocates internally and champions engagement with corporate partners and volunteers.",
+better:"Peer-to-peer treated as a strategic platform. CEO champions it with the board, publicly, and in resource allocation decisions proportional to the program's revenue contribution.",
+best:"Peer-to-peer holds the organizational priority its revenue scale has earned. CEO actively recruits board members, chairs, and corporate partners with P2P growth as an explicit mandate.",
+narrative:{
+notInPlace:"I have seen P2P programs generating a substantial share of an organization's revenue treated as an afterthought in leadership conversations. That is a cultural problem, and it costs real money over time. When peer-to-peer is managed as a program rather than a platform, it does not get the board attention, the budget investment, or the senior leadership advocacy it needs to grow. The volunteers and corporate partners who fuel these programs are sophisticated people — they know whether your CEO is a champion or a passenger, and they calibrate their own engagement accordingly.",
+inDevelopment:"Some internal recognition without consistent resource allocation is the most common pattern in organizations that are underperforming relative to their P2P potential. The program has advocates but not authority. The CDO believes in it but cannot get the CEO in the room. The signal that moves an organization forward on this hold is almost always a board-level presentation — a clear-eyed accounting of what P2P represents as a share of total revenue and what it could represent with the right investment. That conversation changes the internal narrative in ways that no amount of field-level advocacy can.",
+good:"Explicit prioritization with budget investment is meaningful progress. At this level the work is about making the priority visible externally, not just internally. A CEO who champions P2P in corporate partner conversations, who names the program publicly, and who connects it to the organization's broader mission creates a gravitational field that attracts volunteer leadership and corporate investment that internal advocacy alone cannot produce. The program's standing outside the organization should reflect its standing inside it.",
+better:"Treating peer-to-peer as a strategic platform is the mindset shift that separates organizations that grow from organizations that plateau. At this level your CEO is making the case for P2P in board meetings, in corporate conversations, and in resource allocation decisions — and that advocacy is producing results. The question to keep asking is whether the investment in P2P is actually proportional to its revenue contribution. Most organizations are still underinvesting relative to what the program earns, even when they believe they are prioritizing it.",
+best:"When your CEO actively recruits board members, chairs, and corporate partners with P2P growth as an explicit mandate, the program has earned a place at the strategic center of the organization. The risk at this level is succession — when leadership changes, will the next CEO understand what they have and protect it? The answer depends entirely on how well the board understands the program's strategic value and how clearly that value is embedded in the organization's planning framework. Best in Class organizations document this intentionally rather than leaving it to institutional memory."},
+example:null},
+{id:"n4",num:"N4",matrix:"national",title:"Staff Investment, Compensation and Retention",note:null,
+notInPlace:"No structured compensation framework exists. Staffing is ad hoc and turnover is high.",
+inDevelopment:"Compensation exists but is below market. Turnover is high. Local Geographic Leaders spend significant time on administrative tasks.",
+good:"Compensation is competitive. Turnover manageable. Some operational support exists.",
+better:"Compensation attracts and retains top talent at every level. Operational support structured to protect fundraising time. Retention strong enough that institutional relationships survive leadership transitions.",
+best:"Compensation at or above market at every field level. Administrative burden minimized. Retention treated as a revenue metric. Career pathways retain high performers.",
+narrative:{
+notInPlace:"When there is no structured compensation framework, the organization is in a permanent state of reactive staffing — and the field knows it. The staff who leave first are always your highest performers because they have options. What you are left with over time is a team that cannot get a better offer elsewhere, and that is not a team that wins. Beyond the talent problem, there is a relationship problem: every time a Local Geographic Leader walks out the door, they take years of corporate relationships, volunteer trust, and institutional memory with them. You cannot build a high-performing P2P program on a revolving door.",
+inDevelopment:"Below-market compensation is a slow leak that most organizations do not notice until they are already hemorrhaging talent. The administrative burden piece is equally important and often overlooked — I have seen skilled field staff spending thirty to forty percent of their time on tasks that have nothing to do with fundraising. That is a revenue problem masquerading as an operations problem. The cost of turnover, in recruiting, onboarding, and lost relationships, almost always exceeds the cost of the retention investment that would have prevented it. Run that math for your leadership team.",
+good:"Stability is worth more than most leaders give it credit for. The next frontier at this level is time protection — understanding precisely where your field leaders' time is going versus where it should be going. Even well-compensated staff in well-run organizations lose significant hours each week to administrative tasks that could be centralized, automated, or eliminated. That time has a revenue value. Calculate it and make the operational investment case to leadership. The return is almost always faster than expected.",
+better:"Strong retention at this level is a genuine competitive advantage, and you are probably seeing it in your corporate portfolio and volunteer relationships. The risk at this stage is complacency — your best people have options, and if they do not see a path forward they will start taking calls. Make sure career pathways are explicit and visible, not implied. The staff who built your best markets should have a compelling reason to still be with you years from now, and they should be able to articulate what that reason is.",
+best:"Long-tenured staff do not just retain relationships — they deepen them, and they develop the next generation of talent. What you have built compounds over time in ways that no recruiting strategy can replicate. The thing to watch at this level is whether your retention culture survives leadership transitions. I have seen Best in Class staffing environments erode in eighteen months when a strong CDO exits and the successor does not understand what they inherited. Document the culture, the compensation philosophy, and the career pathways — not just the org chart."},
+example:null},
+{id:"n5",num:"N5",matrix:"national",title:"Corporate Portfolio Engineering and Enterprise Activation",
+note:"A nationally standardized corporate sponsorship program with tiered levels priced to reflect the organization's brand and program prominence is a distinct and significant revenue stream alongside employee team engagement. National leadership sets the framework; chapters adapt tier pricing to local event scale without undermining national consistency.",
+notInPlace:"No corporate strategy exists. Corporate engagement is opportunistic. No concentration tracking, no senior champion identification.",
+inDevelopment:"Some corporate relationships exist but are not actively managed or strategically developed. Relationships are often contact-level rather than executive-level.",
+good:"Defined corporate growth strategy exists. Priority sectors and companies identified. Concentration tracked. Senior champions identified within major partners.",
+better:"Portfolio actively engineered with mission alignment driving acquisition. Every major partner has a senior internal champion. Every significant employer has a defined activation plan.",
+best:"Portfolio strategy operates at national and market levels simultaneously. Concentration is a board-level risk metric. Every major partner has a multi-year elevation pathway.",
+narrative:{
+notInPlace:"Opportunistic corporate engagement produces opportunistic results — companies give what they are willing to give rather than what they are capable of giving. Without a portfolio strategy, you have no way to know how much revenue you are leaving on the table or where the highest-potential relationships sit. The organizations I have seen transform their P2P revenue almost always started by mapping what they had, identifying the senior champion inside each major partner, and building an activation plan that went deeper than the employee team. That mapping exercise alone changes the conversation.",
+inDevelopment:"Contact-level corporate relationships feel productive until the contact leaves. You are one reorganization, one departure, or one budget cycle away from losing a relationship that took years to build, because it was never elevated to the executive level where it could survive that kind of disruption. The move that changes the trajectory of a corporate portfolio is identifying the executive inside each major partner who has both the authority and the motivation to grow the relationship — and then making sure your leadership is in the room with theirs. That conversation cannot be initiated by a Local Geographic Leader. It requires organizational standing.",
+good:"A defined strategy puts you ahead of most organizations, and you should build on it systematically. Two moves accelerate progress from here. The first is concentration analysis — do you know what percentage of your P2P revenue comes from your top five partners? If any single partner represents more than twenty percent, you have a risk that belongs on your leadership agenda. The second is penetration mapping: for each major employer, how many of their eligible employees are actually participating? The gap between current performance and theoretical capacity is your most honest measure of where the revenue is.",
+better:"Engineering the portfolio rather than managing it is a meaningful distinction, and the results reflect it. The ceiling from here is multi-year elevation pathways — treating each major partner not as an annual renewal but as a long-term investment with defined milestones, expanding asks, and compounding returns. The organizations operating at this level also track penetration rate as a standing metric: not just what a company gives, but what percentage of their eligible workforce is involved. When penetration goes up, revenue follows reliably.",
+best:"A corporate portfolio that functions as a strategic asset rather than a revenue line is the highest level this business reaches, and sustaining it requires the same intentionality that built it. The risk is internal drift: a CDO transition, a restructuring, or a budget cut to the corporate development function that erodes in a few years what took a decade to build. Treat the portfolio architecture as institutional knowledge — document the relationships, the elevation pathways, the penetration data, and the strategic logic behind every major partnership decision."},
+example:"March of Dimes built one of the strongest national retail portfolios in P2P. A dedicated national team pursued new retail partners. A separate team managed existing ones at the enterprise level. Every level of each retailer's management structure had a corresponding March of Dimes staff partner."},
+{id:"n6",num:"N6",matrix:"national",title:"Training Standardization, Content and Tools",note:null,
+notInPlace:"No standardized training exists. Field staff are not trained consistently.",
+inDevelopment:"Some training content exists but is inconsistently delivered or not connected to performance outcomes.",
+good:"Standardized curriculum exists. Field staff trained consistently. Core tactics defined and communicated across all markets.",
+better:"Dedicated national training function delivers consistent, measurable training. Core tactics standardized, benchmarked, and monitored.",
+best:"Training is a performance management system. Staff certified against defined competency standards. Function identifies and replicates best practices from top markets in real time.",
+narrative:{
+notInPlace:"Without a standardized training framework, every market is essentially running its own version of the program based on whatever its current staff figured out on their own. Your best markets are probably performing well because of exceptional individuals — but you cannot scale intuition, and you cannot replicate it when those individuals leave. The revenue difference between a consistently trained field organization and an untrained one is not marginal. It is the difference between a program that grows systemically and one that is entirely dependent on individual talent.",
+inDevelopment:"Training content that exists but is inconsistently delivered or disconnected from performance outcomes is a resource investment with a poor return. The curriculum is not the hard part — the accountability system is. What gets measured gets done. Until you can track which tactics are being executed in which markets and correlate that to revenue performance, you are making assumptions about whether the training is working. The organizations that close this gap do not do it by improving the content. They do it by building the measurement and coaching system around the content that already exists.",
+good:"A standardized curriculum delivered consistently is the foundation everything else is built on. The next question is whether training is producing consistent execution or just consistent attendance. Pull your performance data and look at which markets are applying core tactics and which ones are not. The variance in your results almost certainly maps to the variance in execution. Use your top markets as teaching cases — not in theory, but literally. Have your best Local Geographic Leaders train their peers. Peer instruction changes behavior faster than any other method.",
+better:"A dedicated national training function with measurable outcomes is a significant organizational investment, and it is producing returns in your field performance data. The differentiator at the next level is competency certification — treating field proficiency as a professional credential rather than a training checklist. Staff who are certified against defined standards perform differently than staff who have simply attended training. They own the framework. That ownership is what produces consistent results in your bottom-quartile markets.",
+best:"When training functions as a performance management system, it creates compounding returns that show up across every other hold in the diagnostic. Your top markets are not just performing well — they are developing talent for the broader organization. The thing to protect at this level is the investment itself. Training budgets are among the first to be cut when organizations face financial pressure, and that is almost always a false economy. The revenue cost of an undertrained field organization accumulates quietly and is rarely attributed back to the decision that caused it."},
+example:null},
+{id:"n7",num:"N7",matrix:"national",title:"Performance Benchmarking and National Standards",note:null,
+notInPlace:"No national benchmarks exist. Markets are not measured against any defined standard.",
+inDevelopment:"Some performance data is collected but benchmarking is informal or based solely on prior year results.",
+good:"National benchmarks exist. Markets measured against peer performance. Underperformance triggers defined follow-up.",
+better:"Performance benchmarked against both historical results and modeled capacity. Every market has a defined expectation relative to potential.",
+best:"Benchmarking is a forward-looking strategic instrument. Organization tracks how much revenue is being left on the table and where.",
+narrative:{
+notInPlace:"Without national benchmarks, every market is essentially grading itself, and human nature being what it is, the grades tend to be generous. The markets that are significantly underperforming relative to their potential have no external standard against which to measure that gap — and neither do their supervisors. This is not just a performance management problem. It is a revenue problem. The distance between what your average market produces and what it could produce represents real money that is being left on the table in every program cycle.",
+inDevelopment:"Benchmarking based solely on prior year results is a trap that keeps underperforming markets from ever being held accountable to their actual potential. A market that grows three percent looks fine against its own history. It looks very different when measured against what its demographic and economic profile suggests it should produce. The organizations that break through on this hold do it by introducing a second reference point alongside historical performance: modeled capacity. When markets know what they are capable of producing, the conversation changes.",
+good:"National benchmarks that trigger structured follow-up for underperformance are a meaningful management tool, and you are using them well. The next level is the question behind the question: is your benchmarking measuring what markets are producing relative to peer average, or relative to what they are actually capable of? Peer average tells you where you stand in the group. Capacity modeling tells you how much revenue you are leaving on the table. Both matter, but only one of them tells you where the real opportunity is.",
+better:"Benchmarking against both historical results and modeled capacity is sophisticated practice, and it changes the accountability conversation at every level of the organization. Markets can no longer hide behind incremental growth when their capacity model shows they are significantly below ceiling. The next iteration is making this a forward-looking instrument — using your benchmarking data not just to evaluate past performance but to drive resource allocation, staff deployment, and corporate targeting decisions prospectively.",
+best:"When benchmarking functions as a strategic instrument that tells you how much revenue is being left on the table and where, it becomes one of the most valuable planning tools in the organization. The discipline required to sustain this is significant — the models need to be updated regularly, the methodology needs to evolve as the program evolves, and leadership needs to be willing to act on what the data shows even when the implications are uncomfortable. Organizations that reach this level protect the function because they have seen what it produces."},
+example:null},
+{id:"n8",num:"N8",matrix:"national",title:"Capacity Modeling Framework and Planning Tools",note:null,
+notInPlace:"No capacity modeling exists. Goals are set based on prior year performance alone.",
+inDevelopment:"Some market data informs planning but there is no integrated tool or consistent methodology.",
+good:"Market data informs goal setting. High-potential underperforming markets identified.",
+better:"Integrated planning tool models capacity using demographic, economic, and performance variables.",
+best:"Capacity modeling is a living system updated annually. Modeling drives staff deployment, resource allocation, and corporate targeting.",
+narrative:{
+notInPlace:"Setting goals based entirely on prior year performance is one of the most common and costly planning mistakes in P2P fundraising. It rewards markets that are already performing well and institutionalizes underperformance in markets that are not, because the baseline for both is whatever happened last time. Without a capacity modeling framework, you have no systematic way to know which markets are at their ceiling and which ones are at thirty percent of what they could produce. That distinction drives every resource allocation and staffing decision worth making.",
+inDevelopment:"Using some market data without an integrated methodology produces inconsistent planning outcomes — good instincts in some markets, missed opportunities in others, and no systematic way to learn from the variance. The organizations that build effective capacity modeling frameworks almost always start with a small set of variables: population, per capita income, employer concentration, and historical yield. Those four inputs, applied consistently, produce a more honest goal-setting conversation than any amount of negotiation between area and local leadership.",
+good:"Using market data alongside historical results to identify high-potential underperforming markets is the right foundation. The next level is integration — building a planning tool that makes the capacity calculation visible and repeatable for every Area Director, not just for the national team. When field leaders can run their own capacity model, goal-setting conversations shift from negotiation to analysis, and the accountability that follows is more honest on both sides.",
+better:"An integrated planning tool that models capacity using demographic, economic, and performance variables is a genuine organizational asset. The work at this level is keeping the model current and ensuring it is actually driving decisions — not just informing them. The most common failure mode at Better is a sophisticated model that gets produced and then filed. The test is whether resource allocation, staff deployment, and corporate targeting decisions are visibly connected to what the model shows.",
+best:"A living capacity modeling system that drives resource allocation at every level of the organization is the highest expression of planning discipline in this business. What separates Best in Class from Better is not the sophistication of the model — it is the organizational will to act on what it shows. That requires leadership that is comfortable making resource decisions based on prospective capacity rather than historical comfort, and a culture that treats unrealized potential as a cost rather than an aspiration."},
+example:null},
+{id:"n9",num:"N9",matrix:"national",title:"Mission and Narrative Alignment",note:null,
+notInPlace:"No consistent mission narrative exists. Staff and volunteers cannot articulate impact clearly.",
+inDevelopment:"Mission messaging exists but is inconsistently applied and not embedded in fundraising conversations.",
+good:"Mission narratives embedded in training, corporate activation, and participant communications.",
+better:"Mission clarity is a revenue strategy. Every touchpoint connects the donor or participant to a specific, emotionally resonant impact narrative.",
+best:"Mission narrative differentiated by constituency — corporate, major donor, and participant versions each authentic, specific, and tested.",
+narrative:{
+notInPlace:"I have walked into corporate meetings with organizations where staff could not tell me a single specific story about the people their mission serves. Not one. And I have watched those meetings fail, because a corporate executive will invest in impact but they will not invest in infrastructure. Mission narrative is not a marketing exercise — it is the emotional permission structure for every significant ask your organization makes. Without it, you are competing on logistics, and you will lose that competition to every other nonprofit with a more compelling story.",
+inDevelopment:"The gap between having messaging and using it is where most organizations live, and it is costing them more than they realize. Your staff and volunteers have probably seen the materials and attended the briefings. But when they are sitting across from a corporate executive or recruiting a volunteer, they are improvising. The fix is not more materials — it is more practice. Mission narrative needs to be rehearsed out loud, in the field, until it becomes instinct rather than recall. The organizations that close this gap do it through repetition and coaching, not through better brochures.",
+good:"Consistent mission presence across your major touchpoints is a real foundation. The next level is differentiation. The story you tell a corporate executive and the story you tell a walk participant should not be the same story — they have different motivations, different relationships to the mission, and different decision frameworks. When you develop those versions separately and train your field to deploy the right one in the right context, your conversion rates improve in ways that are visible and measurable.",
+better:"Using mission clarity as a revenue strategy is the right orientation, and it shows in your results. The next iteration is constituency-specific testing — not just developing different versions but actually measuring which narratives produce the strongest behavioral response in each audience. Which story closes the corporate conversation faster? Which one drives the highest average gift? When you treat narrative as a performance variable rather than a communication choice, you find another layer of revenue that most organizations never reach.",
+best:"Mission narrative at this level is a genuine differentiator, and it is fragile in ways that are worth understanding. It depends on staff who know the stories, leaders who use them, and a culture that treats mission as central rather than ceremonial. The risk is drift — constituencies change, impact stories age, and the versions that worked a few years ago may not land the same way today. Build a refresh discipline into your planning so the narratives stay current, specific, and tested. The moment mission narrative becomes institutional wallpaper, it stops doing the work you built it to do."},
+example:null},
+{id:"n10",num:"N10",matrix:"national",title:"National Recognition and Incentive Architecture",
+note:"Scale recognition appropriately to your program.",
+notInPlace:"No recognition architecture exists. Top performers are not systematically acknowledged or incentivized.",
+inDevelopment:"Some recognition exists but is informal, inconsistent, or not calibrated to drive specific revenue behaviors.",
+good:"Recognition tiered and meaningful. Top volunteers, top teams, and top fundraisers recognized with defined handles.",
+better:"Recognition architecture engineered to drive specific behaviors. Handles calibrated to the revenue behaviors they are designed to produce.",
+best:"Recognition is a strategic retention and elevation tool. Top performers recognized in ways that reinforce internal champions and create visibility within their own organizations.",
+narrative:{
+notInPlace:"Recognition architecture is one of the most underleveraged tools in P2P fundraising, and its absence has a cost that accumulates invisibly. Top performers — corporate team captains, volunteer leaders, major fundraisers — are motivated by acknowledgment in ways that financial incentives alone cannot replicate. When those acknowledgments do not exist or are not calibrated to drive specific behaviors, you are leaving retention and elevation on the table. The volunteers and corporate champions who could become your most powerful long-term assets have no structural reason to deepen their engagement.",
+inDevelopment:"Informal and inconsistent recognition is often worse than no recognition, because it creates the perception of favoritism and leaves your most deserving performers feeling overlooked. The organizations that do this well do not start with elaborate programs — they start with a clear framework: who gets recognized, for what behavior, in what way, and in what context. The calibration question is always the same: is this recognition handle designed to drive a specific revenue behavior, or is it just appreciation? Both have value, but only one of them is a management tool.",
+good:"Tiered recognition that acknowledges top volunteers, teams, and fundraisers is a real foundation. The next level is behavioral engineering — looking at each recognition handle and asking specifically what behavior it is designed to produce and whether it is actually producing it. A recognition program that rewards existing top performers without creating aspiration among emerging ones is a retention tool, not a growth tool. The most effective programs do both simultaneously.",
+better:"Recognition handles calibrated to drive specific revenue behaviors are a management instrument, and you are using them as one. The next iteration is the visibility dimension — ensuring that your top performers are recognized in ways that create visibility within their own organizations. A corporate team captain who is publicly acknowledged in front of their colleagues becomes a more powerful internal champion than one who receives a private thank-you. That distinction compounds over time in your corporate portfolio.",
+best:"Recognition and stewardship engineered as retention and elevation tools at this level are producing returns across your corporate portfolio and volunteer pipeline. The discipline required to sustain this is attention to calibration — as your program evolves, the behaviors you need to drive change, and the recognition architecture needs to evolve with them. The organizations that stay at Best in Class review their recognition framework regularly and retire handles that are no longer connected to the behaviors that matter most."},
+example:null},
+{id:"f1",num:"F1",matrix:"field",title:"Local Board Recruitment and Engagement",note:null,
+notInPlace:"No local board exists or the board has no meaningful role in the campaign.",
+inDevelopment:"A local board exists but engagement is minimal. Members are not recruited for P2P potential.",
+good:"Local board exists with engaged members. Most participate. Several give at leadership levels.",
+better:"Board composition intentionally engineered. Senior executives from local and regional employers recruited directly.",
+best:"Local board is a self-reinforcing corporate recruitment engine. Composition reviewed annually against a defined profile of target employers.",
+narrative:{
+notInPlace:"A local board that has no meaningful role in the campaign is a missed opportunity that compounds over time. The local board is where your market's most significant corporate relationships should be anchored — executives who are committed to the mission, connected to the community, and positioned to open doors that staff cannot open on their own. Without that structure, your corporate development is entirely staff-dependent, which means it resets every time a Local Geographic Leader turns over. The board is the institutional memory and the social capital that survives those transitions.",
+inDevelopment:"A local board that exists but does not engage in P2P is a governance body masquerading as a campaign asset. The gap between having a board and having a board that drives revenue is almost always a recruitment gap — members were brought on for their professional standing or their personal generosity, not for their willingness to make asks and activate their corporate networks. That is a criteria problem, not a culture problem, and it is fixable through intentional recruitment rather than cultural change.",
+good:"An engaged local board with members who participate and give at leadership levels is a real foundation. The next level is asking whether your board composition reflects the corporate landscape you are trying to penetrate. The strongest local boards are engineered to match the employer relationships that matter most to your market — not assembled organically from whoever was available and willing. Look at your top twenty employers and ask which ones are represented at the board level. The gaps in that list are your next recruitment priorities.",
+better:"Board composition that is intentionally engineered with senior executives from local and regional employers is a meaningful distinction. At this level your board is not just supporting the campaign — it is actively developing it through their own networks. The next iteration is annual review: looking at your board as a portfolio, identifying which relationships are producing and which seats are underutilized, and managing the composition actively rather than waiting for natural turnover.",
+best:"A local board that functions as a self-reinforcing corporate recruitment engine is one of the most durable assets a market can build. When composition is reviewed regularly against a defined profile of target employers, and when board members are actively recruiting their peers, the corporate development function of the market becomes structurally independent of any individual staff relationship. That independence is what makes the market resilient when leadership transitions happen."},
+example:"The CEO of Sacramento's largest birthing hospital joined the local board, became local campaign chair, and ultimately served as Sacramento board chair. He was part of a major Northern California health system with 40,000 employees. He approached his system CEO — who said yes and activated all locations. The market went from $100,000 to $600,000."},
+{id:"f2",num:"F2",matrix:"field",title:"Local Corporate and Employer Engagement",
+note:"This hold addresses both the depth of individual corporate partner relationships and the breadth of employer penetration across the market. Local event sponsorship operates alongside employee team engagement as a separate revenue stream. Chapters apply the national sponsorship framework to their market, scaling tier levels to local event size and prominence. A sponsorship program priced too low signals underconfidence and leaves revenue on the table.",
+notInPlace:"No structured corporate engagement exists at the local level.",
+inDevelopment:"Some local corporate relationships exist but are not actively managed or developed beyond a single contact.",
+good:"Existing corporate partners actively managed and renewed. Most major local employers participate with at least one significant team.",
+better:"Defined local corporate growth strategy exists. Priority companies identified with mission alignment as a key criterion. Senior champions cultivated within existing partners.",
+best:"Local corporate portfolio actively engineered in parallel with national strategy. Every major partner has a multi-year elevation pathway. Penetration rate tracked.",
+narrative:{
+notInPlace:"Without a structured corporate engagement strategy at the local level, your market is dependent on whoever happens to call and whatever they happen to offer. That is not a development strategy — it is a waiting strategy, and it produces waiting-strategy results. The corporate landscape in most markets is rich with employers who could be activated at a much higher level than they currently are. Mapping that landscape — who your top twenty employers are, what their current relationship with the market looks like, and who inside each company has the standing to grow it — is the first move that changes the trajectory.",
+inDevelopment:"Single-contact corporate relationships are one reorganization away from zero. When the only person who knows your organization at a company is a mid-level employee who championed the team, and that person leaves, the relationship leaves with them. The move that protects and grows the corporate portfolio is identifying the senior executive inside each significant employer who has both the motivation and the authority to make the relationship institutional rather than personal. That conversation is very different from the one that happens with a team captain.",
+good:"Active management of existing partners with most major employers participating is a solid foundation. The growth move from here is intentional penetration analysis — for each major employer, what percentage of eligible employees are actually participating, and what does the gap between that number and theoretical capacity represent in revenue terms? Most markets operating at Good have never run that calculation, and the answer almost always reframes the conversation about where the real opportunity sits.",
+better:"A defined local corporate growth strategy with senior champions inside your major partners is producing results, and you should be building on it systematically. The ceiling from here is the multi-year elevation pathway — treating each significant employer not as a team to renew but as a relationship to develop, with defined milestones, expanding asks, and a clear picture of what the relationship could look like in three to five years. The markets that operate at this level think about their corporate portfolio the way a major gifts officer thinks about a prospect pool.",
+best:"A local corporate portfolio engineered in parallel with national strategy, with penetration rates tracked and multi-year pathways in place, is the highest expression of local corporate development. The discipline required to sustain this is significant — the landscape needs to be mapped continuously, the senior relationships need to be stewarded at the right organizational level, and the penetration data needs to drive decisions rather than just inform them. Protect the investment in this infrastructure because it is the hardest thing to rebuild once it erodes."},
+example:"United Healthcare had some local involvement in Phoenix. Rather than managing it as a single-market relationship, the volunteer approached the executive overseeing the western United States and asked him to serve as a regional chair. He said yes — and several additional markets came on board."},
+{id:"f3",num:"F3",matrix:"field",title:"Volunteer Leadership Pipeline and Succession",
+note:"This hold reflects your organization's consistent ability to develop and sustain volunteer leadership over time — not the strength of any single year's chair.",
+notInPlace:"No local campaign chair structure exists. Volunteer leadership roles are not filled systematically.",
+inDevelopment:"A chair is sometimes in place but recruitment is reactive, last-minute, or dependent on a single staff relationship.",
+good:"Campaign chair in place and functionally engaged. Chairs recruited at least twelve months before their event.",
+better:"Chairs consistently exceed financial expectations and recruit from their networks. Chairs confirmed at least fifteen months before their event.",
+best:"Chair is a strategic asset. Next two to three chairs always in development. Outgoing chair recruits and mentors successor directly.",
+narrative:{
+notInPlace:"A market without a campaign chair structure is entirely dependent on staff relationships for its corporate development, and that dependency is a fragility. When the Local Geographic Leader turns over, the corporate relationships and volunteer connections that person built go with them. A well-recruited campaign chair provides the market with civic standing, corporate network access, and volunteer credibility that survives staff transitions. Without that structure, you are rebuilding the corporate foundation of the market every time the team changes.",
+inDevelopment:"Reactive chair recruitment is one of the most common and most expensive patterns in local P2P markets. A chair who was approached a few months before the event and said yes out of personal loyalty to a staff member is not a chair in the strategic sense — they are doing you a favor, and the corporate activation that defines the role's real value never happens. The extended cultivation window — the period when a chair is building relationships, making introductions, and positioning the campaign within their network — is where the revenue is. If that window is not being used, you are getting a fraction of what this hold can produce.",
+good:"A campaign chair who is in place and functionally engaged, recruited well in advance, is a real asset. The next question is whether the chair is working their network proactively or primarily activating their own company. Good chairs do the latter reliably. Best in Class chairs do the former strategically — they identify the corporate relationships your market needs and use their standing to open them. That is the conversation you need to have with your current chair, and it starts with being explicit about what you are asking them to do.",
+better:"Chairs who consistently exceed financial expectations and recruit from their own networks are producing results that go well beyond what staff-driven development can achieve. The next level is succession discipline — not just having the next chair identified, but having them actively engaged in the current campaign so they understand what they are taking on before they take it on. The handoff between chairs is where most pipelines leak. Building it as a structured transition rather than a moment of departure is what sustains the momentum.",
+best:"A chair pipeline where the next two to three chairs are always in development and outgoing chairs are actively recruiting and mentoring their successors is one of the most durable structures in local P2P. It means the market's corporate development is never starting over, never dependent on a single staff relationship, and never at the mercy of a last-minute recruitment. Protect this structure carefully — it is built on trust relationships that take years to develop and can be disrupted quickly by a staff transition that does not honor the cultivation process."},
+example:"The March of Dimes Houston market became the standard against which other markets were measured. At any point in the cycle, the next two to three chairs were already identified, recruited, and in development. Recruitment happened no fewer than 18 months before the event."},
+{id:"f4",num:"F4",matrix:"field",title:"Goal Setting Relative to Capacity",
+note:"Goal setting applies to both site-level and team-level targets.",
+notInPlace:"No structured goal-setting process exists. Revenue targets are set arbitrarily or based on incremental increases from prior year.",
+inDevelopment:"Goals are set but based on prior year results alone, without reference to modeled capacity.",
+good:"Goals set through structured dialogue between area and local leadership. Market capacity referenced alongside historical results.",
+better:"Goal-setting is a disciplined process. Gap between performance and potential explicitly quantified.",
+best:"Goals treat revenue left on the table as a cost. Resource allocation driven by the gap between current performance and modeled ceiling.",
+narrative:{
+notInPlace:"Goals set arbitrarily or as incremental increases from prior year are not goals — they are projections, and they produce projection-level accountability. The fundamental problem with prior-year-based goal setting is that it has no relationship to what a market is actually capable of producing. A market that has been underperforming for years and grows incrementally looks fine against its own history. Against its capacity model, it may be at forty percent of ceiling. Until your goals are anchored in what markets can produce rather than what they have produced, you are measuring the wrong thing.",
+inDevelopment:"Prior-year-only goal setting is a comfortable trap. It feels rigorous because there is a number and a process, but the number is derived from a baseline that may have no relationship to market potential. The organizations that break through on this hold almost always do it the same way: they introduce a second reference point. What does this market's demographic profile, employer concentration, and peer comparison suggest it should produce? When that question gets asked alongside the historical question, the goal-setting conversation changes fundamentally.",
+good:"Structured goal-setting dialogue that references market capacity alongside historical results is a meaningful step forward. The next level is making the capacity reference explicit and quantified rather than impressionistic. When an Area Director can walk into a goal-setting conversation with a specific capacity model — here is what your market has produced, here is what comparable markets produce, here is what your employer landscape suggests you are capable of — the accountability that follows is more honest on both sides and more productive for the market.",
+better:"Goal-setting that explicitly quantifies the gap between performance and potential is a sophisticated management practice, and it changes the nature of the accountability conversation at every level. Markets can no longer hide behind incremental growth when the capacity data shows the distance between where they are and where they should be. The next iteration is using that gap analysis to drive resource allocation — deploying staff support, corporate development resources, and training investment to the markets where the opportunity is largest relative to current performance.",
+best:"Treating revenue left on the table as a cost — rather than an aspiration — is the mindset that defines Best in Class goal setting. When resource allocation is driven by the gap between current performance and modeled ceiling, the organization stops rewarding markets that are already performing and starts investing in markets that have the most room to grow. That reorientation is uncomfortable for organizations that are used to celebrating their top markets, but it is where the largest revenue opportunity in the portfolio almost always sits."},
+example:null},
+{id:"f5",num:"F5",matrix:"field",title:"Performance Accountability and Course Correction",note:null,
+notInPlace:"No performance accountability structure exists at the local level.",
+inDevelopment:"Performance is tracked but accountability conversations are informal or occur too late to produce meaningful course correction.",
+good:"Regular performance check-ins occur. Variance from goal triggers a structured conversation and a documented recovery plan.",
+better:"Accountability is systematic. Regular cadence of performance reviews at every level.",
+best:"Performance accountability is a management culture, not a process. Every level of leadership knows their numbers and is equipped to course-correct before it's too late.",
+narrative:{
+notInPlace:"Without a performance accountability structure, underperformance in a market can go unaddressed for an entire campaign cycle before anyone intervenes. By then, the window for meaningful course correction has usually closed. The cost of late accountability is not just the current cycle's lost revenue — it is the pattern it establishes. Markets that are not held accountable develop a tolerance for underperformance that becomes structural over time, and reversing that culture is significantly harder than preventing it.",
+inDevelopment:"Accountability conversations that happen too late to produce course correction are not accountability conversations — they are post-mortems. The discipline that separates In Development from Good on this hold is not sophistication. It is timing and consistency. Regular check-ins during the campaign cycle, with a defined expectation of what a recovery plan looks like when variance appears, are the structural minimum. Markets that know accountability is coming on a predictable schedule perform differently than markets where it arrives only when someone notices a problem.",
+good:"Regular performance check-ins that trigger structured recovery plans when variance appears are a meaningful management foundation. The next level is the quality of the recovery conversation itself. A recovery plan that says we will work harder is not a recovery plan. A recovery plan that identifies the specific gap, the specific tactic that will close it, and the specific person accountable for executing it is. The difference between those two conversations determines whether course correction actually happens or just gets discussed.",
+better:"Systematic accountability at every level of the organization is producing the consistency your performance data reflects. The next iteration is preemptive intervention — using your benchmark and trajectory data to identify markets that are trending toward underperformance before they arrive there, and deploying support before the gap becomes structural. The best accountability systems track leading indicators regularly and flag risk early enough to do something about it.",
+best:"When performance accountability is a management culture rather than a process, it produces something that process alone cannot — staff who internalize the standard rather than responding to external pressure. At this level your Local Geographic Leaders are not waiting to be asked how they are tracking. They know their numbers, they understand the gap, and they have already developed a recovery plan before the check-in happens. That internalization is the highest expression of performance culture, and it is the hardest thing to build and the most valuable thing to have."},
+example:null},
+{id:"f6",num:"F6",matrix:"field",title:"Core Tactic Focus and Field Execution",note:null,
+notInPlace:"No core tactical framework exists. Field execution is inconsistent and unmanaged.",
+inDevelopment:"Some core tactics are identified but execution is inconsistent.",
+good:"Core tactics defined, communicated, and applied consistently.",
+better:"Core tactics executed with discipline and measured for effectiveness. Non-revenue activities deprioritized during peak campaign periods.",
+best:"Tactical execution is a competitive advantage. Every tactic measured for return.",
+narrative:{
+notInPlace:"Without a defined core tactical framework, every market is essentially running its own version of the program. That is not inherently bad when the market has exceptional staff — but it means you cannot systematically replicate success or diagnose failure. When a market underperforms, you cannot tell whether the problem is tactics, execution, or strategy, because there is no shared standard against which to evaluate any of those things. The tactical framework is not about restricting field creativity. It is about establishing the baseline of execution from which field creativity can add value.",
+inDevelopment:"Identified but inconsistently executed tactics produce inconsistently executed results. The gap between knowing the tactics and deploying them with discipline is almost always a prioritization problem — non-revenue activities expand to fill available time, and the core tactics that actually drive performance get compressed or skipped during busy periods. The management move that closes this gap is explicit time protection during peak campaign periods: what gets done first, what gets deprioritized, and what the expectation is for tactic completion rates in each market.",
+good:"Consistently defined and applied core tactics are the foundation of a scalable program. At this level the next question is measurement — are you tracking which tactics are being executed and correlating that to performance outcomes? Knowing that a tactic is defined is not the same as knowing it is working. The markets that move from Good to Better almost always do it by introducing execution data: tactic completion rates by market, correlated with revenue performance. That correlation almost always tells you something actionable.",
+better:"Core tactics executed with discipline and measured for effectiveness is a significant operational achievement. Non-revenue activities deprioritized during peak campaign periods means your field teams are protecting the time that matters most. The ceiling from here is using your execution data to refine the tactical framework itself — identifying which tactics produce the highest return across different market types and adjusting the prioritization accordingly. The best programs treat the tactical framework as a living document, not a fixed playbook.",
+best:"When tactical execution is a competitive advantage, it shows up in the consistency of your performance across markets of different sizes, demographics, and competitive environments. Every tactic measured for return means your tactical framework is evidence-based, and the decisions about what to prioritize are driven by data rather than tradition. Protect this discipline carefully — the pressure to add tactics faster than you can measure them is constant, and it is the most common way Best in Class execution programs lose their edge."},
+example:null},
+{id:"f7",num:"F7",matrix:"field",title:"Training Application and Staff Development",note:null,
+notInPlace:"No training is applied at the local level. Staff development does not exist.",
+inDevelopment:"Training is attended but not consistently applied.",
+good:"National training applied consistently at the local level.",
+better:"Training application monitored and coached. Staff development individualized.",
+best:"Training application is a managed performance system. The best local markets are talent development engines for the broader organization.",
+narrative:{
+notInPlace:"Training that is not applied in the field has no revenue value regardless of its quality. What you have without application is an informed staff that is not performing differently than an uninformed one. The training investment — in time, content, and delivery — produces a return only when it changes what staff do in front of corporate partners, volunteers, and participants. The management question is not whether training happened. It is whether behavior changed as a result, and if not, what is preventing the application.",
+inDevelopment:"Training that is attended but not consistently applied is one of the most common patterns in P2P field organizations, and it is almost never a training quality problem. It is a coaching and accountability problem. Staff leave training with the knowledge and return to markets where no one is tracking whether the tactics are being used, no one is coaching the application, and the day-to-day pressure of execution crowds out the intentional behavior change that training is designed to produce. The fix is not better training. It is a coaching system that connects the training to the field.",
+good:"Consistent application of national training at the local level is a real achievement and the foundation for everything else on this hold. The next level is individualization — moving from consistent application to coached application, where each staff member has a development plan that identifies their specific gaps and the specific skills they are building. Consistent application lifts the floor. Individualized coaching raises the ceiling for your highest-potential staff.",
+better:"Training application that is monitored and coached with individualized development plans is producing results that show up in your performance data. At this level the distinction between your best and average staff is not knowledge — it is skill, and skill is built through deliberate practice with feedback. The next iteration is using your best performers as coaches and teaching resources. The market that produced your highest-yielding participant engagement strategy should be training every other market in how they did it.",
+best:"When training application is a managed performance system and your best local markets are developing talent for the broader organization, you have built something that compounds. The markets at this level are not just performing well — they are producing the next generation of Area Directors and Regional VPs. Protect this pipeline by making it explicit: identify your highest-potential Local Program Leads, give them stretch assignments, and create a visible pathway to the next level. When staff can see where the road goes, they stay on it."},
+example:null},
+{id:"f8",num:"F8",matrix:"field",title:"Participant Yield Optimization",note:null,
+notInPlace:"Participant yield is not tracked. No fundraising ask strategies are in place.",
+inDevelopment:"Some yield tracking exists but fundraising coaching is minimal.",
+good:"Participant yield tracked and benchmarked. Core fundraising ask strategies in place.",
+better:"Yield optimization is a structured program. Re-enrollment of prior participants is a defined and staffed strategy.",
+best:"Participant yield managed as a segmented portfolio. Average yield improvement compounds annually.",
+narrative:{
+notInPlace:"Participant yield is where most P2P organizations have their largest unrealized revenue opportunity, and most of them do not know it because they are not tracking it. The question is not how many people crossed your finish line — it is how much each of them raised, how that compares to what they could have raised with better coaching, and what percentage of your prior participants came back. Those three numbers tell you more about your program's health than any other data set, and without them you are making resource allocation decisions in the dark.",
+inDevelopment:"Minimal yield tracking and minimal fundraising coaching produces minimal yield improvement. Participants will raise what they raise without intervention — some a little, some a lot, and most somewhere in the middle. The intervention that moves the middle is coaching: proactive outreach to participants who have raised something but are below their potential, with a specific ask, a specific tool, and a specific timeline. That coaching does not require sophisticated technology. It requires a segmented list and a staff member who makes the calls.",
+good:"Tracked and benchmarked participant yield with core fundraising ask strategies in place is the operational foundation for yield improvement. The next level is segmentation — treating your participant pool not as a single group but as at least three distinct populations: your top fundraisers who need stewardship and stretch goals, your mid-tier participants who respond to coaching and specific asks, and your lapsed participants who need re-enrollment outreach. Each segment requires a different strategy, and the return on that differentiation is significant.",
+better:"A structured yield optimization program with active re-enrollment strategy for prior participants is producing compounding returns in your participant base. The ceiling from here is portfolio management — treating your highest-yield participants the way a major gifts officer treats a prospect: with personalized stewardship, stretch goal conversations, and relationship-based cultivation between events. The participants who give the most are also your most likely to give more. That conversation is almost never happening at the scale it should be.",
+best:"Participant yield managed as a segmented portfolio with compounding improvement is the highest expression of participant development in P2P fundraising. At this level your average yield improvement is not accidental — it is the product of deliberate segmentation, disciplined coaching, and stewardship practices that treat your top fundraisers as the long-term assets they are. The discipline to sustain this is consistency: the segmentation strategy, the coaching cadence, and the re-enrollment outreach need to operate with the same reliability as the event itself."},
+example:null},
+{id:"f9",num:"F9",matrix:"field",title:"Survivor, Ambassador and Community Engagement",note:null,
+notInPlace:"Survivors and community members have no visible role in the campaign.",
+inDevelopment:"Some survivor presence exists at events but engagement is not structured or year-round.",
+good:"Survivors and community members present and visible. Their stories shared in fundraising communications.",
+better:"Survivor engagement structured and year-round. Ambassadors developed as active fundraisers.",
+best:"Survivor and community engagement is an acquisition and retention strategy. Ambassador role formalized with defined fundraising goals.",
+narrative:{
+notInPlace:"Survivors and community members are the most powerful storytellers your program has, and without a structured role for them, their impact is limited to the moments when they happen to show up. The organizations that use mission ambassadors most effectively do not treat them as event-day assets — they treat them as year-round fundraising partners with their own goals, their own networks, and their own capacity to activate corporate and individual donors in ways that staff cannot. The difference between a survivor who speaks at the event and a survivor who is an active fundraiser is a conversation and a goal.",
+inDevelopment:"Event-day survivor presence is a start, but it is the lowest-value expression of what this hold can produce. The transition from In Development to Good is about structure — giving ambassadors a year-round role, a defined ask, and the tools to be active fundraisers rather than passive storytellers. Most survivors and community members who are asked to do more say yes. The reason most of them are not doing more is that no one has asked them explicitly, with a specific goal and a specific plan for how they can help.",
+good:"Survivors and community members who are present and visible with their stories shared in fundraising communications are doing real work for your program. The next level is activation — converting the most compelling story-sharers into active fundraisers with their own personal fundraising goals. Not every ambassador will want that role, but the ones who do will be among your most effective fundraisers. Their authenticity opens conversations that corporate team captains cannot open and closes gifts that staff asks cannot close.",
+better:"Structured year-round ambassador engagement with active fundraising goals is producing returns beyond what event-day presence alone can generate. The ceiling from here is formalization — defining the ambassador role clearly enough that it can be recruited to, not just discovered. When you have a defined role with defined expectations, you can actively seek out survivors and community members who are well-networked, energized, and ready to fundraise, rather than waiting for them to self-identify.",
+best:"Ambassador engagement as an acquisition and retention strategy with formalized roles and defined fundraising goals is a genuine differentiator. At this level your ambassador community is not just telling stories — it is growing your participant base, activating corporate networks, and providing the mission authenticity that no staff communication can replicate. Protect the investment in relationship management that makes this work. Ambassadors at this level are high-touch relationships, and the returns compound when they are stewarded with the same discipline as your top corporate partners."},
+example:null},
+{id:"f10",num:"F10",matrix:"field",title:"Local Recognition and Volunteer Stewardship",note:null,
+notInPlace:"No recognition structure exists. Top volunteers and fundraisers are not acknowledged.",
+inDevelopment:"Some recognition occurs but it is informal, inconsistent, or event-focused.",
+good:"Recognition meaningful and consistent. Stewardship is year-round.",
+better:"Recognition tiered and behavior-specific. Stewardship experiences distinctive enough to create aspiration among emerging leaders.",
+best:"Recognition and stewardship engineered as retention and elevation tools. Top volunteers recognized in ways that create visibility within their own organizations.",
+narrative:{
+notInPlace:"Top volunteers and fundraisers who are not systematically acknowledged will eventually stop performing at the top. Not always dramatically — more often gradually, as the energy and engagement that drove their early performance quietly dissipates without the reinforcement that sustains it. Recognition is not just appreciation. It is a management tool that signals what the organization values, calibrates expectations, and creates the kind of aspiration in emerging performers that drives the next generation of your volunteer base.",
+inDevelopment:"Informal and inconsistent recognition creates a perception problem that is often worse than no recognition at all — the volunteers who feel overlooked do not always say so, and by the time their disengagement becomes visible it has usually been building for a long time. The move from In Development to Good is not complexity. It is consistency. A defined recognition framework that acknowledges specific behaviors in specific ways, applied reliably across your top performers, changes the volunteer experience in ways that retention data will eventually confirm.",
+good:"Meaningful and consistent recognition with year-round stewardship is a real foundation, and it shows in your volunteer retention. The next level is the behavior-specificity of your recognition handles — are you acknowledging people for giving generously, or for doing the specific things that drive program growth? There is a meaningful difference between recognizing your highest total fundraiser and recognizing the volunteer who recruited three new corporate teams. Both deserve acknowledgment, but only one of them tells your volunteer community what behaviors move the program forward.",
+better:"Tiered, behavior-specific recognition that creates aspiration among emerging leaders is a sophisticated stewardship practice. The next iteration is the visibility dimension — ensuring that your top performers are recognized in contexts that create standing within their own organizations and communities. A corporate team captain acknowledged in front of their colleagues, or a volunteer honored at an event their CEO attends, has a different experience than one who receives a private thank-you. That public visibility is often more motivating than the recognition itself.",
+best:"Recognition and stewardship engineered as retention and elevation tools at this level are producing returns across your volunteer pipeline and corporate portfolio simultaneously. The discipline required to sustain this is attention to evolution — the behaviors you need to drive change as the program matures, and the recognition architecture needs to change with them. The organizations that stay at Best in Class review their recognition framework regularly and retire handles that are no longer connected to the behaviors that matter most to program growth."},
+example:null},
+{id:"f11",num:"F11",matrix:"field",title:"Local Mission and Narrative Alignment",note:null,
+notInPlace:"No consistent mission narrative is used locally. Staff and volunteers cannot clearly articulate impact.",
+inDevelopment:"Some mission messaging exists but is not consistently embedded in fundraising conversations.",
+good:"Mission narratives consistently embedded in local fundraising conversations, corporate pitches, and event programming.",
+better:"Mission narrative localized — connecting national impact to specific community outcomes.",
+best:"Local mission narrative differentiated by constituency — corporate, volunteer, and participant versions each authentic, specific, and tested.",
+narrative:{
+notInPlace:"Staff and volunteers who cannot clearly articulate the mission's local impact are having conversations that are less persuasive than they could be at every touchpoint — corporate pitches, volunteer recruitment, participant engagement, donor asks. The gap is not passion. Most people who work and volunteer for these programs believe deeply in the mission. The gap is specificity: the ability to connect the national mission to a specific community outcome that the person across the table can see, understand, and feel motivated to support. That connection is built, not natural, and it requires intentional development.",
+inDevelopment:"Mission messaging that lives in materials but not in conversations is decoration rather than strategy. Your staff has probably read the talking points and attended the briefings. But in the field, when they are across from a corporate executive or recruiting a volunteer, they are improvising — and improvisation defaults to the generic. The move from In Development to Good is practice: getting your team to deliver the local mission narrative out loud, repeatedly, with coaching and feedback, until it becomes instinct. That work happens in team meetings and one-on-ones, not in updated materials.",
+good:"Mission narratives consistently embedded in local fundraising conversations and corporate pitches are doing real work for your program. The next level is localization depth — how specific and how current is the local impact story your team is using? A story that references a specific community outcome from the recent past lands differently than a general description of what the organization does. The most effective local narratives are granular enough that the person hearing them can picture a specific place, a specific person, or a specific outcome in their own community.",
+better:"A localized mission narrative that connects national impact to specific community outcomes is one of your most powerful development tools, and you are using it as one. The next iteration is constituency differentiation — the story you tell a corporate executive should emphasize community impact and employee engagement differently than the story you tell a walk participant. Both are true. Both are compelling. But they are not the same story, and deploying the right version in the right context is what moves conversion rates.",
+best:"Local mission narrative differentiated by constituency — with corporate, volunteer, and participant versions each authentic, specific, and tested — is a genuine competitive advantage in local P2P markets. The discipline required to sustain this is currency: the stories need to be refreshed regularly, the versions need to be tested in the field, and the staff need to be coached on which version to use in which context. The moment local mission narrative becomes institutional boilerplate, it stops doing the work you built it to do."},
+example:"While leading the Los Angeles March for Babies, a search for newsletter content surfaced a little girl who had already raised $10,000. The father was the President of Universal Pictures. Over time the family raised over $120,000 as a family team."}
+];
+
+var SEC_NAT={type:"section",id:"sec-nat",matrix:"national",title:"National Matrix",subtitle:"10 Holds — Strategic and Relational",desc:"These holds address the relationships and strategic infrastructure that only national leadership can build and sustain.",guidance:[{icon:"🏛",role:"National leader",text:"Score each hold based on your organization's consistent performance across all markets and campaign cycles — not your best year or your best market."},{icon:"📍",role:"Chapter or market leader",text:"These holds reflect the national infrastructure your chapter operates within. Score them based on what you observe from your position."}]};
+var SEC_FLD={type:"section",id:"sec-fld",matrix:"field",title:"Field Matrix",subtitle:"11 Holds — Operational and Execution",desc:"These holds address the operational and relational discipline that determines whether your market performs at its capacity.",guidance:[{icon:"🏛",role:"National leader",text:"Score each hold based on how your average market performs — not your best market."},{icon:"📍",role:"Chapter or market leader",text:"Score each hold specifically for your own market. Be honest about where you are, not where you aspire to be."},{icon:"🔍",role:"National leader assessing a specific market",text:"Score each hold based on the specific market you are evaluating."}]};
+var SEQUENCE=[SEC_NAT].concat(HOLDS.filter(function(h){return h.matrix==="national";})).concat([SEC_FLD]).concat(HOLDS.filter(function(h){return h.matrix==="field";}));
+
+function goAssess(){
+  var org=document.getElementById("org-in").value.trim();
+  var name=document.getElementById("person-in").value.trim();
+  var title=document.getElementById("title-in").value.trim();
+  if(!org||!name){alert("Please enter organization name and your name first.");return;}
+  state.org=org;
+  state.person=title?name+", "+title:name;
+  showScreen("assess");renderSeqItem();renderJumpNav();updateProgress();
+}
+
+function goPrev(){
+  if(state.seqIdx>0){state.seqIdx--;renderSeqItem();updateProgress();}
+  else{showScreen("intro");}
+}
+
+function goNext(){
+  if(state.seqIdx<SEQUENCE.length-1){state.seqIdx++;renderSeqItem();updateProgress();}
+  else{showResults();}
+}
+
+function jumpTo(idx){state.seqIdx=idx;renderSeqItem();updateProgress();}
+
+function updateProgress(){
+  var sc=totalScored();var total=HOLDS.length;
+  var pct=Math.round(sc/total*100);
+  document.getElementById("prog-bar").style.width=pct+"%";
+  document.getElementById("prog-pct").textContent=pct+"%";
+  var item=SEQUENCE[state.seqIdx];
+  var isSec=item.type==="section";
+  document.getElementById("prog-label").textContent=isSec?(item.title+" — "+item.subtitle):(item.num+": "+(item.matrix==="national"?"National":"Field")+" Matrix");
+  document.getElementById("nav-label").textContent=isSec?(item.matrix==="national"?"National Matrix":"Field Matrix"):item.num;
+  document.getElementById("nav-scored").textContent=sc+" of "+total+" scored";
+  document.getElementById("assess-sub").textContent=state.org+(state.person?" · "+state.person:"");
+  document.getElementById("next-btn").textContent=state.seqIdx===SEQUENCE.length-1?"View Results →":"Next →";
+  renderDotNav();
+  renderJumpNav();
+}
+
+function renderDotNav(){
+  var html="";
+  HOLDS.forEach(function(h){
+    var si=SEQUENCE.findIndex(function(sq){return sq.id===h.id;});
+    var sc=state.scores[h.id]||{};
+    var done=sc.payoff&&sc.ease;
+    var item=SEQUENCE[state.seqIdx];
+    var cur=item&&!item.type&&item.id===h.id;
+    var rk=sc.rating;
+    var dc=cur?"#fff":done&&rk?RS[rk].dot:done?"#93c5fd":"rgba(255,255,255,0.3)";
+    html+='<button onclick="jumpTo('+si+')" title="'+h.num+'" style="width:16px;height:16px;border-radius:50%;border:none;cursor:pointer;background:'+dc+';outline:'+(cur?"2px solid #fff":"none")+';outline-offset:1px;padding:0;"></button>';
+  });
+  document.getElementById("dot-nav").innerHTML=html;
+}
+
+function renderJumpNav(){
+  var html="";
+  HOLDS.forEach(function(h){
+    var si=SEQUENCE.findIndex(function(sq){return sq.id===h.id;});
+    var sc=state.scores[h.id]||{};
+    var done=sc.payoff&&sc.ease;
+    var item=SEQUENCE[state.seqIdx];
+    var cur=item&&!item.type&&item.id===h.id;
+    var rk=sc.rating;
+    var dotColor=cur?"#1e40af":done&&rk?RS[rk].dot:done?"#93c5fd":"#d1d5db";
+    html+='<button onclick="jumpTo('+si+')" style="display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:6px;border:1px solid '+(cur?"#1e40af":"#e5e7eb")+';background:'+(cur?"#eff6ff":"#f9fafb")+';color:'+(cur?"#1e40af":"#374151")+';font-size:12px;font-family:Georgia,serif;font-weight:'+(cur?"bold":"normal")+';"><span style="width:7px;height:7px;border-radius:50%;background:'+dotColor+';display:inline-block;flex-shrink:0;"></span>'+h.num+'</button>';
+  });
+  document.getElementById("jump-nav").innerHTML=html;
+}
+
+function renderSeqItem(){
+  var item=SEQUENCE[state.seqIdx];
+  var content=document.getElementById("assess-content");
+  if(item.type==="section"){
+    var color=item.matrix==="national"?"#1e40af":"#0f766e";
+    var guidanceHTML=item.guidance.map(function(g){return '<div style="display:flex;gap:14px;padding:14px 16px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;margin-bottom:8px;"><span style="font-size:20px;flex-shrink:0;">'+g.icon+'</span><div><div style="font-size:13px;font-weight:bold;color:#111827;margin-bottom:4px;">'+esc(g.role)+'</div><div style="font-size:14px;color:#374151;line-height:1.5;">'+esc(g.text)+'</div></div></div>';}).join('');
+    content.innerHTML='<div style="background:#fff;border-radius:12px;border:3px solid '+color+';overflow:hidden;"><div style="background:'+color+';padding:28px 32px 24px;"><div style="font-size:12px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">GBB Diagnostic Framework&#8482;</div><h2 style="margin:0 0 6px;font-size:26px;font-weight:700;color:#fff;">'+esc(item.title)+'</h2><div style="font-size:14px;color:rgba(255,255,255,0.8);">'+esc(item.subtitle)+'</div></div><div style="padding:24px 32px 28px;"><p style="margin:0 0 20px;font-size:16px;color:#111827;line-height:1.6;">'+esc(item.desc)+'</p><p style="margin:0 0 14px;font-size:13px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;">How to Score This Matrix</p>'+guidanceHTML+'</div></div>';
+  } else {
+    renderHold(item,content);
+  }
+}
+
+function renderHold(hold,container){
+  var s=state.scores[hold.id]||{};
+  var rating=s.rating||null;var payoff=s.payoff||null;var ease=s.ease||null;
+  var total=(payoff&&ease)?payoff+ease:null;
+  var borderColor=rating?RS[rating].border:"#e5e7eb";
+  var ratingsHTML=RORDER.map(function(rk){
+    var st=RS[rk];var sel=rating===rk;
+    return '<button onclick="setRating(\''+hold.id+'\',\''+rk+'\','+(sel?"true":"false")+')" style="width:100%;padding:12px 16px;border-radius:8px;border:1px solid '+(sel?st.border:"#e5e7eb")+';background:'+(sel?st.bg:"transparent")+';cursor:pointer;text-align:left;margin-bottom:8px;"><div style="display:flex;align-items:flex-start;gap:12px;"><div style="width:12px;height:12px;border-radius:50%;background:'+(sel?st.dot:"#d1d5db")+';margin-top:3px;flex-shrink:0;"></div><div><span style="font-size:14px;font-weight:bold;color:'+(sel?st.text:"#374151")+';">'+RLABELS[rk]+'&nbsp;&nbsp;</span><span style="font-size:14px;color:'+(sel?st.text:"#374151")+';line-height:1.5;">'+esc(hold[rk])+'</span></div></div></button>';
+  }).join('');
+  var payoffBtns="";
+  for(var n=1;n<=5;n++){var a=payoff&&payoff>=n;payoffBtns+='<button onclick="setScore(\''+hold.id+'\',\'payoff\','+n+')" style="flex:1;height:40px;border:1px solid '+(a?"#dc2626":"#d1d5db")+';border-radius:6px;cursor:pointer;background:'+(a?"#dc2626":"#f9fafb")+';color:'+(a?"#fff":"#6b7280")+';font-weight:bold;font-size:14px;font-family:Georgia,serif;">'+n+'</button>';}
+  var easeBtns="";
+  for(var n=1;n<=5;n++){var a=ease&&ease>=n;easeBtns+='<button onclick="setScore(\''+hold.id+'\',\'ease\','+n+')" style="flex:1;height:40px;border:1px solid '+(a?"#2563eb":"#d1d5db")+';border-radius:6px;cursor:pointer;background:'+(a?"#2563eb":"#f9fafb")+';color:'+(a?"#fff":"#6b7280")+';font-weight:bold;font-size:14px;font-family:Georgia,serif;">'+n+'</button>';}
+  var scoreBar=total?'<div style="padding:14px 28px;background:#f9fafb;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:15px;color:#374151;">Priority Score: <strong style="color:'+pC(total)+';font-size:18px;">'+total+'/10</strong></span><span style="font-size:13px;color:'+pC(total)+';font-weight:bold;text-transform:uppercase;">'+pL(total)+'</span></div>':"";
+  var narrativeHTML="";
+  if(rating&&hold.narrative&&hold.narrative[rating]){var nb=rating?RS[rating]:null;narrativeHTML='<div style="border-top:1px solid #f3f4f6;padding:20px 28px;background:#fafafa;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span style="width:3px;height:16px;border-radius:2px;background:'+(nb?nb.dot:"#9ca3af")+';display:inline-block;flex-shrink:0;"></span><span style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;font-weight:bold;">What This Means For Your Program</span></div><p style="margin:0;font-size:14px;color:#374151;line-height:1.75;font-style:italic;">'+esc(hold.narrative[rating])+'</p></div>';}
+  var exampleHTML="";
+  if(hold.example){exampleHTML='<div style="border-top:1px solid #f3f4f6;"><button onclick="toggleEx(\''+hold.id+'\')" style="width:100%;padding:14px 28px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left;"><span style="width:20px;height:20px;border-radius:4px;border:1px solid #bfdbfe;background:#f9fafb;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span id="ex-arrow-'+hold.id+'" style="color:#3b82f6;font-size:10px;transform:rotate(90deg);display:inline-block;">&#9658;</span></span><span style="font-size:13px;color:#3b82f6;text-transform:uppercase;letter-spacing:0.1em;">What This Looks Like</span></button><div id="ex-content-'+hold.id+'" style="margin:0 28px 20px;padding:16px 18px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;border-left:3px solid #3b82f6;"><p style="margin:0;font-size:14px;color:#1f2937;line-height:1.7;font-style:italic;">'+esc(hold.example)+'</p></div></div>';}
+  var noteHTML=hold.note?'<p style="margin:10px 0 0;font-size:14px;color:#374151;font-style:italic;line-height:1.5;">'+esc(hold.note)+'</p>':"";
+  var totalBox=total?'<div style="min-width:60px;height:60px;border-radius:10px;background:#f9fafb;border:2px solid '+pC(total)+';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:22px;font-weight:bold;color:'+pC(total)+';line-height:1;">'+total+'</span><span style="font-size:10px;color:#9ca3af;text-transform:uppercase;">/10</span></div>':"";
+  container.innerHTML='<div style="background:#fff;border-radius:12px;border:1px solid '+borderColor+';overflow:hidden;"><div style="padding:24px 28px 18px;border-bottom:1px solid #f3f4f6;display:flex;align-items:flex-start;gap:16px;"><div style="flex:1;"><div style="font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">'+esc(hold.num)+' · '+(hold.matrix==="national"?"National Matrix":"Field Matrix")+'</div><h2 style="margin:0;font-size:20px;color:#111827;font-weight:700;line-height:1.3;">'+esc(hold.title)+'</h2>'+noteHTML+'</div>'+totalBox+'</div><div style="padding:20px 28px;border-bottom:1px solid #f3f4f6;"><p style="margin:0 0 12px;font-size:13px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;">Current Rating</p>'+ratingsHTML+'</div><div style="padding:20px 28px;border-bottom:1px solid #f3f4f6;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;"><div><p style="margin:0 0 10px;font-size:13px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;">Payoff — Revenue Impact</p><div style="display:flex;gap:6px;">'+payoffBtns+'</div><p style="margin:6px 0 0;font-size:12px;color:#6b7280;">1 = Low · 5 = Highest</p></div><div><p style="margin:0 0 10px;font-size:13px;color:#374151;text-transform:uppercase;letter-spacing:0.08em;">Ease of Implementation</p><div style="display:flex;gap:6px;">'+easeBtns+'</div><p style="margin:6px 0 0;font-size:12px;color:#6b7280;">1 = Hardest · 5 = Easiest</p></div></div></div>'+scoreBar+narrativeHTML+exampleHTML+'</div>';
+}
+
+function setRating(id,rk,alreadySelected){state.scores[id]=state.scores[id]||{};state.scores[id].rating=alreadySelected?null:rk;renderSeqItem();updateProgress();}
+function setScore(id,field,val){state.scores[id]=state.scores[id]||{};var cur=state.scores[id][field];state.scores[id][field]=(cur===val)?null:val;renderSeqItem();updateProgress();}
+function toggleEx(id){var c=document.getElementById("ex-content-"+id);var a=document.getElementById("ex-arrow-"+id);if(c.classList.contains("hide")){c.classList.remove("hide");a.style.transform="rotate(90deg)";}else{c.classList.add("hide");a.style.transform="";}}
+
+function showResults(){
+  showScreen("results-screen");
+  document.getElementById("results-sub").textContent=state.org+(state.person?" · "+state.person:"");
+  renderResultsTable("nat",HOLDS.filter(function(h){return h.matrix==="national";}));
+  renderResultsTable("field",HOLDS.filter(function(h){return h.matrix==="field";}));
+}
+
+function renderResultsTable(prefix,holds){
+  var rows=holds.map(function(h,i){var s=state.scores[h.id]||{};var t=(s.payoff&&s.ease)?s.payoff+s.ease:0;return{id:h.id,num:(prefix==="nat"?"N":"F")+(i+1),title:h.title,rating:s.rating||null,payoff:s.payoff||null,ease:s.ease||null,total:t};}).sort(function(a,b){return b.total-a.total;});
+  var scored=rows.filter(function(r){return r.total>0;});
+  var unscored=rows.filter(function(r){return r.total===0;});
+  var html=scored.map(function(r){
+    var st=r.rating?RS[r.rating]:null;
+    var badge=r.rating?'<span style="font-size:11px;padding:2px 7px;border-radius:4px;background:'+(st?st.bbg:"#f3f4f6")+';color:'+(st?st.text:"#374151")+';border:1px solid '+(st?st.border:"#d1d5db")+';">'+RLABELS[r.rating]+'</span>':"";
+    return '<div onclick="jumpToHold(\''+r.id+'\')" style="background:#fff;border-radius:8px;border:1px solid '+(r.rating&&RS[r.rating]?RS[r.rating].border:"#e5e7eb")+';padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:8px;" onmouseover="this.style.boxShadow=\'0 2px 8px rgba(0,0,0,0.1)\'" onmouseout="this.style.boxShadow=\'none\'"><div style="min-width:44px;height:44px;border-radius:8px;background:#f9fafb;border:2px solid '+pC(r.total)+';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:17px;font-weight:bold;color:'+pC(r.total)+';line-height:1;">'+r.total+'</span><span style="font-size:9px;color:#9ca3af;text-transform:uppercase;">/10</span></div><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;"><span style="font-size:11px;color:#6b7280;font-weight:bold;">'+r.num+'</span>'+badge+'<span style="font-size:11px;color:'+pC(r.total)+';font-weight:bold;">'+pL(r.total)+'</span></div><div style="font-size:14px;color:#111827;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(r.title)+'</div></div><div style="display:flex;gap:12px;flex-shrink:0;"><div style="text-align:center;"><div style="font-size:16px;font-weight:bold;color:#dc2626;">'+(r.payoff||"—")+'</div><div style="font-size:10px;color:#9ca3af;text-transform:uppercase;">Payoff</div></div><div style="text-align:center;"><div style="font-size:16px;font-weight:bold;color:#2563eb;">'+(r.ease||"—")+'</div><div style="font-size:10px;color:#9ca3af;text-transform:uppercase;">Ease</div></div></div></div>';
+  }).join("");
+  if(unscored.length){html+='<div style="padding:10px 14px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;"><span style="font-size:12px;color:#9ca3af;">Not yet scored: '+unscored.map(function(r){return r.num;}).join(", ")+'</span></div>';}
+  if(!scored.length){html='<p style="color:#9ca3af;font-style:italic;font-size:14px;">Complete holds to populate this summary.</p>';}
+  document.getElementById("results-"+prefix).innerHTML=html;
+}
+
+function jumpToHold(id){var idx=SEQUENCE.findIndex(function(s){return s.id===id;});if(idx>=0){state.seqIdx=idx;showScreen("assess");renderSeqItem();updateProgress();}}
+
+function showAction(){
+  showScreen("action-screen");
+  document.getElementById("action-sub").textContent=new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})+" · "+(state.org||"Your Organization");
+  buildApMinBtns();
+  renderAction();
+}
+
+function buildApMinBtns(){
+  var vals=[5,6,7,8,9,"All"];
+  var html="";
+  vals.forEach(function(v){
+    var val=v==="All"?0:v;
+    var active=apMinScore===val;
+    html+='<button onclick="apMinScore='+val+';renderAction();" style="padding:6px 12px;border-radius:6px;border:1px solid '+(active?"#1e40af":"#e5e7eb")+';background:'+(active?"#1e40af":"#f9fafb")+';color:'+(active?"#fff":"#374151")+';font-size:13px;font-family:Georgia,serif;">'+v+'</button>';
+  });
+  document.getElementById("ap-min-btns").innerHTML=html;
+}
+
+function renderAction(){
+  buildApMinBtns();
+  var org=state.org||"Your Organization";
+  var allRoles=NROLES.concat(FROLES);
+  var html="";
+  allRoles.forEach(function(rk){
+    var isNat=NROLES.indexOf(rk)>=0;
+    var holds=HOLDS.filter(function(h){return isNat?(h.matrix==="national"):(h.matrix==="field");});
+    var items=[];
+    holds.forEach(function(h){
+      var s=state.scores[h.id]||{};
+      var t=(s.payoff&&s.ease)?s.payoff+s.ease:0;
+      if(t<apMinScore)return;
+      var task=resTask(TASKS[h.id]?TASKS[h.id][rk]:null,org);
+      if(!task)return;
+      items.push({hold:h,score:t,rating:s.rating,task:task});
+    });
+    if(!items.length)return;
+    items.sort(function(a,b){return b.score-a.score;});
+    var rc=isNat?"#1e40af":"#0f766e";
+    html+='<div style="background:#fff;border-radius:12px;border:2px solid '+rc+';margin-bottom:28px;overflow:hidden;"><div style="background:'+rc+';padding:18px 24px;display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:10px;color:rgba(255,255,255,0.65);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;">'+(isNat?"National Role":"Field Role")+'</div><h2 style="margin:0;font-size:20px;font-weight:700;color:#fff;">'+esc(getRole(rk))+'</h2></div><div style="background:rgba(255,255,255,0.15);border-radius:8px;padding:10px 16px;text-align:center;"><div style="font-size:22px;font-weight:bold;color:#fff;line-height:1;">'+items.length+'</div><div style="font-size:10px;color:rgba(255,255,255,0.7);text-transform:uppercase;">action'+(items.length!==1?"s":"")+'</div></div></div>';
+    items.forEach(function(item,i){
+      var st=item.rating?RS[item.rating]:null;
+      var badge=item.rating&&st?'<span style="font-size:11px;padding:1px 7px;border-radius:4px;background:'+st.bbg+';color:'+st.text+';border:1px solid '+st.border+';">'+RLABELS[item.rating]+'</span>':"";
+      html+='<div style="padding:16px 24px;border-top:'+(i===0?"none":"1px solid #f3f4f6")+';display:flex;align-items:flex-start;gap:16px;"><div style="flex-shrink:0;width:44px;"><div style="width:44px;height:44px;border-radius:8px;background:#f9fafb;border:2px solid '+pC(item.score)+';display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-size:16px;font-weight:bold;color:'+pC(item.score)+';line-height:1;">'+item.score+'</span><span style="font-size:8px;color:#9ca3af;text-transform:uppercase;">/10</span></div></div><div style="flex:1;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;"><span style="font-size:11px;color:#6b7280;font-weight:bold;">'+item.hold.num+'</span><span style="font-size:11px;color:'+pC(item.score)+';font-weight:bold;">'+pL(item.score)+'</span>'+badge+'</div><div style="font-size:13px;color:#6b7280;font-style:italic;margin-bottom:6px;">'+esc(item.hold.title)+'</div><div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:'+pC(item.score)+';font-size:14px;flex-shrink:0;margin-top:1px;">&#8594;</span><p style="margin:0;font-size:14px;color:#111827;line-height:1.6;">'+esc(item.task)+'</p></div><button onclick="jumpToHold(\''+item.hold.id+'\')" style="background:transparent;border:none;color:#3b82f6;cursor:pointer;font-size:12px;padding:6px 0 0;font-family:Georgia,serif;display:block;">&#8592; Revisit '+item.hold.num+'</button></div></div>';
+    });
+    html+='</div>';
+  });
+  if(!html){html='<div style="background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:24px;text-align:center;"><p style="color:#9ca3af;font-style:italic;font-size:14px;">No holds meet the current filter criteria.</p></div>';}
+  document.getElementById("action-content").innerHTML=html;
+}
+
+function doEmailResults(){
+  var org=state.org||"Our Organization";var person=state.person||"—";
+  var date=new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+  var priL=function(t){return t>=9?"IMMEDIATE FOCUS":t>=7?"HIGH PRIORITY":t>=5?"Secondary":"Lower Priority";};
+  var fmt=function(holds,prefix,lbl){
+    var rows=holds.map(function(h,i){var s=state.scores[h.id]||{};var t=(s.payoff&&s.ease)?s.payoff+s.ease:0;var rl=s.rating?RLABELS[s.rating]:null;return{num:prefix+(i+1),title:h.title,rl:rl,payoff:s.payoff||null,ease:s.ease||null,total:t};}).sort(function(a,b){return b.total-a.total;});
+    var lines=[lbl,"—".repeat(50),""];
+    rows.filter(function(r){return r.total>0;}).forEach(function(r){lines.push(r.num+". "+r.title);lines.push("   Rating: "+(r.rl||"—")+" | Payoff: "+r.payoff+"/5 | Ease: "+r.ease+"/5 | Score: "+r.total+"/10 ["+priL(r.total)+"]");lines.push("");});
+    var u=rows.filter(function(r){return r.total===0;});
+    if(u.length)lines.push("Not yet scored: "+u.map(function(r){return r.num;}).join(", "));
+    return lines.join("\n");
+  };
+  var sub="GBB Diagnostic(tm) Assessment — "+org;
+  var body=["GBB Diagnostic Framework(tm) Assessment","Campaign Architecture(tm) | Enterprise Engineering","=".repeat(50),"","Organization: "+org,"Completed by: "+person,"Date: "+date,"","=".repeat(50),"",fmt(HOLDS.filter(function(h){return h.matrix==="national";}),"N","NATIONAL MATRIX — Priority Rankings"),"","=".repeat(50),"",fmt(HOLDS.filter(function(h){return h.matrix==="field";}),"F","FIELD MATRIX — Priority Rankings"),"","=".repeat(50),"","—","Scott Archimbaud | Campaign Architecture(tm)","scott@scottarchconsultancy.com | 917-868-0745 | (c) 2026 Campaign Architecture(tm)"].join("\n");
+  window.location.href="mailto:?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(body);
+}
+
+function doEmailAction(){
+  var org=state.org||"Our Organization";var person=state.person||"—";
+  var date=new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+  var allRoles=NROLES.concat(FROLES);
+  var lines=["GBB DIAGNOSTIC(tm) — ORGANIZATIONAL ACTION PLAN","Campaign Architecture(tm) | Enterprise Engineering","=".repeat(50),"","Organization: "+org,"Prepared by: "+person,"Date: "+date,"Minimum priority score: "+apMinScore,"","=".repeat(50),""];
+  allRoles.forEach(function(rk){
+    var isNat=NROLES.indexOf(rk)>=0;
+    var holds=HOLDS.filter(function(h){return isNat?(h.matrix==="national"):(h.matrix==="field");});
+    var items=[];
+    holds.forEach(function(h){
+      var s=state.scores[h.id]||{};var t=(s.payoff&&s.ease)?s.payoff+s.ease:0;
+      if(t<apMinScore)return;
+      var task=resTask(TASKS[h.id]?TASKS[h.id][rk]:null,org);
+      if(!task)return;
+      items.push({hold:h,score:t,rating:s.rating,task:task});
+    });
+    if(!items.length)return;
+    items.sort(function(a,b){return b.score-a.score;});
+    lines.push("—".repeat(50));lines.push(getRole(rk).toUpperCase()+" ("+items.length+" action"+(items.length!==1?"s":"")+")");lines.push("—".repeat(50));lines.push("");
+    items.forEach(function(item){lines.push(" "+item.hold.num+" "+item.hold.title);lines.push(" Rating: "+(item.rating?RLABELS[item.rating]:"—")+" | Score: "+item.score+"/10 ["+pL(item.score)+"]");lines.push(" → "+item.task);lines.push("");});
+  });
+  lines.push("=".repeat(50),"","—","Scott Archimbaud | Campaign Architecture(tm)","scott@scottarchconsultancy.com | 917-868-0745 | (c) 2026 Campaign Architecture(tm)");
+  var sub="GBB Diagnostic(tm) Action Plan — "+org;
+  window.location.href="mailto:?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(lines.join("\n"));
+}
+</script>
+
+</body>
+</html>
