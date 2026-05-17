@@ -168,6 +168,7 @@ input::placeholder{color:#9ca3af;}
       <span style="font-size:13px;"><strong style="color:#2563eb;">5&#8211;6</strong> Secondary</span>
       <span style="font-size:13px;"><strong style="color:#6b7280;">&lt;5</strong> Lower Priority</span>
     </div>
+    <div id="ai-narrative" style="margin:20px 0;"></div>
     <h2 style="font-size:18px;font-weight:700;color:#111827;margin:20px 0 14px;padding-bottom:10px;border-bottom:1px solid #e5e7eb;">National Matrix &#8212; Priority Summary</h2>
     <div id="results-nat" style="margin-bottom:32px;"></div>
     <h2 style="font-size:18px;font-weight:700;color:#111827;margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid #e5e7eb;">Field Matrix &#8212; Priority Summary</h2>
@@ -747,6 +748,71 @@ function showResults(){
   document.getElementById("results-sub").textContent=state.org+(state.person?" · "+state.person:"");
   renderResultsTable("nat",HOLDS.filter(function(h){return h.matrix==="national";}));
   renderResultsTable("field",HOLDS.filter(function(h){return h.matrix==="field";}));
+  generateNarrative();
+}
+
+function generateNarrative(){
+  var narDiv=document.getElementById("ai-narrative");
+  // Only generate if at least 10 holds scored
+  var scored=HOLDS.filter(function(h){var s=state.scores[h.id]||{};return s.payoff&&s.ease&&s.rating;});
+  if(scored.length<5){narDiv.innerHTML="";return;}
+
+  narDiv.innerHTML='<div style="background:#fffbeb;border:1px solid #fcd34d;border-left:4px solid #b8972e;border-radius:10px;padding:24px 28px;margin-bottom:8px;">'+
+    '<div style="font-size:11px;color:#b8972e;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:12px;font-weight:bold;">Generating Your Program Assessment</div>'+
+    '<div style="font-size:14px;color:#92400e;font-style:italic;margin-bottom:14px;">Analyzing your scores and composing a custom narrative across all holds...</div>'+
+    '<div style="display:flex;gap:6px;"><div style="width:8px;height:8px;border-radius:50%;background:#b8972e;animation:gbbpulse 1.2s ease-in-out infinite;"></div><div style="width:8px;height:8px;border-radius:50%;background:#b8972e;animation:gbbpulse 1.2s ease-in-out 0.4s infinite;"></div><div style="width:8px;height:8px;border-radius:50%;background:#b8972e;animation:gbbpulse 1.2s ease-in-out 0.8s infinite;"></div></div>'+
+    '</div><style>@keyframes gbbpulse{0%,100%{opacity:0.3;}50%{opacity:1;}}</style>';
+
+  // Build sorted scored holds
+  var allScored=HOLDS.map(function(h){
+    var s=state.scores[h.id]||{};
+    var rating=s.rating||null;
+    var payoff=s.payoff||0;
+    var ease=s.ease||0;
+    var total=(payoff&&ease)?payoff+ease:0;
+    return{hold:h,rating:rating,payoff:payoff,ease:ease,score:total};
+  }).filter(function(h){return h.score>0;}).sort(function(a,b){return b.score-a.score;});
+
+  var org=state.org||"the organization";
+  var topHolds=allScored.slice(0,5);
+  var holdSummary=allScored.map(function(item,i){
+    return (i+1)+". "+item.hold.title+" ("+item.hold.matrix+" matrix) — Rating: "+RLABELS[item.rating]+", Payoff: "+item.payoff+"/5, Ease: "+item.ease+"/5, Priority Score: "+item.score+"/10";
+  }).join("\n");
+
+  var topNames=topHolds.map(function(h){return h.hold.title;});
+  var prompt="You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience including running a $100M national P2P program across 1,200 markets. Write a 4-paragraph executive assessment for "+org+" based on their GBB Diagnostic results.\n\nAll scored holds ranked by priority:\n\n"+holdSummary+"\n\nStructure your response exactly as follows:\n\nParagraph 1: Describe the OVERALL PATTERN across all scored holds — what does the composite picture reveal about this program's architecture? Name at least 4 holds.\n\nParagraph 2: Focus on the top two highest-priority holds — "+topNames[0]+" and "+(topNames[1]||topNames[0])+" — and explain what they mean IN COMBINATION. How do these gaps relate to each other?\n\nParagraph 3: Address the next two or three highest-priority holds and how they connect to or compound the top priorities.\n\nParagraph 4: Acknowledge the lower-priority holds briefly and close with a specific recommendation about sequencing — where to start and why.\n\nRules: Flowing prose only. No bullets. No headers. No numerical scores — describe qualitatively. Write directly to the senior leader using 'you' and 'your program'. Sound like someone who has seen this exact pattern many times.";
+
+  fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      model:"claude-sonnet-4-20250514",
+      max_tokens:1500,
+      system:"You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience. You write in direct, experienced prose as a peer speaking to another senior leader. Always write in flowing paragraphs — no bullets, no headers, no numerical scores. Always cover every hold mentioned, distributed across all four paragraphs.",
+      messages:[{role:"user",content:prompt}]
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    var text="";
+    if(data.content&&data.content.length){data.content.forEach(function(b){if(b.type==="text")text+=b.text;});}
+    if(!text){throw new Error("No content");}
+    var paragraphs=text.trim().split(/\n\n+/).filter(function(p){return p.trim();});
+    narDiv.innerHTML='<div style="background:#fffbeb;border:1px solid #fcd34d;border-left:4px solid #b8972e;border-radius:10px;padding:24px 28px;margin-bottom:8px;">'+
+      '<div style="font-size:11px;color:#b8972e;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px;font-weight:bold;">Your Program Assessment</div>'+
+      paragraphs.map(function(p){return '<p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.8;font-style:italic;">'+p.trim()+'</p>';}).join('')+
+    '</div>';
+  })
+  .catch(function(){
+    // Fallback — show top holds with their narratives
+    narDiv.innerHTML='<div style="background:#fffbeb;border:1px solid #fcd34d;border-left:4px solid #b8972e;border-radius:10px;padding:24px 28px;margin-bottom:8px;">'+
+      '<div style="font-size:11px;color:#b8972e;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px;font-weight:bold;">Your Top Priorities</div>'+
+      topHolds.slice(0,3).map(function(item){
+        var nar=item.hold.narrative&&item.rating?item.hold.narrative[item.rating]:"";
+        return nar?'<p style="margin:0 0 14px;font-size:14px;color:#374151;line-height:1.7;font-style:italic;"><strong>'+item.hold.title+':</strong> '+nar+'</p>':"";
+      }).join('')+
+    '</div>';
+  });
 }
 
 function renderResultsTable(prefix,holds){
