@@ -753,7 +753,6 @@ function showResults(){
 
 function generateNarrative(){
   var narDiv=document.getElementById("ai-narrative");
-  // Only generate if at least 10 holds scored
   var scored=HOLDS.filter(function(h){var s=state.scores[h.id]||{};return s.payoff&&s.ease&&s.rating;});
   if(scored.length<5){narDiv.innerHTML="";return;}
 
@@ -763,29 +762,25 @@ function generateNarrative(){
     '<div style="display:flex;gap:6px;"><div style="width:8px;height:8px;border-radius:50%;background:#b8972e;animation:gbbpulse 1.2s ease-in-out infinite;"></div><div style="width:8px;height:8px;border-radius:50%;background:#b8972e;animation:gbbpulse 1.2s ease-in-out 0.4s infinite;"></div><div style="width:8px;height:8px;border-radius:50%;background:#b8972e;animation:gbbpulse 1.2s ease-in-out 0.8s infinite;"></div></div>'+
     '</div><style>@keyframes gbbpulse{0%,100%{opacity:0.3;}50%{opacity:1;}}</style>';
 
-  // Build sorted scored holds
   var allScored=HOLDS.map(function(h){
     var s=state.scores[h.id]||{};
-    var rating=s.rating||null;
-    var payoff=s.payoff||0;
-    var ease=s.ease||0;
-    var total=(payoff&&ease)?payoff+ease:0;
-    return{hold:h,rating:rating,payoff:payoff,ease:ease,score:total};
-  }).filter(function(h){return h.score>0;}).sort(function(a,b){return b.score-a.score;});
+    if(!s.payoff||!s.ease||!s.rating)return null;
+    return{hold:h,rating:s.rating,payoff:s.payoff,ease:s.ease,score:s.payoff+s.ease};
+  }).filter(Boolean).sort(function(a,b){return b.score-a.score;});
 
-  var org=state.org||"the organization";
-  var topHolds=allScored.slice(0,5);
-  var holdSummary=allScored.map(function(item,i){
-    return (i+1)+". "+item.hold.title+" ("+item.hold.matrix+" matrix) — Rating: "+RLABELS[item.rating]+", Payoff: "+item.payoff+"/5, Ease: "+item.ease+"/5, Priority Score: "+item.score+"/10";
+  var org=state.org||"this organization";
+
+  // Build a numbered list with rating and priority label for every scored hold
+  var holdList=allScored.map(function(item,i){
+    return (i+1)+". "+item.hold.title+" — "+RLABELS[item.rating]+" ("+pL(item.score)+")";
   }).join("\n");
 
-  var topNames=topHolds.map(function(h){return h.hold.title;});
-  var topGroup=allScored.slice(0,Math.ceil(allScored.length/2));
-  var bottomGroup=allScored.slice(Math.ceil(allScored.length/2));
-  var topNames=topGroup.map(function(h){return h.hold.title;}).join(", ");
-  var bottomNames=bottomGroup.map(function(h){return h.hold.title;}).join(", ");
+  var urgent=allScored.slice(0,3).map(function(h){return h.hold.title+" ("+RLABELS[h.rating]+")"}).join(", ");
+  var important=allScored.slice(3,6).map(function(h){return h.hold.title+" ("+RLABELS[h.rating]+")"}).join(", ");
+  var remaining=allScored.slice(6).map(function(h){return h.hold.title+" ("+RLABELS[h.rating]+")"}).join(", ");
 
-  var prompt="You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience. Write a 4-paragraph executive assessment for "+org+".\n\nHere are all scored holds split into two groups:\n\nHIGHEST PRIORITY GROUP (must all appear in paragraphs 1-2):\n"+topGroup.map(function(h){return"- "+h.hold.title+" ("+RLABELS[h.rating]+")"}).join("\n")+"\n\nSECONDARY GROUP (must all appear in paragraphs 3-4):\n"+bottomGroup.map(function(h){return"- "+h.hold.title+" ("+RLABELS[h.rating]+")"}).join("\n")+"\n\nWrite 4 paragraphs of flowing executive prose. Every hold in BOTH groups must be mentioned by name.\n\nParagraph 1: Overall pattern — mention several holds from the highest priority group.\nParagraph 2: Dig into the top priority holds — all of them — and how they compound each other.\nParagraph 3: Address every hold in the secondary group by name and connect them to the bigger picture.\nParagraph 4: Sequencing recommendation — where to start and why.\n\nNo bullets. No headers. No numerical scores. Write to the senior leader as 'you'. Every hold listed above must appear in the response.";
+  var prompt="You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience running P2P programs at national scale. You are delivering a verbal assessment to the senior leader of "+org+" after reviewing their GBB Diagnostic results. Write exactly 4 paragraphs.\n\nHere are all "+n+" scored holds ranked from highest to lowest priority:\n"+holdList+"\n\nDeliver this the way you would in person — lead with what matters most, build the case around the urgent issues, then wind down naturally through the remaining holds. Think of it as a doctor delivering results: start with what needs attention now, then work through everything else so the patient leaves with a complete picture.\n\nParagraph 1: Open with the overall pattern you see. What does this program's profile tell you? Concentrate on the most urgent holds: "+urgent+"\n\nParagraph 2: Go deeper on the urgent gaps. How do they compound each other? What is the cost to the program of having these issues simultaneously? Reference the next tier of holds too: "+important+"\n\nParagraph 3: Work through the remaining holds naturally — "+remaining+" — acknowledging what is working and what still needs attention, in descending order of urgency.\n\nParagraph 4: Close with a clear sequencing recommendation. Where do you start, what comes next, and why does that order matter?\n\nWrite in flowing prose. No bullets. No headers. No numerical scores. Speak directly to the senior leader as 'you'. Sound like someone who has delivered hundreds of these assessments and knows exactly what they are looking at.";
+
 
   fetch("https://api.anthropic.com/v1/messages",{
     method:"POST",
@@ -793,7 +788,7 @@ function generateNarrative(){
     body:JSON.stringify({
       model:"claude-sonnet-4-20250514",
       max_tokens:3000,
-      system:"You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience. You write in direct, experienced prose as a peer speaking to another senior leader. Always write in flowing paragraphs — no bullets, no headers, no numerical scores. Always cover every hold mentioned, distributed across all four paragraphs.",
+      system:"You are Scott Archimbaud, a 35-year P2P fundraising veteran. Write in direct, experienced prose — peer to senior leader. Flowing paragraphs only. No bullets, no headers, no scores. You always mention every hold assigned to each paragraph.",
       messages:[{role:"user",content:prompt}]
     })
   })
@@ -809,13 +804,14 @@ function generateNarrative(){
     '</div>';
   })
   .catch(function(){
-    // Fallback — show top holds with their narratives
+    // Fallback — narrative from each hold's pre-written text
+    var fallbackParas=allScored.map(function(item){
+      var nar=item.hold.narrative&&item.hold.narrative[item.rating]?item.hold.narrative[item.rating]:"";
+      return nar?'<p style="margin:0 0 14px;font-size:14px;color:#374151;line-height:1.7;"><strong style="font-style:normal;">'+item.hold.title+'</strong> — <em>'+nar+'</em></p>':"";
+    }).filter(Boolean).join('');
     narDiv.innerHTML='<div style="background:#fffbeb;border:1px solid #fcd34d;border-left:4px solid #b8972e;border-radius:10px;padding:24px 28px;margin-bottom:8px;">'+
-      '<div style="font-size:11px;color:#b8972e;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px;font-weight:bold;">Your Top Priorities</div>'+
-      topHolds.slice(0,3).map(function(item){
-        var nar=item.hold.narrative&&item.rating?item.hold.narrative[item.rating]:"";
-        return nar?'<p style="margin:0 0 14px;font-size:14px;color:#374151;line-height:1.7;font-style:italic;"><strong>'+item.hold.title+':</strong> '+nar+'</p>':"";
-      }).join('')+
+      '<div style="font-size:11px;color:#b8972e;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px;font-weight:bold;">Your Program Assessment</div>'+
+      fallbackParas+
     '</div>';
   });
 }
