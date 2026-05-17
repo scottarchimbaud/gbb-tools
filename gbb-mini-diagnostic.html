@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GBB Mini Diagnostic&#8482; &#8212; Campaign Architecture&#8482;</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--navy:#1e3a5f;--blue:#1e40af;--gold:#b8972e;--cream:#faf8f4;--white:#ffffff;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-500:#6b7280;--gray-700:#374151;--gray-900:#111827;}
+body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min-height:100vh;}
+.header{background:var(--navy);padding:0;position:relative;overflow:hidden;}
+.header::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(184,151,46,0.08) 0%,transparent 60%);pointer-events:none;}
+.header-bar{display:flex;gap:4px;padding:0 40px;}
+.hbs{height:5px;flex:1;background:var(--gold);}
+.hbs:nth-child(1){opacity:0.15;}.hbs:nth-child(2){opacity:0.35;}.hbs:nth-child(3){opacity:0.65;}.hbs:nth-child(4){opacity:1;}
+.header-inner{max-width:720px;margin:0 auto;padding:44px 24px 40px;position:relative;}
+.brand-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(184,151,46,0.85);margin-bottom:10px;}
+.header h1{font-family:'Arial Narrow',Arial,sans-serif;font-size:clamp(32px,5vw,48px);font-weight:800;color:var(--white);line-height:1.05;margin-bottom:10px;}
+.header h1 span{color:var(--gold);}
+.header-sub{font-size:17px;color:rgba(255,255,255,0.7);line-height:1.5;max-width:520px;font-style:italic;margin-bottom:28px;}
+.header-meta{display:flex;gap:20px;flex-wrap:wrap;}
+.hbadge{display:flex;align-items:center;gap:8px;font-family:'Arial Narrow',Arial,sans-serif;font-size:13px;letter-spacing:0.06em;color:rgba(255,255,255,0.55);text-transform:uppercase;}
+.hbadge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0.7;}
+.prog-wrap{background:var(--navy);border-bottom:1px solid rgba(255,255,255,0.08);padding:16px 24px;position:sticky;top:0;z-index:100;}
+.prog-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:16px;}
+.prog-track{flex:1;height:3px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.5s ease;width:0%;}
+.prog-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45);white-space:nowrap;min-width:80px;text-align:right;}
+.main{max-width:720px;margin:0 auto;padding:40px 24px 80px;}
+.intro-text{font-size:17px;line-height:1.7;color:var(--gray-700);margin-bottom:32px;font-style:italic;}
+.intro-text strong{font-style:normal;color:var(--navy);}
+.org-section{background:var(--white);border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;margin-bottom:28px;box-shadow:0 2px 8px rgba(30,58,95,0.04);}
+.org-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gray-500);margin-bottom:8px;display:block;}
+.org-input{width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:16px;color:var(--gray-900);background:var(--cream);}
+.org-input:focus{outline:none;border-color:#93c5fd;}
+.org-input::placeholder{color:#c0c4cc;}
+.q-card{background:var(--white);border-radius:12px;border:1px solid var(--gray-200);margin-bottom:28px;overflow:hidden;box-shadow:0 2px 8px rgba(30,58,95,0.06);opacity:0;transform:translateY(16px);transition:opacity 0.4s ease,transform 0.4s ease;}
+.q-card.visible{opacity:1;transform:translateY(0);}
+.q-header{padding:20px 24px 16px;border-bottom:1px solid var(--gray-100);}
+.q-num{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;}
+.q-title{font-family:'Arial Narrow',Arial,sans-serif;font-size:20px;font-weight:700;color:var(--navy);}
+.q-rating{padding:16px 24px 4px;}
+.sec-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);margin-bottom:10px;}
+.opt-btn{width:100%;padding:11px 14px;border-radius:8px;border:1px solid var(--gray-200);background:transparent;cursor:pointer;text-align:left;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px;font-family:Georgia,serif;transition:all 0.12s;}
+.opt-btn:hover{border-color:#93c5fd;background:#f8faff;}
+.opt-dot{width:10px;height:10px;border-radius:50%;background:var(--gray-200);flex-shrink:0;margin-top:5px;}
+.opt-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;margin-bottom:2px;color:var(--gray-700);}
+.opt-desc{font-size:14px;color:var(--gray-700);line-height:1.5;}
+.opt-btn.sel-notInPlace{border-color:#d1d5db;background:#f9fafb;}
+.opt-btn.sel-notInPlace .opt-dot{background:#9ca3af;}
+.opt-btn.sel-notInPlace .opt-label,.opt-btn.sel-notInPlace .opt-desc{color:#374151;}
+.opt-btn.sel-inDevelopment{border-color:#fcd34d;background:#fffbeb;}
+.opt-btn.sel-inDevelopment .opt-dot{background:#f59e0b;}
+.opt-btn.sel-inDevelopment .opt-label,.opt-btn.sel-inDevelopment .opt-desc{color:#92400e;}
+.opt-btn.sel-good{border-color:#86efac;background:#f0fdf4;}
+.opt-btn.sel-good .opt-dot{background:#22c55e;}
+.opt-btn.sel-good .opt-label,.opt-btn.sel-good .opt-desc{color:#166534;}
+.opt-btn.sel-better{border-color:#93c5fd;background:#eff6ff;}
+.opt-btn.sel-better .opt-dot{background:#3b82f6;}
+.opt-btn.sel-better .opt-label,.opt-btn.sel-better .opt-desc{color:#1e40af;}
+.opt-btn.sel-best{border-color:#c4b5fd;background:#faf5ff;}
+.opt-btn.sel-best .opt-dot{background:#a855f7;}
+.opt-btn.sel-best .opt-label,.opt-btn.sel-best .opt-desc{color:#6b21a8;}
+.q-scores{padding:16px 24px 16px;border-top:1px solid var(--gray-100);display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.score-group-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);margin-bottom:8px;}
+.score-btns{display:flex;gap:5px;}
+.score-btn{flex:1;height:36px;border-radius:6px;border:1px solid var(--gray-200);cursor:pointer;background:var(--gray-100);color:var(--gray-500);font-weight:bold;font-size:14px;font-family:Georgia,serif;transition:all 0.12s;}
+.score-btn:hover{border-color:#93c5fd;}
+.score-btn.ap{background:#dc2626;border-color:#dc2626;color:#fff;}
+.score-btn.ae{background:#2563eb;border-color:#2563eb;color:#fff;}
+.score-hint{font-size:11px;color:#9ca3af;margin-top:5px;}
+.priority-bar{padding:12px 24px;background:#f9fafb;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;}
+.ps-num{font-family:'Arial Narrow',Arial,sans-serif;font-size:22px;font-weight:800;line-height:1;}
+.ps-lbl{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;}
+.cta-wrap{text-align:center;margin-top:36px;}
+.cta-btn{display:inline-block;padding:16px 36px;background:var(--navy);color:var(--white);border:none;border-radius:8px;font-family:'Arial Narrow',Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 14px rgba(30,58,95,0.2);transition:all 0.15s;}
+.cta-btn:hover{background:#162d4f;transform:translateY(-1px);}
+.cta-btn:disabled{background:var(--gray-200);color:var(--gray-500);box-shadow:none;transform:none;cursor:not-allowed;}
+.cta-note{font-size:14px;color:var(--gray-500);font-style:italic;margin-top:12px;}
+#results{display:none;}
+.results-hdr{background:var(--navy);border-radius:12px 12px 0 0;padding:28px 28px 24px;position:relative;overflow:hidden;}
+.results-hdr::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(184,151,46,0.1) 0%,transparent 50%);}
+.results-hdr-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(184,151,46,0.85);margin-bottom:8px;}
+.results-title{font-family:'Arial Narrow',Arial,sans-serif;font-size:28px;font-weight:800;color:var(--white);margin-bottom:6px;}
+.results-org{font-size:15px;color:rgba(255,255,255,0.6);font-style:italic;}
+.results-body{background:var(--white);border:1px solid var(--gray-200);border-top:none;border-radius:0 0 12px 12px;padding:24px 28px 28px;}
+.lev-box{background:linear-gradient(135deg,#fff8e6 0%,#fef3c7 100%);border:1px solid var(--gold);border-left:4px solid var(--gold);border-radius:8px;padding:18px 20px;margin-bottom:20px;}
+.lev-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.lev-hold{font-family:'Arial Narrow',Arial,sans-serif;font-size:20px;font-weight:800;color:#78350f;margin-bottom:6px;}
+.lev-text{font-size:15px;color:#92400e;line-height:1.6;}
+.result-row{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--gray-100);}
+.result-row:last-child{border-bottom:none;}
+.result-badge{min-width:52px;height:52px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:2px solid;background:#f9fafb;}
+.rb-num{font-family:'Arial Narrow',Arial,sans-serif;font-size:20px;font-weight:800;line-height:1;}
+.rb-den{font-family:'Arial Narrow',Arial,sans-serif;font-size:9px;color:#9ca3af;}
+.ri-hold{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray-500);margin-bottom:3px;}
+.ri-title{font-family:'Arial Narrow',Arial,sans-serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.ri-meta{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--gray-500);}
+.full-cta{background:var(--navy);border-radius:10px;padding:24px;margin-top:24px;text-align:center;}
+.fc-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(184,151,46,0.85);margin-bottom:8px;}
+.fc-title{font-family:'Arial Narrow',Arial,sans-serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:8px;line-height:1.2;}
+.fc-text{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.5;margin-bottom:20px;font-style:italic;}
+.fc-btn{display:inline-block;padding:13px 28px;background:var(--gold);color:var(--navy);border:none;border-radius:7px;font-family:'Arial Narrow',Arial,sans-serif;font-size:15px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;text-decoration:none;}
+.fc-btn:hover{background:#c9a83a;}
+.restart-btn{display:block;margin:16px auto 0;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:9px 20px;color:rgba(255,255,255,0.5);font-family:'Arial Narrow',Arial,sans-serif;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;}
+.footer{max-width:720px;margin:0 auto;padding:0 24px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.footer-name{font-family:'Arial Narrow',Arial,sans-serif;font-size:13px;letter-spacing:0.06em;color:var(--gray-500);}
+.footer-contact{font-size:13px;color:var(--gray-500);font-style:italic;}
+@media(max-width:500px){.header-inner{padding:32px 20px 28px;}.main{padding:28px 16px 60px;}.q-scores{grid-template-columns:1fr;}.results-body{padding:18px;}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-bar"><div class="hbs"></div><div class="hbs"></div><div class="hbs"></div><div class="hbs"></div></div>
+  <div class="header-inner">
+    <div class="brand-label">Campaign Architecture&#8482;</div>
+    <h1>GBB Mini <span>Diagnostic&#8482;</span></h1>
+    <p class="header-sub">Five holds. Five minutes. Your highest-leverage opportunity — revealed.</p>
+    <div class="header-meta">
+      <div class="hbadge">Peer-to-Peer Fundraising</div>
+      <div class="hbadge">5 of 21 Holds</div>
+      <div class="hbadge">Instant Results</div>
+    </div>
+  </div>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-inner">
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    <div class="prog-label" id="progLabel">0 of 5</div>
+  </div>
+</div>
+
+<div class="main">
+  <p class="intro-text">Rate your organization honestly on each hold — not where you aspire to be, but where you <strong>actually are</strong>. Score the revenue payoff and ease of implementation to surface your highest-priority opportunity.</p>
+
+  <div class="org-section">
+    <label class="org-label" for="orgInput">Your Organization (optional)</label>
+    <input class="org-input" type="text" id="orgInput" placeholder="e.g. American Heart Association — Dallas"/>
+  </div>
+
+  <div id="questionsWrap"></div>
+
+  <div class="cta-wrap" id="ctaWrap">
+    <button class="cta-btn" id="submitBtn" disabled onclick="showResults()">See My Results &#8594;</button>
+    <p class="cta-note" id="ctaNote">Complete all five holds to see your results.</p>
+  </div>
+
+  <div id="results">
+    <div class="results-hdr">
+      <div class="results-hdr-label">GBB Mini Diagnostic&#8482; &#8212; Campaign Architecture&#8482;</div>
+      <div class="results-title">Your Diagnostic Results</div>
+      <div class="results-org" id="resultsOrg"></div>
+    </div>
+    <div class="results-body">
+      <div id="leverageBox"></div>
+      <div id="resultRows"></div>
+    </div>
+    <div class="full-cta">
+      <div class="fc-label">Ready for the Full Picture?</div>
+      <div class="fc-title">See All 21 Holds Across Both Matrices</div>
+      <div class="fc-text">This sample covers 5 of 21 holds. The full GBB Diagnostic&#8482; maps every dimension of your P2P program, scores each hold by payoff and ease, and generates a prioritized action plan by role.</div>
+      <a class="fc-btn" href="mailto:scott@scottarchconsultancy.com?subject=GBB%20Diagnostic%20%E2%80%94%20Full%20Access%20Request">Request Full Access &#8594;</a>
+      <button class="restart-btn" onclick="restart()">&#8592; Start Over</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-name">Scott Archimbaud &middot; Campaign Architecture&#8482;</div>
+  <div class="footer-contact">scott@scottarchconsultancy.com &middot; 917-868-0745</div>
+</div>
+
+<script>
+var HOLDS=[
+{id:"vol_leadership",num:"Hold 1 of 5",title:"Volunteer Leadership",fullTitle:"Volunteer Leadership Pipeline & Succession",
+options:[
+{key:"notInPlace",label:"Not in Place",desc:"No local campaign chair structure exists. Volunteer leadership roles are not filled systematically."},
+{key:"inDevelopment",label:"In Development",desc:"A chair is sometimes in place but recruitment is reactive, last-minute, or dependent on a single staff relationship."},
+{key:"good",label:"Good",desc:"Campaign chair in place and functionally engaged. Chairs recruited at least twelve months before their event."},
+{key:"better",label:"Better",desc:"Chairs consistently exceed financial expectations and recruit from their networks. Chairs confirmed at least fifteen months before their event."},
+{key:"best",label:"Best in Class",desc:"Chair is a strategic asset. Next two to three chairs always in development. Outgoing chair recruits and mentors successor directly."}],
+implication:{
+notInPlace:"A market without a campaign chair structure is entirely dependent on staff relationships for its corporate development, and that dependency is a fragility. When your key staff person turns over, the corporate relationships and volunteer connections they built go with them. A well-recruited campaign chair provides the market with civic standing, corporate network access, and volunteer credibility that survives staff transitions. Without that structure, you are rebuilding the corporate foundation of your program every time the team changes.",
+inDevelopment:"Reactive chair recruitment is one of the most common and most expensive patterns in P2P markets. A chair who was approached a few months before the event and said yes out of personal loyalty to a staff member is not a chair in the strategic sense — they are doing you a favor, and the corporate activation that defines the role's real value never happens. The extended cultivation window — the period when a chair is building relationships, making introductions, and positioning the campaign within their network — is where the revenue is. If that window is not being used, you are getting a fraction of what this hold can produce.",
+good:"A campaign chair who is in place and functionally engaged, recruited well in advance, is a real asset. The next question is whether the chair is working their network proactively or primarily activating their own company. Good chairs do the latter reliably. Best in Class chairs do the former strategically — they identify the corporate relationships your program needs and use their standing to open them. That is the conversation you need to have with your current chair, and it starts with being explicit about what you are asking them to do.",
+better:"Chairs who consistently exceed financial expectations and recruit from their own networks are producing results that go well beyond what staff-driven development can achieve. The next level is succession discipline — not just having the next chair identified, but having them actively engaged in the current campaign so they understand what they are taking on before they take it on. The handoff between chairs is where most pipelines leak. Building it as a structured transition rather than a moment of departure is what sustains the momentum.",
+best:"A chair pipeline where the next two to three chairs are always in development and outgoing chairs are actively recruiting and mentoring their successors is one of the most durable structures in local P2P. It means your program's corporate development is never starting over, never dependent on a single staff relationship, and never at the mercy of a last-minute recruitment. Protect this structure carefully — it is built on trust relationships that take years to develop and can be disrupted quickly by a staff transition that does not honor the cultivation process."}},
+
+{id:"staffing",num:"Hold 2 of 5",title:"Staffing Consistency",fullTitle:"Staff Investment, Compensation & Retention",
+options:[
+{key:"notInPlace",label:"Not in Place",desc:"No structured compensation framework exists. Staffing is ad hoc and turnover is high."},
+{key:"inDevelopment",label:"In Development",desc:"Compensation exists but is below market. Turnover is high. Staff spend significant time on administrative tasks."},
+{key:"good",label:"Good",desc:"Compensation is competitive. Turnover manageable. Some operational support exists."},
+{key:"better",label:"Better",desc:"Compensation attracts and retains top talent. Operational support structured to protect fundraising time. Retention strong."},
+{key:"best",label:"Best in Class",desc:"Compensation at or above market at every level. Administrative burden minimized. Retention treated as a revenue metric. Career pathways retain high performers."}],
+implication:{
+notInPlace:"When I walked into organizations with no staffing framework, the first thing I noticed was not the revenue gap — it was the relationship gap. Every time a Local Geographic Leader walks out the door, they take three years of corporate relationships, volunteer trust, and institutional memory with them. You cannot build a high-performing P2P program on a revolving door. Before you invest in any other hold, you need to know why people are leaving and what it would take to make them stay. The answer almost always costs less than the turnover does.",
+inDevelopment:"Below-market compensation is a slow leak that most organizations do not notice until they are already hemorrhaging talent. The staff who leave first are always your best ones — they have options. What you are left with is people who cannot get a better offer elsewhere, and that is not a team that wins. Beyond pay, look hard at administrative burden. I have seen Local Geographic Leaders spending forty percent of their time on tasks that have nothing to do with fundraising. That is a revenue problem masquerading as an operations problem.",
+good:"You have stability, and that is worth more than most leaders give it credit for. The next frontier is time protection. Ask your field leaders to track their week — where is their time actually going versus where it should be going? In my experience, even well-compensated staff in well-run organizations lose ten to fifteen hours a week to administrative tasks that could be centralized, automated, or eliminated. That time has a revenue value. Calculate it and make the case for the operational investment.",
+better:"Strong retention at this level is a genuine competitive advantage, and you are probably seeing it in your corporate portfolio and volunteer relationships. The risk at this stage is complacency — your best people have options, and if they do not see a path forward they will start taking calls. Make sure career pathways are explicit, not implied. The staff who built your best markets should have a reason to still be with you in five years.",
+best:"You have built something that compounds over time, and that is the whole game. Long-tenured staff do not just retain relationships — they deepen them, and they develop the next generation of talent. The thing to watch at this level is whether your retention culture survives leadership transitions. I have seen Best in Class staffing environments collapse in eighteen months when a strong CDO exits and the new leader does not understand what they inherited. Document the culture, not just the compensation."}},
+
+{id:"training",num:"Hold 3 of 5",title:"Training",fullTitle:"Training Standardization, Content & Tools",
+options:[
+{key:"notInPlace",label:"Not in Place",desc:"No standardized training exists. Staff are not trained consistently."},
+{key:"inDevelopment",label:"In Development",desc:"Some training content exists but is inconsistently delivered or not connected to performance outcomes."},
+{key:"good",label:"Good",desc:"Standardized curriculum exists. Staff trained consistently. Core tactics defined and communicated across all markets."},
+{key:"better",label:"Better",desc:"Dedicated training function delivers consistent, measurable results. Core tactics standardized, benchmarked, and monitored."},
+{key:"best",label:"Best in Class",desc:"Training is a performance management system. Staff certified against defined competency standards. Best practices replicated from top markets in real time."}],
+implication:{
+notInPlace:"What you have right now is not a training problem — it is a replication problem. Your best markets are probably performing well because of one or two exceptional staff members who figured things out on their own. But you cannot scale intuition. Without a shared tactical framework, every new hire starts from scratch, every underperforming market stays underperforming, and you have no systematic way to close the gap between your best markets and your average ones. The revenue difference between a trained field team and an untrained one is not marginal — it is the difference between a program that grows and one that plateaus.",
+inDevelopment:"Training that is not connected to performance outcomes is professional development theater. I have sat in on training sessions where the content was excellent and the application rate was near zero, because no one was measuring whether the tactics were actually being used in the field. The curriculum is not the hard part — the accountability system is. What gets measured gets done. Until you can track which tactics are being executed in which markets and correlate that to revenue performance, you are guessing.",
+good:"You have the infrastructure and that is the hardest part to build. Now the question is whether training is producing consistent execution or just consistent attendance. Pull your performance data and look at which markets are applying core tactics and which ones are not. I would bet the variance in your results maps almost directly to the variance in execution. Use your top markets as teaching cases — not in theory, but literally: have your best Local Geographic Leaders train their peers. Peer instruction changes behavior faster than anything else I have seen.",
+better:"At this level the differentiator is not what you teach but how you certify. The organizations I have seen break through to Best in Class all had one thing in common: they treated field competency as a professional credential, not a checklist. Staff who are certified against defined standards perform differently than staff who have simply attended training. They own the framework rather than receiving it. That ownership is what produces the results you are looking for in your bottom quartile markets.",
+best:"You have turned training into a talent development system, and that is genuinely rare. The next horizon is using your best markets as a farm system for the broader organization — identifying your top Local Program Leads, giving them stretch assignments, and creating a visible pathway to Area Director. When your training culture produces your next generation of field leaders, you have built something that sustains itself. Protect the investment and resist the temptation to cut training when budgets tighten — it is always a false economy."}},
+
+{id:"mission",num:"Hold 4 of 5",title:"Mission Narrative",fullTitle:"Mission & Narrative Alignment",
+options:[
+{key:"notInPlace",label:"Not in Place",desc:"No consistent mission narrative exists. Staff and volunteers cannot articulate impact clearly."},
+{key:"inDevelopment",label:"In Development",desc:"Mission messaging exists but is inconsistently applied and not embedded in fundraising conversations."},
+{key:"good",label:"Good",desc:"Mission narratives embedded in training, corporate activation, and participant communications."},
+{key:"better",label:"Better",desc:"Mission clarity is a revenue strategy. Every touchpoint connects the donor or participant to a specific, emotionally resonant impact narrative."},
+{key:"best",label:"Best in Class",desc:"Mission narrative differentiated by constituency — corporate, major donor, and participant versions each authentic, specific, and tested."}],
+implication:{
+notInPlace:"I have walked into corporate meetings with organizations where the staff could not tell me a single specific story about the people their mission serves. Not one. And I have watched those meetings fail in real time, because a corporate executive will write a check for impact but they will not write one for infrastructure. Mission narrative is not a marketing exercise — it is the emotional permission structure for every significant ask your organization makes. Without it, you are competing on logistics. You will lose that competition to every other charity knocking on the same door.",
+inDevelopment:"The gap between having messaging and using it is where most organizations live, and it is costing them more than they realize. Your staff and volunteers have probably seen the materials, attended the briefings, and nodded at the right moments. But when they are sitting across from a corporate executive or recruiting a volunteer, they are improvising. The fix is not more materials — it is more practice. Mission narrative needs to be rehearsed out loud, in the field, until it becomes instinct rather than recall.",
+good:"You have consistency, and in this business that is genuinely valuable. The next level is differentiation. The story you tell a corporate executive and the story you tell a walk participant should not be the same story — they have different motivations, different relationships to the mission, and different decision frameworks. A corporate leader wants to know about community impact and employee engagement. A participant wants to know about the person whose life was changed. When you develop those versions separately and test them, your conversion rates go up significantly.",
+better:"You are using mission as a revenue strategy, which is exactly right. The next iteration is constituency-specific testing — not just developing different versions but actually measuring which narratives produce the strongest behavioral response in each audience. Which story closes the corporate conversation faster? Which one drives the highest average gift from participants? When you start treating narrative as a performance variable rather than a communication choice, you unlock another layer of revenue that most organizations never find.",
+best:"What you have built is rare and worth protecting carefully. Mission narrative at this level is a genuine differentiator, but it is also fragile — it depends on staff who know the stories, leaders who use them, and a culture that treats mission as central rather than ceremonial. The risk at Best in Class is drift. Constituencies change, impact stories age, and the versions that worked two years ago may not land the same way today. Build a refresh cycle into your annual planning so the narratives stay current, specific, and tested."}},
+
+{id:"corporate",num:"Hold 5 of 5",title:"Corporate Presence",fullTitle:"Corporate Portfolio Engineering & Enterprise Activation",
+options:[
+{key:"notInPlace",label:"Not in Place",desc:"No corporate strategy exists. Engagement is opportunistic. No senior champion identification."},
+{key:"inDevelopment",label:"In Development",desc:"Some corporate relationships exist but are not actively managed or strategically developed. Relationships are contact-level rather than executive-level."},
+{key:"good",label:"Good",desc:"Defined corporate growth strategy exists. Priority sectors identified. Senior champions identified within major partners."},
+{key:"better",label:"Better",desc:"Portfolio actively engineered with mission alignment driving acquisition. Every major partner has a senior internal champion and a defined activation plan."},
+{key:"best",label:"Best in Class",desc:"Portfolio strategy operates at national and market levels simultaneously. Every major partner has a multi-year elevation pathway. Penetration rate tracked."}],
+implication:{
+notInPlace:"Opportunistic corporate engagement is the most expensive strategy in peer-to-peer fundraising, and most organizations do not realize they are using it. When you approach companies without a framework, you get what they are willing to give rather than what they are capable of giving. I have seen organizations leave millions of dollars on the table year after year because no one had mapped the portfolio, identified the senior champions, or built an activation plan that went deeper than the employee team. A corporate relationship without a senior champion is a vendor relationship. It will never grow beyond its current level.",
+inDevelopment:"Contact-level corporate relationships feel safer than they are. Your contact is one reorganization, one departure, or one budget cycle away from being replaced by someone who has never heard of you. The move that changes everything is identifying the executive inside each major partner who has both the authority and the motivation to take the relationship to the next level — and then making sure your leadership is in the room with theirs. That conversation cannot be initiated by a Local Geographic Leader. It requires organizational standing that only comes from the top.",
+good:"A defined strategy is a real advantage over most of your peers, and you should build on it systematically. The next move is concentration analysis — do you know what percentage of your P2P revenue comes from your top five corporate partners? If any single partner represents more than twenty percent, you have a concentration risk that belongs on your leadership agenda. The other move is penetration mapping: for each major employer, how many of their eligible employees are actually participating? The gap between current performance and theoretical capacity is your most honest measure of where the revenue is.",
+better:"You are engineering the portfolio rather than managing it, and that distinction matters enormously. The ceiling from here is multi-year elevation pathways — treating each major partner not as an annual renewal but as a five-year investment with defined milestones, expanding asks, and compounding returns. The organizations that operate at this level also track penetration rate as a standing metric: not just what a company gives, but what percentage of their eligible employees are involved. When penetration goes up, revenue follows. When it stagnates, you know where to intervene before it becomes a problem.",
+best:"You have built a corporate portfolio that functions as a strategic asset rather than a revenue line, and that is the highest level this business reaches. The discipline required to sustain it is significant — concentration monitoring, multi-year pathway management, coordinated national and local activation, and board-level visibility into the portfolio. The risk at this level is not a competitor taking your partners. It is internal drift: a CDO transition, a restructuring, or a budget cut to the corporate development function that erodes in two years what took a decade to build. Treat the portfolio architecture as institutional knowledge and document it accordingly."}}
+];
+
+var RLABELS={notInPlace:"Not in Place",inDevelopment:"In Development",good:"Good",better:"Better",best:"Best in Class"};
+var answers={};
+
+function isComplete(id){var a=answers[id];return a&&a.rating&&a.payoff&&a.ease;}
+function countComplete(){return HOLDS.filter(function(h){return isComplete(h.id);}).length;}
+function pScore(id){var a=answers[id];if(!a||!a.payoff||!a.ease)return null;return a.payoff+a.ease;}
+function pColor(s){if(!s)return"#9ca3af";if(s>=9)return"#dc2626";if(s>=7)return"#d97706";if(s>=5)return"#2563eb";return"#6b7280";}
+function pLabel(s){if(!s)return"—";if(s>=9)return"Immediate Focus";if(s>=7)return"High Priority";if(s>=5)return"Secondary";return"Lower Priority";}
+
+function buildQuestions(){
+  var wrap=document.getElementById("questionsWrap");
+  HOLDS.forEach(function(hold,i){
+    var card=document.createElement("div");
+    card.className="q-card";card.id="card-"+hold.id;
+    var opts=hold.options.map(function(o){
+      return '<button class="opt-btn" id="opt-'+hold.id+'-'+o.key+'" onclick="selRating(\''+hold.id+'\',\''+o.key+'\')">'+
+        '<div class="opt-dot" id="dot-'+hold.id+'-'+o.key+'"></div>'+
+        '<div><div class="opt-label">'+o.label+'</div><div class="opt-desc">'+o.desc+'</div></div>'+
+      '</button>';
+    }).join('');
+    var pbts=[1,2,3,4,5].map(function(n){return'<button class="score-btn" id="p-'+hold.id+'-'+n+'" onclick="selScore(\''+hold.id+'\',\'payoff\','+n+')">'+n+'</button>';}).join('');
+    var ebts=[1,2,3,4,5].map(function(n){return'<button class="score-btn" id="e-'+hold.id+'-'+n+'" onclick="selScore(\''+hold.id+'\',\'ease\','+n+')">'+n+'</button>';}).join('');
+    card.innerHTML=
+      '<div class="q-header"><div class="q-num">'+hold.num+' &middot; '+hold.title+'</div><div class="q-title">'+hold.fullTitle+'</div></div>'+
+      '<div class="q-rating"><div class="sec-label">Current Rating</div>'+opts+'</div>'+
+      '<div class="q-scores">'+
+        '<div><div class="score-group-label">Payoff &mdash; Revenue Impact</div><div class="score-btns">'+pbts+'</div><div class="score-hint">1 = Low &middot; 5 = Highest</div></div>'+
+        '<div><div class="score-group-label">Ease of Implementation</div><div class="score-btns">'+ebts+'</div><div class="score-hint">1 = Hardest &middot; 5 = Easiest</div></div>'+
+      '</div>'+
+      '<div class="priority-bar"><span style="font-size:13px;color:#6b7280;">Priority Score</span>'+
+      '<div><span class="ps-num" id="ps-'+hold.id+'" style="color:#9ca3af;">&#8212;</span><span style="font-size:11px;color:#9ca3af;">/10</span>&nbsp;&nbsp;'+
+      '<span class="ps-lbl" id="pl-'+hold.id+'" style="color:#9ca3af;">Rate all three above</span></div></div>';
+    wrap.appendChild(card);
+    setTimeout(function(){card.classList.add("visible");},i*80+100);
+  });
+}
+
+function selRating(id,rk){
+  if(!answers[id])answers[id]={};
+  answers[id].rating=rk;
+  var hold=HOLDS.find(function(h){return h.id===id;});
+  hold.options.forEach(function(o){document.getElementById("opt-"+id+"-"+o.key).className="opt-btn";});
+  document.getElementById("opt-"+id+"-"+rk).className="opt-btn sel-"+rk;
+  updatePBar(id);updateProgress();
+}
+
+function selScore(id,field,val){
+  if(!answers[id])answers[id]={};
+  answers[id][field]=(answers[id][field]===val)?null:val;
+  for(var n=1;n<=5;n++){
+    var btn=document.getElementById((field==="payoff"?"p":"e")+"-"+id+"-"+n);
+    if(!btn)continue;
+    var active=answers[id][field]&&n<=answers[id][field];
+    btn.className="score-btn"+(active?(field==="payoff"?" ap":" ae"):"");
+  }
+  updatePBar(id);updateProgress();
+}
+
+function updatePBar(id){
+  var s=pScore(id);
+  var sEl=document.getElementById("ps-"+id);
+  var lEl=document.getElementById("pl-"+id);
+  if(s){var c=pColor(s);sEl.textContent=s;sEl.style.color=c;lEl.textContent=pLabel(s);lEl.style.color=c;}
+  else{sEl.innerHTML="&#8212;";sEl.style.color="#9ca3af";lEl.textContent="Rate all three above";lEl.style.color="#9ca3af";}
+}
+
+function updateProgress(){
+  var n=countComplete();
+  document.getElementById("progFill").style.width=(n/5*100)+"%";
+  document.getElementById("progLabel").textContent=n+" of 5";
+  var btn=document.getElementById("submitBtn");
+  var note=document.getElementById("ctaNote");
+  if(n===5){btn.disabled=false;note.textContent="All five holds complete — see your results.";}
+  else{btn.disabled=true;note.textContent=(5-n)+" hold"+(5-n!==1?"s":"")+" remaining.";}
+}
+
+function showResults(){
+  document.getElementById("questionsWrap").style.display="none";
+  document.getElementById("ctaWrap").style.display="none";
+  document.getElementById("results").style.display="block";
+  document.querySelector(".org-section").style.display="none";
+  document.querySelector(".intro-text").style.display="none";
+  var org=document.getElementById("orgInput").value.trim();
+  document.getElementById("resultsOrg").textContent=org||"Your Organization";
+
+  var scored=HOLDS.map(function(h){
+    var a=answers[h.id]||{};
+    var rating=a.rating||"notInPlace";
+    var payoff=a.payoff||1;
+    var ease=a.ease||1;
+    return{hold:h,rating:rating,payoff:payoff,ease:ease,score:payoff+ease};
+  });
+  var sorted=scored.slice().sort(function(a,b){return b.score-a.score;});
+
+  // Show loading state
+  document.getElementById("leverageBox").innerHTML=
+    '<div class="lev-box" style="text-align:center;padding:28px 20px;">'+
+      '<div class="lev-label">Generating Your Assessment</div>'+
+      '<div style="margin-top:12px;font-size:15px;color:#92400e;font-style:italic;">Analyzing your five holds and composing a custom narrative...</div>'+
+      '<div style="margin-top:16px;display:flex;justify-content:center;gap:6px;">'+
+        '<div style="width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 1.2s ease-in-out infinite;"></div>'+
+        '<div style="width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 1.2s ease-in-out 0.4s infinite;"></div>'+
+        '<div style="width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 1.2s ease-in-out 0.8s infinite;"></div>'+
+      '</div>'+
+    '</div>'+
+    '<style>@keyframes pulse{0%,100%{opacity:0.3;}50%{opacity:1;}}</style>';
+
+  // Show score rows immediately
+  document.getElementById("resultRows").innerHTML=sorted.map(function(item){
+    var c=pColor(item.score);
+    return '<div class="result-row">'+
+      '<div class="result-badge" style="border-color:'+c+';">'+
+        '<div class="rb-num" style="color:'+c+';">'+item.score+'</div>'+
+        '<div class="rb-den">/10</div>'+
+      '</div>'+
+      '<div style="flex:1;">'+
+        '<div class="ri-hold">'+item.hold.title+'</div>'+
+        '<div class="ri-title">'+item.hold.fullTitle+'</div>'+
+        '<div class="ri-meta">'+
+          '<span>'+RLABELS[item.rating]+'</span>'+
+          '<span style="color:'+c+';font-weight:bold;">'+pLabel(item.score)+'</span>'+
+          '<span>Payoff '+item.payoff+'/5 &middot; Ease '+item.ease+'/5</span>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+
+  setTimeout(function(){document.getElementById("results").scrollIntoView({behavior:"smooth",block:"start"});},100);
+  document.getElementById("progFill").style.width="100%";
+  document.getElementById("progLabel").textContent="Complete";
+
+  // Multi-call approach — one paragraph per group of holds
+  var orgName=org||"this organization";
+
+  function desc(arr){
+    return arr.map(function(h){return h.hold.fullTitle+" ("+RLABELS[h.rating]+")"}).join(", ");
+  }
+
+  var sys="You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience. Write in direct, experienced prose as a peer speaking to a senior leader. One paragraph only — no bullets, no headers, no numerical scores. Use 'you' and 'your program'.";
+
+  function apiCall(content){
+    return fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:300,
+        system:sys,
+        messages:[{role:"user",content:content}]
+      })
+    }).then(function(r){return r.json();}).then(function(d){
+      var t="";
+      if(d.content&&d.content.length)d.content.forEach(function(b){if(b.type==="text")t+=b.text;});
+      return t.trim();
+    });
+  }
+
+  var top2=sorted.slice(0,2);
+  var mid2=sorted.slice(2,4);
+  var last=sorted.slice(4);
+
+  var p1=apiCall("You have just completed a GBB Mini Diagnostic with the senior leader of "+orgName+". Write ONE paragraph (80-100 words) opening your verbal assessment. Describe the overall pattern the results reveal. You must mention each of these holds by name: "+desc(top2)+". Write as if speaking directly to them.");
+
+  var p2=apiCall("Continuing your GBB Mini Diagnostic debrief for "+orgName+". Write ONE paragraph (80-100 words) going deeper into how these gaps compound each other. You must mention each of these holds by name: "+desc(mid2)+". Connect them to the issues you raised in your opening.");
+
+  var p3=apiCall("Continuing your GBB Mini Diagnostic debrief for "+orgName+". Write ONE paragraph (60-80 words) addressing the remaining hold: "+desc(last)+". Acknowledge what it means for the program and wind down naturally toward a close.");
+
+  var p4=apiCall("Close your GBB Mini Diagnostic debrief for "+orgName+". Write ONE paragraph (60-80 words) with a clear sequencing recommendation — where to start given everything covered, what comes next, and why that order matters.");
+
+  Promise.all([p1,p2,p3,p4])
+  .then(function(paras){
+    var html='<div class="lev-box" style="padding:24px 24px;">'+
+      '<div class="lev-label" style="margin-bottom:14px;">Your GBB Diagnostic Assessment</div>'+
+      paras.filter(Boolean).map(function(p){
+        return '<p style="margin:0 0 16px;font-size:15px;color:#374151;line-height:1.8;font-style:italic;">'+p+'</p>';
+      }).join('')+
+    '</div>';
+    document.getElementById("leverageBox").innerHTML=html;
+  })
+  .catch(function(){
+    var html='<div class="lev-box" style="padding:24px 24px;">'+
+      '<div class="lev-label" style="margin-bottom:14px;">Your GBB Diagnostic Assessment</div>'+
+      sorted.map(function(item,i){
+        var prefix=i===0?"Your most urgent priority is":i===1?"Closely related,":i===2?"Also significant,":i===3?"Worth noting,":"Finally,";
+        return '<p style="margin:0 0 14px;font-size:15px;color:#374151;line-height:1.7;font-style:italic;">'+prefix+' <strong>'+item.hold.fullTitle+'</strong> is rated '+RLABELS[item.rating]+'. '+item.hold.implication[item.rating]+'</p>';
+      }).join('')+
+    '</div>';
+    document.getElementById("leverageBox").innerHTML=html;
+  });
+}
+
+function restart(){
+  answers={};
+  document.getElementById("questionsWrap").innerHTML="";
+  document.getElementById("questionsWrap").style.display="";
+  document.getElementById("ctaWrap").style.display="";
+  document.getElementById("results").style.display="none";
+  document.querySelector(".org-section").style.display="";
+  document.querySelector(".intro-text").style.display="";
+  document.getElementById("orgInput").value="";
+  buildQuestions();updateProgress();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+buildQuestions();
+updateProgress();
+</script>
+</body>
+</html>
