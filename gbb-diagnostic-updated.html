@@ -112,7 +112,7 @@ input::placeholder{color:#9ca3af;}
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button onclick="showScreen('intro')" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Setup</button>
-          <button onclick="showResults()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Results</button>
+          <button onclick="showResults()" style="padding:7px 14px;background:#fff;border:none;border-radius:6px;color:#1e40af;font-size:13px;font-weight:bold;">Results &#8594;</button>
           <button onclick="showAction()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Action Plan</button>
         </div>
       </div>
@@ -780,15 +780,19 @@ function generateNarrative(){
   }).join("\n");
 
   var topNames=topHolds.map(function(h){return h.hold.title;});
-  var allHoldNames=allScored.map(function(h){return h.hold.title;}).join(", ");
-  var prompt="You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience. Write a 4-paragraph executive assessment for "+org+".\n\nScored holds ranked by priority:\n\n"+holdSummary+"\n\nBefore writing, note that you are required to mention EVERY ONE of these holds by name in your response: "+allHoldNames+". If any hold from that list does not appear in your response, your response is incomplete.\n\nParagraph 1 (3-4 sentences): Open with the overall pattern. Mention at least 4 holds from the list.\n\nParagraph 2 (4-5 sentences): Discuss the top-priority holds in depth — how they compound each other and what they cost the program.\n\nParagraph 3 (4-5 sentences): Address the mid and lower priority holds — mention every remaining hold that has not yet appeared. Explain how they connect to the larger picture.\n\nParagraph 4 (2-3 sentences): Close with a sequencing recommendation — where to start and why.\n\nStrict rules: Flowing prose only. No bullets. No headers. No numerical scores. Use hold names naturally in sentences. Write to the senior leader as 'you'. Every hold listed above must appear somewhere in the four paragraphs.";
+  var topGroup=allScored.slice(0,Math.ceil(allScored.length/2));
+  var bottomGroup=allScored.slice(Math.ceil(allScored.length/2));
+  var topNames=topGroup.map(function(h){return h.hold.title;}).join(", ");
+  var bottomNames=bottomGroup.map(function(h){return h.hold.title;}).join(", ");
+
+  var prompt="You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience. Write a 4-paragraph executive assessment for "+org+".\n\nHere are all scored holds split into two groups:\n\nHIGHEST PRIORITY GROUP (must all appear in paragraphs 1-2):\n"+topGroup.map(function(h){return"- "+h.hold.title+" ("+RLABELS[h.rating]+")"}).join("\n")+"\n\nSECONDARY GROUP (must all appear in paragraphs 3-4):\n"+bottomGroup.map(function(h){return"- "+h.hold.title+" ("+RLABELS[h.rating]+")"}).join("\n")+"\n\nWrite 4 paragraphs of flowing executive prose. Every hold in BOTH groups must be mentioned by name.\n\nParagraph 1: Overall pattern — mention several holds from the highest priority group.\nParagraph 2: Dig into the top priority holds — all of them — and how they compound each other.\nParagraph 3: Address every hold in the secondary group by name and connect them to the bigger picture.\nParagraph 4: Sequencing recommendation — where to start and why.\n\nNo bullets. No headers. No numerical scores. Write to the senior leader as 'you'. Every hold listed above must appear in the response.";
 
   fetch("https://api.anthropic.com/v1/messages",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
       model:"claude-sonnet-4-20250514",
-      max_tokens:1500,
+      max_tokens:3000,
       system:"You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience. You write in direct, experienced prose as a peer speaking to another senior leader. Always write in flowing paragraphs — no bullets, no headers, no numerical scores. Always cover every hold mentioned, distributed across all four paragraphs.",
       messages:[{role:"user",content:prompt}]
     })
