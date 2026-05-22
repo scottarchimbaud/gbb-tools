@@ -155,7 +155,7 @@ input::placeholder{color:#9ca3af;}
         <button onclick="showScreen('assess');state.seqIdx=1;renderSeqItem();renderJumpNav();updateProgress();" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Continue</button>
         <button onclick="showAction()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">Action Plan &#10022;</button>
         <button onclick="doEmailResults()" style="padding:7px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;font-size:13px;">&#9993; Email</button>
-        <button onclick="doSave()" style="padding:7px 14px;background:#fff;border:none;border-radius:6px;color:#1e40af;font-size:13px;font-weight:bold;">Save</button>
+        <button onclick="doSave()" id="results-save-btn" style="padding:7px 14px;background:#fff;border:none;border-radius:6px;color:#1e40af;font-size:13px;font-weight:bold;">Save</button>
       </div>
     </div>
   </div>
@@ -228,11 +228,15 @@ async function findRecord(org,person){
 
 async function doSave(){
   var org=document.getElementById("org-in").value.trim()||state.org;
-  var name=document.getElementById("person-in").value.trim();
+  var name=document.getElementById("person-in").value.trim()||state.person;
   var title=document.getElementById("title-in").value.trim();
-  var person=name?(title?name+", "+title:name):state.person;
+  var person=name?(title&&!name.includes(",")&&!state.person?name+", "+title:name):state.person;
   if(!org||!person){alert("Please enter organization name and your name first.");return;}
-  var btn=document.getElementById("save-btn");btn.textContent="Saving...";btn.disabled=true;
+  // Find whichever save button triggered this
+  var allBtns=[document.getElementById("save-btn"),document.getElementById("results-save-btn"),document.getElementById("action-save-btn")].filter(Boolean);
+  var activeBtn=allBtns.find(function(b){return b.offsetParent!==null;})||allBtns[0];
+  var origText=activeBtn?activeBtn.textContent:"Save";
+  if(activeBtn){activeBtn.textContent="Saving...";activeBtn.disabled=true;activeBtn.style.opacity="0.7";}
   try{
     var fields={Org:org,person:person,savedAt:new Date().toISOString(),scores:JSON.stringify(state.scores)};
     var existing=await findRecord(org,person);
@@ -240,10 +244,17 @@ async function doSave(){
     var res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Service":"airtable"},body:JSON.stringify(body)});
     var data=await res.json();
     if(data.error)throw new Error(data.error.message);
-    var msg=document.getElementById("save-msg");msg.textContent="Saved — "+new Date().toLocaleTimeString();
-    setTimeout(function(){msg.textContent="";},4000);
-  }catch(e){alert("Save error: "+e.message);}
-  btn.textContent="Save Assessment";btn.disabled=false;
+    if(activeBtn){activeBtn.textContent="\u2713 Saved";activeBtn.style.background="#f0fdf4";activeBtn.style.borderColor="#86efac";activeBtn.style.color="#166534";activeBtn.style.opacity="1";activeBtn.disabled=false;}
+    var msg=document.getElementById("save-msg");if(msg)msg.textContent="Saved \u2014 "+new Date().toLocaleTimeString();
+    setTimeout(function(){
+      if(activeBtn){activeBtn.textContent=origText;activeBtn.style.background="";activeBtn.style.borderColor="";activeBtn.style.color="";}
+      if(msg)msg.textContent="";
+    },3000);
+  }catch(e){
+    if(activeBtn){activeBtn.textContent="Error";activeBtn.style.background="#fef2f2";activeBtn.style.color="#dc2626";activeBtn.style.opacity="1";activeBtn.disabled=false;}
+    setTimeout(function(){if(activeBtn){activeBtn.textContent=origText;activeBtn.style.background="";activeBtn.style.color="";}},3000);
+    alert("Save error: "+e.message);
+  }
 }
 
 async function doLoad(){
