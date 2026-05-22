@@ -221,7 +221,7 @@ var PW = "FLW";
 var WORKER_URL = "https://sparkling-truth-7db6.scott-archimbaud.workers.dev";
 
 async function findRecord(org,person){
-  var res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Service":"airtable"},body:JSON.stringify({method:"GET",filter:'AND({org}="'+org+'",{person}="'+person+'")'})});
+  var res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Service":"airtable"},body:JSON.stringify({method:"GET",filter:'AND({Org}="'+org+'",{person}="'+person+'")'})});
   var data=await res.json();
   return(data.records&&data.records.length)?data.records[0]:null;
 }
@@ -234,7 +234,7 @@ async function doSave(){
   if(!org||!person){alert("Please enter organization name and your name first.");return;}
   var btn=document.getElementById("save-btn");btn.textContent="Saving...";btn.disabled=true;
   try{
-    var fields={org:org,person:person,savedAt:new Date().toISOString(),scores:JSON.stringify(state.scores)};
+    var fields={Org:org,person:person,savedAt:new Date().toISOString(),scores:JSON.stringify(state.scores)};
     var existing=await findRecord(org,person);
     var body=existing?{method:"PATCH",recordId:existing.id,fields:fields}:{method:"POST",fields:fields};
     var res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Service":"airtable"},body:JSON.stringify(body)});
