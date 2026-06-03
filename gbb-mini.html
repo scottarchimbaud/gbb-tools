@@ -121,10 +121,6 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
 .ct-lock:hover{background:#c9a83a;}
 @media(max-width:500px){.header-inner{padding:32px 20px 28px;}.main{padding:28px 16px 60px;}.q-scores{grid-template-columns:1fr;}.results-body{padding:18px;}.ct-cols,.ct-row{grid-template-columns:120px 1fr 1fr;}}
 </style>
-<script>
-  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
-</script>
-<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </head>
 <body>
 
@@ -276,17 +272,11 @@ function submitIntake(){
   var err=document.getElementById("intakeError");
   if(!name||!org||!email||!phone){err.style.display="block";return;}
   err.style.display="none";
-  // Submit via Formspree AJAX library
-  var fd=new FormData();
-  fd.append("name",name);
-  fd.append("organization",org);
-  fd.append("email",email);
-  fd.append("phone",phone);
-  fd.append("source","GBB Mini Diagnostic");
+  // Submit to Formspree
   fetch("https://formspree.io/f/mlgkrpvl",{
     method:"POST",
-    body:fd,
-    headers:{"Accept":"application/json"}
+    headers:{"Content-Type":"application/json","Accept":"application/json"},
+    body:JSON.stringify({name:name,organization:org,email:email,phone:phone,source:"GBB Mini Diagnostic"})
   }).then(function(r){
     if(!r.ok){console.warn("Formspree submission failed",r.status);}
   }).catch(function(e){console.warn("Formspree error",e);});
@@ -634,4 +624,3 @@ updateProgress();
 </script>
 </body>
 </html>
-
