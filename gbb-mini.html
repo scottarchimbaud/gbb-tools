@@ -155,27 +155,30 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
       <div style="font-size:14px;color:rgba(255,255,255,0.55);font-style:italic;position:relative;">Five holds. Five minutes. Your results are on the other side.</div>
     </div>
     <div style="padding:28px 32px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-        <div>
-          <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Your Name <span style="color:#dc2626;">*</span></label>
-          <input id="intakeName" name="name" type="text" data-fs-field placeholder="First and last name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+      <form action="https://formspree.io/f/mlgkrpvl" method="POST">
+        <input type="hidden" name="_next" value="https://scottarchimbaud.github.io/gbb-tools/gbb-mini.html?start=1"/>
+        <input type="hidden" name="source" value="GBB Mini Diagnostic"/>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div>
+            <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Your Name <span style="color:#dc2626;">*</span></label>
+            <input name="name" type="text" required placeholder="First and last name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+          </div>
+          <div>
+            <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Organization <span style="color:#dc2626;">*</span></label>
+            <input name="organization" type="text" required placeholder="Your organization name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+          </div>
+          <div>
+            <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Email Address <span style="color:#dc2626;">*</span></label>
+            <input name="email" type="email" required placeholder="you@organization.org" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+          </div>
+          <div>
+            <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Phone Number <span style="color:#dc2626;">*</span></label>
+            <input name="phone" type="tel" required placeholder="(555) 555-5555" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+          </div>
         </div>
-        <div>
-          <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Organization <span style="color:#dc2626;">*</span></label>
-          <input id="intakeOrg" name="organization" type="text" data-fs-field placeholder="Your organization name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
-        </div>
-        <div>
-          <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Email Address <span style="color:#dc2626;">*</span></label>
-          <input id="intakeEmail" name="email" type="email" data-fs-field placeholder="you@organization.org" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
-        </div>
-        <div>
-          <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Phone Number <span style="color:#dc2626;">*</span></label>
-          <input id="intakePhone" name="phone" type="tel" data-fs-field placeholder="(555) 555-5555" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
-        </div>
-      </div>
-      <div id="intakeError" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:10px 14px;font-size:13px;color:#991b1b;margin-bottom:16px;">Please complete all four fields before continuing.</div>
-      <button onclick="submitIntake()" style="width:100%;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'Arial Narrow',Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#162d4f'" onmouseout="this.style.background='var(--navy)'">Start the Diagnostic &#8594;</button>
-      <p style="font-size:12px;color:#9ca3af;text-align:center;margin-top:12px;font-style:italic;">Your information will only be used to follow up on your results.</p>
+        <button type="submit" style="width:100%;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'Arial Narrow',Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#162d4f'" onmouseout="this.style.background='var(--navy)'">Start the Diagnostic &#8594;</button>
+        <p style="font-size:12px;color:#9ca3af;text-align:center;margin-top:12px;font-style:italic;">Your information will only be used to follow up on your results.</p>
+      </form>
     </div>
   </div>
 </div>
@@ -621,6 +624,12 @@ function restart(){
 
 buildQuestions();
 updateProgress();
+// Auto-start diagnostic if redirected back from Formspree
+if(window.location.search.indexOf('start=1')!==-1){
+  document.getElementById('intakeScreen').style.display='none';
+  document.getElementById('diagnosticScreen').style.display='block';
+  document.getElementById('progWrap').style.display='block';
+}
 </script>
 </body>
 </html>
