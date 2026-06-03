@@ -145,19 +145,55 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
   </div>
 </div>
 
-<div class="prog-wrap">
+<div class="prog-wrap" id="progWrap" style="display:none;">
   <div class="prog-inner">
     <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
     <div class="prog-label" id="progLabel">0 of 5</div>
   </div>
 </div>
 
+<!-- INTAKE SCREEN -->
+<div id="intakeScreen" class="main" style="padding-top:48px;">
+  <div style="background:#fff;border-radius:12px;border:1px solid var(--gray-200);box-shadow:0 4px 20px rgba(30,58,95,0.08);overflow:hidden;">
+    <div style="background:var(--navy);padding:28px 32px;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,151,46,0.1) 0%,transparent 60%);"></div>
+      <div style="font-family:'Arial Narrow',Arial,sans-serif;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(184,151,46,0.85);margin-bottom:8px;position:relative;">Before You Begin</div>
+      <div style="font-family:'Arial Narrow',Arial,sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:6px;position:relative;">Tell us about yourself</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.55);font-style:italic;position:relative;">Five holds. Five minutes. Your results are on the other side.</div>
+    </div>
+    <div style="padding:28px 32px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div>
+          <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Your Name <span style="color:#dc2626;">*</span></label>
+          <input id="intakeName" type="text" placeholder="First and last name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+        </div>
+        <div>
+          <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Organization <span style="color:#dc2626;">*</span></label>
+          <input id="intakeOrg" type="text" placeholder="Your organization name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+        </div>
+        <div>
+          <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Email Address <span style="color:#dc2626;">*</span></label>
+          <input id="intakeEmail" type="email" placeholder="you@organization.org" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+        </div>
+        <div>
+          <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Phone Number <span style="color:#dc2626;">*</span></label>
+          <input id="intakePhone" type="tel" placeholder="(555) 555-5555" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+        </div>
+      </div>
+      <div id="intakeError" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:10px 14px;font-size:13px;color:#991b1b;margin-bottom:16px;">Please complete all four fields before continuing.</div>
+      <button onclick="submitIntake()" style="width:100%;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'Arial Narrow',Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#162d4f'" onmouseout="this.style.background='var(--navy)'">Start the Diagnostic &#8594;</button>
+      <p style="font-size:12px;color:#9ca3af;text-align:center;margin-top:12px;font-style:italic;">Your information will only be used to follow up on your results.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DIAGNOSTIC SCREEN -->
+<div id="diagnosticScreen" style="display:none;">
 <div class="main">
   <p class="intro-text">Rate your organization honestly on each hold &mdash; not where you aspire to be, but where you <strong>actually are</strong>. Score your program as a whole, not any one site or any single year's performance. Score the revenue payoff and ease of implementation to surface your highest-priority opportunity.</p>
 
-  <div class="org-section">
-    <label class="org-label" for="orgInput">Your Organization (optional)</label>
-    <input class="org-input" type="text" id="orgInput" placeholder="e.g. American Heart Association &mdash; Dallas"/>
+  <div class="org-section" style="display:none;">
+    <input type="hidden" id="orgInput"/>
   </div>
 
   <div id="questionsWrap"></div>
@@ -168,7 +204,7 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
   </div>
 
   <div id="results">
-    <div class="results-hdr">
+    <div class="results-hdr" style="border-radius:12px 12px 0 0;">
       <div class="results-hdr-label">GBB Mini Diagnostic&#8482; &mdash; Campaign Architecture&#8482;</div>
       <div class="results-title">Your Diagnostic Results</div>
       <div class="results-org" id="resultsOrg"></div>
@@ -242,6 +278,7 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
 
   </div>
 </div>
+</div><!-- end diagnosticScreen -->
 
 <div class="footer">
   <div class="footer-name">Scott Archimbaud &middot; Campaign Architecture&#8482;</div>
@@ -250,6 +287,30 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
 
 <script>
 var WORKER_URL="https://sparkling-truth-7db6.scott-archimbaud.workers.dev";
+var FORMSPREE="https://formspree.io/f/mlgkrpvl";
+
+function submitIntake(){
+  var name=document.getElementById("intakeName").value.trim();
+  var org=document.getElementById("intakeOrg").value.trim();
+  var email=document.getElementById("intakeEmail").value.trim();
+  var phone=document.getElementById("intakePhone").value.trim();
+  var err=document.getElementById("intakeError");
+  if(!name||!org||!email||!phone){err.style.display="block";return;}
+  err.style.display="none";
+  // Set org input for results screen
+  document.getElementById("orgInput").value=org;
+  // Send to Formspree (non-blocking)
+  fetch(FORMSPREE,{
+    method:"POST",
+    headers:{"Content-Type":"application/json","Accept":"application/json"},
+    body:JSON.stringify({name:name,organization:org,email:email,phone:phone,source:"GBB Mini Diagnostic"})
+  }).catch(function(){});
+  // Show diagnostic
+  document.getElementById("intakeScreen").style.display="none";
+  document.getElementById("diagnosticScreen").style.display="block";
+  document.getElementById("progWrap").style.display="block";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
 
 var HOLDS=[
 {id:"vol_leadership",num:"Hold 1 of 5",title:"Volunteer Leadership",fullTitle:"Volunteer Leadership Pipeline & Succession",
@@ -372,7 +433,8 @@ function showResults(){
   document.querySelector(".org-section").style.display="none";
   document.querySelector(".intro-text").style.display="none";
   var org=document.getElementById("orgInput").value.trim();
-  document.getElementById("resultsOrg").textContent=org||"Your Organization";
+  var name=document.getElementById("intakeName").value.trim();
+  document.getElementById("resultsOrg").textContent=(name?name+" \u00b7 ":"")+( org||"Your Organization");
 
   var scored=HOLDS.map(function(h){
     var a=answers[h.id]||{};
@@ -458,8 +520,13 @@ function restart(){
   document.getElementById("questionsWrap").style.display="";
   document.getElementById("ctaWrap").style.display="";
   document.getElementById("results").style.display="none";
-  document.querySelector(".org-section").style.display="";
-  document.querySelector(".intro-text").style.display="";
+  document.getElementById("diagnosticScreen").style.display="none";
+  document.getElementById("progWrap").style.display="none";
+  document.getElementById("intakeScreen").style.display="block";
+  document.getElementById("intakeName").value="";
+  document.getElementById("intakeOrg").value="";
+  document.getElementById("intakeEmail").value="";
+  document.getElementById("intakePhone").value="";
   document.getElementById("orgInput").value="";
   buildQuestions();updateProgress();
   window.scrollTo({top:0,behavior:"smooth"});
