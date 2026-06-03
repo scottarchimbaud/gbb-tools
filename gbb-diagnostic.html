@@ -33,6 +33,53 @@ input::placeholder{color:#9ca3af;}
   </div>
 </div>
 
+<!-- LANDING -->
+<div id="landing" class="hide" style="min-height:100vh;background:#1e40af;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div style="max-width:680px;width:100%;text-align:center;">
+    <div style="font-size:11px;color:#93c5fd;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:10px;">Campaign Architecture&trade;</div>
+    <h1 style="margin:0 0 8px;font-size:26px;font-weight:700;color:#fff;">GBB Diagnostic Platform&trade;</h1>
+    <p style="margin:0 0 40px;font-size:15px;color:#bfdbfe;">Choose a tool to get started.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:40px;">
+
+      <!-- Diagnostic Card -->
+      <div onclick="showScreen('intro')" style="background:#fff;border-radius:12px;padding:32px 28px;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,0.2);transition:transform 0.15s;text-align:left;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="width:44px;height:44px;background:#eff6ff;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div style="font-size:16px;font-weight:700;color:#111827;margin-bottom:8px;">Run a Diagnostic</div>
+        <div style="font-size:13px;color:#6b7280;line-height:1.5;">Score your program across all 21 holds. Get a prioritized action plan and an AI-generated summary.</div>
+        <div style="margin-top:20px;font-size:13px;font-weight:600;color:#1e40af;">Start assessment &rarr;</div>
+      </div>
+
+      <!-- Comparison Card -->
+      <a href="https://scottarchimbaud.github.io/gbb-tools/gbb-comparison.html" style="background:#fff;border-radius:12px;padding:32px 28px;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,0.2);transition:transform 0.15s;text-align:left;text-decoration:none;display:block;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="width:44px;height:44px;background:#f0fdf4;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div style="font-size:16px;font-weight:700;color:#111827;margin-bottom:8px;">Compare Assessments</div>
+        <div style="font-size:13px;color:#6b7280;line-height:1.5;">Load two or more saved assessments side by side. See where your team agrees — and where the gaps are.</div>
+        <div style="margin-top:20px;font-size:13px;font-weight:600;color:#166534;">Open comparison tool &rarr;</div>
+      </a>
+
+    </div>
+
+    <!-- Free Trial Card — full width below -->
+    <a href="https://scottarchimbaud.github.io/gbb-tools/gbb-mini.html" style="display:block;background:#fff;border-radius:12px;padding:28px 32px;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,0.2);transition:transform 0.15s;text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="display:flex;align-items:center;gap:20px;">
+        <div style="width:44px;height:44px;background:#fefce8;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#854d0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:#111827;margin-bottom:4px;">Try It Free</div>
+          <div style="font-size:13px;color:#6b7280;">Five holds. Five minutes. Your highest-leverage opportunity — revealed. No access code required.</div>
+        </div>
+      </div>
+      <div style="font-size:13px;font-weight:600;color:#854d0e;white-space:nowrap;">Start free trial &rarr;</div>
+    </a>
+    <p style="font-size:12px;color:#93c5fd;">Scott Archimbaud &middot; Campaign Architecture&trade;</p>
+  </div>
+</div>
+
 <!-- INTRO -->
 <div id="intro" class="hide">
   <div class="hdr">
@@ -544,13 +591,13 @@ function pL(s){return !s?"—":s>=9?"Immediate Focus":s>=7?"High Priority":s>=5?
 function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function show(id){document.getElementById(id).classList.remove("hide");}
 function hide(id){document.getElementById(id).classList.add("hide");}
-function showScreen(id){["gate","intro","assess","results-screen","action-screen"].forEach(function(s){hide(s);});show(id);}
+function showScreen(id){["gate","landing","intro","assess","results-screen","action-screen"].forEach(function(s){hide(s);});show(id);}
 function totalScored(){return HOLDS.filter(function(h){var s=state.scores[h.id]||{};return s.payoff&&s.ease;}).length;}
 function fmtD(iso){try{return new Date(iso).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}catch(e){return iso;}}
 
 document.getElementById("pw-btn").addEventListener("click",function(){
   var val=document.getElementById("pw-in").value.trim();
-  if(val===PW){hide("gate");showScreen("intro");}
+  if(val===PW){hide("gate");showScreen("landing");}
   else{document.getElementById("pw-in").value="";document.getElementById("pw-in").style.borderColor="#fca5a5";show("pw-err");setTimeout(function(){document.getElementById("pw-in").style.borderColor="#d1d5db";hide("pw-err");},2000);}
 });
 document.getElementById("pw-in").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("pw-btn").click();});
