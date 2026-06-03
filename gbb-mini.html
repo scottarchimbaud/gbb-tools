@@ -155,17 +155,19 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
       <div style="font-size:14px;color:rgba(255,255,255,0.55);font-style:italic;position:relative;">Five holds. Five minutes. Your results are on the other side.</div>
     </div>
     <div style="padding:28px 32px;">
-      <form action="https://formspree.io/f/mlgkrpvl" method="POST">
+      <form action="https://formspree.io/f/mlgkrpvl" method="POST" onsubmit="captureIntake(this)">
         <input type="hidden" name="_next" value="https://scottarchimbaud.github.io/gbb-tools/gbb-mini.html?start=1"/>
+        <input type="hidden" id="hiddenName" name="_name_pass" value=""/>
+        <input type="hidden" id="hiddenOrg" name="_org_pass" value=""/>
         <input type="hidden" name="source" value="GBB Mini Diagnostic"/>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
           <div>
             <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Your Name <span style="color:#dc2626;">*</span></label>
-            <input name="name" type="text" required placeholder="First and last name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+            <input id="intakeName" name="name" type="text" required placeholder="First and last name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
           </div>
           <div>
             <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Organization <span style="color:#dc2626;">*</span></label>
-            <input name="organization" type="text" required placeholder="Your organization name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+            <input id="intakeOrg" name="organization" type="text" required placeholder="Your organization name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
           </div>
           <div>
             <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Email Address <span style="color:#dc2626;">*</span></label>
@@ -490,7 +492,7 @@ function showResults(){
   document.getElementById("progFill").style.width="100%";
   document.getElementById("progLabel").textContent="Complete";
 
-  var orgName=org||"this organization";
+  var orgName="your organization";
   var holdSummary=sorted.map(function(item,i){
     return (i+1)+". "+item.hold.fullTitle+" \u2014 "+RLABELS[item.rating];
   }).join("\n");
@@ -625,6 +627,7 @@ function restart(){
 buildQuestions();
 updateProgress();
 // Auto-start diagnostic if redirected back from Formspree
+function captureIntake(form){}
 if(window.location.search.indexOf('start=1')!==-1){
   document.getElementById('intakeScreen').style.display='none';
   document.getElementById('diagnosticScreen').style.display='block';
