@@ -29,11 +29,6 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
 .main{max-width:720px;margin:0 auto;padding:40px 24px 80px;}
 .intro-text{font-size:17px;line-height:1.7;color:var(--gray-700);margin-bottom:32px;font-style:italic;}
 .intro-text strong{font-style:normal;color:var(--navy);}
-.org-section{background:var(--white);border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;margin-bottom:28px;box-shadow:0 2px 8px rgba(30,58,95,0.04);}
-.org-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gray-500);margin-bottom:8px;display:block;}
-.org-input{width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:16px;color:var(--gray-900);background:var(--cream);}
-.org-input:focus{outline:none;border-color:#93c5fd;}
-.org-input::placeholder{color:#c0c4cc;}
 .q-card{background:var(--white);border-radius:12px;border:1px solid var(--gray-200);margin-bottom:28px;overflow:hidden;box-shadow:0 2px 8px rgba(30,58,95,0.06);opacity:0;transform:translateY(16px);transition:opacity 0.4s ease,transform 0.4s ease;}
 .q-card.visible{opacity:1;transform:translateY(0);}
 .q-header{padding:20px 24px 16px;border-bottom:1px solid var(--gray-100);}
@@ -80,9 +75,9 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
 #results{display:none;}
 .results-hdr{background:var(--navy);border-radius:12px 12px 0 0;padding:28px 28px 24px;position:relative;overflow:hidden;}
 .results-hdr::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(184,151,46,0.1) 0%,transparent 50%);}
-.results-hdr-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(184,151,46,0.85);margin-bottom:8px;}
-.results-title{font-family:'Arial Narrow',Arial,sans-serif;font-size:28px;font-weight:800;color:var(--white);margin-bottom:6px;}
-.results-org{font-size:15px;color:rgba(255,255,255,0.6);font-style:italic;}
+.results-hdr-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(184,151,46,0.85);margin-bottom:8px;position:relative;}
+.results-title{font-family:'Arial Narrow',Arial,sans-serif;font-size:28px;font-weight:800;color:var(--white);margin-bottom:6px;position:relative;}
+.results-org{font-size:15px;color:rgba(255,255,255,0.6);font-style:italic;position:relative;}
 .results-body{background:var(--white);border:1px solid var(--gray-200);border-top:none;border-radius:0 0 12px 12px;padding:24px 28px 28px;}
 .lev-box{background:linear-gradient(135deg,#fff8e6 0%,#fef3c7 100%);border:1px solid var(--gold);border-left:4px solid var(--gold);border-radius:8px;padding:18px 20px;margin-bottom:20px;}
 .lev-label{font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
@@ -104,7 +99,6 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
 .footer{max-width:720px;margin:0 auto;padding:0 24px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
 .footer-name{font-family:'Arial Narrow',Arial,sans-serif;font-size:13px;letter-spacing:0.06em;color:var(--gray-500);}
 .footer-contact{font-size:13px;color:var(--gray-500);font-style:italic;}
-/* Comparison mockup */
 .compare-teaser{margin-top:28px;border-radius:12px;overflow:hidden;border:1px solid var(--gray-200);box-shadow:0 4px 20px rgba(30,58,95,0.1);}
 .ct-header{background:var(--navy);padding:20px 24px;position:relative;overflow:hidden;}
 .ct-header::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,151,46,0.1) 0%,transparent 60%);}
@@ -120,13 +114,12 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
 .ct-hold{font-size:12px;color:var(--gray-700);padding:9px 12px;display:flex;align-items:center;}
 .ct-cell{padding:9px 12px;display:flex;align-items:center;justify-content:center;}
 .ct-badge{display:inline-flex;align-items:center;gap:5px;font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px;letter-spacing:0.04em;}
-.ct-gap{font-family:'Arial Narrow',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;}
 .ct-footer{background:#f9fafb;padding:14px 24px;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
 .ct-cta-text{font-size:13px;color:var(--gray-700);line-height:1.4;}
 .ct-cta-text strong{color:var(--navy);}
 .ct-lock{display:inline-flex;align-items:center;gap:6px;font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--navy);background:var(--gold);padding:8px 16px;border-radius:6px;text-decoration:none;white-space:nowrap;}
 .ct-lock:hover{background:#c9a83a;}
-@media(max-width:500px){.header-inner{padding:32px 20px 28px;}.main{padding:28px 16px 60px;}.q-scores{grid-template-columns:1fr;}.results-body{padding:18px;}.ct-cols,.ct-row{grid-template-columns:130px 1fr 1fr;}}
+@media(max-width:500px){.header-inner{padding:32px 20px 28px;}.main{padding:28px 16px 60px;}.q-scores{grid-template-columns:1fr;}.results-body{padding:18px;}.ct-cols,.ct-row{grid-template-columns:120px 1fr 1fr;}}
 </style>
 </head>
 <body>
@@ -192,10 +185,6 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
 <div class="main">
   <p class="intro-text">Rate your organization honestly on each hold &mdash; not where you aspire to be, but where you <strong>actually are</strong>. Score your program as a whole, not any one site or any single year's performance. Score the revenue payoff and ease of implementation to surface your highest-priority opportunity.</p>
 
-  <div class="org-section" style="display:none;">
-    <input type="hidden" id="orgInput"/>
-  </div>
-
   <div id="questionsWrap"></div>
 
   <div class="cta-wrap" id="ctaWrap">
@@ -204,7 +193,7 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
   </div>
 
   <div id="results">
-    <div class="results-hdr" style="border-radius:12px 12px 0 0;">
+    <div class="results-hdr">
       <div class="results-hdr-label">GBB Mini Diagnostic&#8482; &mdash; Campaign Architecture&#8482;</div>
       <div class="results-title">Your Diagnostic Results</div>
       <div class="results-org" id="resultsOrg"></div>
@@ -225,53 +214,163 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
     <!-- COMPARISON MOCKUP -->
     <div class="compare-teaser">
       <div class="ct-header">
-        <div class="ct-label">Full GBB Diagnostic&#8482; &mdash; Campaign Architecture&#8482;</div>
-        <div class="ct-title">See How Your Program Compares</div>
-        <div class="ct-sub">The full diagnostic lets you compare two assessments side by side &mdash; across all 21 holds.</div>
+        <div class="ct-label" style="position:relative;">Full GBB Diagnostic&#8482; &mdash; Campaign Architecture&#8482;</div>
+        <div class="ct-title" style="position:relative;">See What the Comparison Tool Does</div>
+        <div class="ct-sub" style="position:relative;">The full diagnostic includes a Comparison Tool that loads two assessments side by side &mdash; hold by hold &mdash; so leadership can see where perspectives align and where the gaps are.</div>
       </div>
-      <div class="ct-body">
-        <div class="ct-cols">
-          <div class="ct-col-hdr">Hold</div>
-          <div class="ct-col-hdr">&#9632; Your Program</div>
-          <div class="ct-col-hdr">&#9632; Prior Year</div>
-        </div>
+      <div class="ct-body" style="padding:16px 20px;">
 
-        <!-- Row 1 -->
-        <div class="ct-row">
-          <div class="ct-hold">N1 &middot; Campaign Chair</div>
-          <div class="ct-cell"><span class="ct-badge" style="background:#eff6ff;color:#1e40af;border:1px solid #93c5fd;">Better &nbsp; 8</span></div>
-          <div class="ct-cell"><span class="ct-badge" style="background:#f0fdf4;color:#166534;border:1px solid #86efac;">Good &nbsp; 6</span></div>
-        </div>
-        <!-- Row 2 -->
-        <div class="ct-row">
-          <div class="ct-hold">N5 &middot; Corporate Portfolio</div>
-          <div class="ct-cell"><span class="ct-badge" style="background:#f0fdf4;color:#166534;border:1px solid #86efac;">Good &nbsp; 7</span></div>
-          <div class="ct-cell"><span class="ct-badge" style="background:#f0fdf4;color:#166534;border:1px solid #86efac;">Good &nbsp; 7</span></div>
-        </div>
-        <!-- Row 3 -->
-        <div class="ct-row">
-          <div class="ct-hold">F3 &middot; Volunteer Pipeline</div>
-          <div class="ct-cell"><span class="ct-badge" style="background:#faf5ff;color:#6b21a8;border:1px solid #c4b5fd;">Best &nbsp; 9</span></div>
-          <div class="ct-cell"><span class="ct-badge" style="background:#eff6ff;color:#1e40af;border:1px solid #93c5fd;">Better &nbsp; 7</span></div>
-        </div>
-        <!-- Row 4 -->
-        <div class="ct-row">
-          <div class="ct-hold">F2 &middot; Local Corporate</div>
-          <div class="ct-cell"><span class="ct-badge" style="background:#fffbeb;color:#92400e;border:1px solid #fcd34d;">In Dev &nbsp; 4</span></div>
-          <div class="ct-cell"><span class="ct-badge" style="background:#fffbeb;color:#92400e;border:1px solid #fcd34d;">In Dev &nbsp; 5</span></div>
-        </div>
-        <!-- Row 5 — gap highlight -->
-        <div class="ct-row" style="background:#fef2f2;">
-          <div class="ct-hold" style="color:#991b1b;font-weight:600;">F4 &middot; Goal Setting</div>
-          <div class="ct-cell"><span class="ct-badge" style="background:#f0fdf4;color:#166534;border:1px solid #86efac;">Good &nbsp; 7</span></div>
-          <div class="ct-cell" style="position:relative;">
-            <span class="ct-badge" style="background:#f9fafb;color:#6b7280;border:1px solid #d1d5db;">Not in Place &nbsp; 2</span>
-            <span class="ct-gap" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#dc2626;font-size:9px;">+5 &#9650;</span>
+        <!-- Explanation -->
+        <p style="font-size:13px;color:#374151;line-height:1.6;margin:0 0 16px;font-style:italic;">Below is a sample comparison between two respondents from the same organization &mdash; a national leader and a field leader &mdash; scoring the same five holds. The gaps between their assessments are often as revealing as the scores themselves.</p>
+
+        <!-- Respondent key -->
+        <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="width:12px;height:12px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
+            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#1e40af;">Sarah Chen</span>
+            <span style="font-size:11px;color:#6b7280;">Chief Development Officer</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="width:12px;height:12px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
+            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#166534;">Marcus Webb</span>
+            <span style="font-size:11px;color:#6b7280;">Regional Director, Western US</span>
           </div>
         </div>
+
+        <!-- Hold 1: Volunteer Leadership -->
+        <div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:10px;overflow:hidden;">
+          <div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;">
+            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#374151;">Volunteer Leadership Pipeline &amp; Succession</span>
+          </div>
+          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
+                <span style="font-size:11px;color:#1e40af;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Sarah Chen</span>
+              </div>
+              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#faf5ff;color:#6b21a8;border:1px solid #c4b5fd;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Best in Class</span>
+              <span style="font-size:13px;font-weight:700;color:#d97706;font-family:'Arial Narrow',Arial,sans-serif;">9/10</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
+                <span style="font-size:11px;color:#166534;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Marcus Webb</span>
+              </div>
+              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#eff6ff;color:#1e40af;border:1px solid #93c5fd;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Better</span>
+              <span style="font-size:13px;font-weight:700;color:#2563eb;font-family:'Arial Narrow',Arial,sans-serif;">7/10</span>
+            </div>
+            <div style="font-size:11px;color:#dc2626;font-style:italic;padding-top:2px;">&#9650; 2-level gap &mdash; national and field see this hold differently</div>
+          </div>
+        </div>
+
+        <!-- Hold 2: Corporate Portfolio -->
+        <div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:10px;overflow:hidden;">
+          <div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;">
+            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#374151;">Corporate Portfolio Engineering &amp; Enterprise Activation</span>
+          </div>
+          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
+                <span style="font-size:11px;color:#1e40af;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Sarah Chen</span>
+              </div>
+              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#eff6ff;color:#1e40af;border:1px solid #93c5fd;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Better</span>
+              <span style="font-size:13px;font-weight:700;color:#2563eb;font-family:'Arial Narrow',Arial,sans-serif;">8/10</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
+                <span style="font-size:11px;color:#166534;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Marcus Webb</span>
+              </div>
+              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#f0fdf4;color:#166534;border:1px solid #86efac;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Good</span>
+              <span style="font-size:13px;font-weight:700;color:#d97706;font-family:'Arial Narrow',Arial,sans-serif;">7/10</span>
+            </div>
+            <div style="font-size:11px;color:#6b7280;font-style:italic;padding-top:2px;">Aligned on priority, one level apart on rating</div>
+          </div>
+        </div>
+
+        <!-- Hold 3: Staffing -->
+        <div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:10px;overflow:hidden;">
+          <div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;">
+            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#374151;">Staff Investment, Compensation &amp; Retention</span>
+          </div>
+          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
+                <span style="font-size:11px;color:#1e40af;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Sarah Chen</span>
+              </div>
+              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#f0fdf4;color:#166534;border:1px solid #86efac;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Good</span>
+              <span style="font-size:13px;font-weight:700;color:#2563eb;font-family:'Arial Narrow',Arial,sans-serif;">6/10</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
+                <span style="font-size:11px;color:#166534;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Marcus Webb</span>
+              </div>
+              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#fffbeb;color:#92400e;border:1px solid #fcd34d;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">In Development</span>
+              <span style="font-size:13px;font-weight:700;color:#dc2626;font-family:'Arial Narrow',Arial,sans-serif;">9/10</span>
+            </div>
+            <div style="font-size:11px;color:#dc2626;font-style:italic;padding-top:2px;">&#9650; Significant gap &mdash; field rates this more urgent and lower than national</div>
+          </div>
+        </div>
+
+        <!-- Hold 4: Training -->
+        <div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:10px;overflow:hidden;">
+          <div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;">
+            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#374151;">Training Standardization, Content &amp; Tools</span>
+          </div>
+          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
+                <span style="font-size:11px;color:#1e40af;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Sarah Chen</span>
+              </div>
+              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#eff6ff;color:#1e40af;border:1px solid #93c5fd;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Better</span>
+              <span style="font-size:13px;font-weight:700;color:#6b7280;font-family:'Arial Narrow',Arial,sans-serif;">5/10</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
+                <span style="font-size:11px;color:#166534;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Marcus Webb</span>
+              </div>
+              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#eff6ff;color:#1e40af;border:1px solid #93c5fd;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Better</span>
+              <span style="font-size:13px;font-weight:700;color:#6b7280;font-family:'Arial Narrow',Arial,sans-serif;">5/10</span>
+            </div>
+            <div style="font-size:11px;color:#166534;font-style:italic;padding-top:2px;">&#10003; Full alignment &mdash; same rating and same priority score</div>
+          </div>
+        </div>
+
+        <!-- Hold 5: Mission -->
+        <div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:16px;overflow:hidden;">
+          <div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;">
+            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#374151;">Mission &amp; Narrative Alignment</span>
+          </div>
+          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
+                <span style="font-size:11px;color:#1e40af;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Sarah Chen</span>
+              </div>
+              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#f0fdf4;color:#166534;border:1px solid #86efac;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Good</span>
+              <span style="font-size:13px;font-weight:700;color:#6b7280;font-family:'Arial Narrow',Arial,sans-serif;">4/10</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
+                <span style="font-size:11px;color:#166534;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Marcus Webb</span>
+              </div>
+              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#f0fdf4;color:#166534;border:1px solid #86efac;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Good</span>
+              <span style="font-size:13px;font-weight:700;color:#6b7280;font-family:'Arial Narrow',Arial,sans-serif;">4/10</span>
+            </div>
+            <div style="font-size:11px;color:#166534;font-style:italic;padding-top:2px;">&#10003; Aligned &mdash; both see this as lower priority relative to other holds</div>
+          </div>
+        </div>
+
+        <p style="font-size:12px;color:#6b7280;line-height:1.6;margin:0;font-style:italic;">This is a sample. In practice the full tool compares all 21 holds. The gaps &mdash; especially where field rates a hold lower and more urgent than national &mdash; are where the most important conversations live.</p>
       </div>
       <div class="ct-footer">
-        <div class="ct-cta-text"><strong>The full diagnostic covers all 21 holds.</strong> Compare your team against a prior year, a peer organization, or a leadership colleague &mdash; and see exactly where you diverge.</div>
+        <div class="ct-cta-text"><strong>The full GBB Diagnostic covers all 21 holds.</strong> The Comparison Tool lets your whole leadership team score independently &mdash; then shows you exactly where you agree and where the gaps are.</div>
         <a class="ct-lock" href="mailto:scott@scottarchconsultancy.com?subject=GBB%20Diagnostic%20%E2%80%94%20Full%20Access%20Request">&#128274; Unlock Full Access</a>
       </div>
     </div>
@@ -297,15 +396,11 @@ function submitIntake(){
   var err=document.getElementById("intakeError");
   if(!name||!org||!email||!phone){err.style.display="block";return;}
   err.style.display="none";
-  // Set org input for results screen
-  document.getElementById("orgInput").value=org;
-  // Send to Formspree (non-blocking)
   fetch(FORMSPREE,{
     method:"POST",
     headers:{"Content-Type":"application/json","Accept":"application/json"},
     body:JSON.stringify({name:name,organization:org,email:email,phone:phone,source:"GBB Mini Diagnostic"})
   }).catch(function(){});
-  // Show diagnostic
   document.getElementById("intakeScreen").style.display="none";
   document.getElementById("diagnosticScreen").style.display="block";
   document.getElementById("progWrap").style.display="block";
@@ -319,35 +414,69 @@ options:[
 {key:"inDevelopment",label:"In Development",desc:"A chair is sometimes in place but recruitment is reactive, last-minute, or dependent on a single staff relationship."},
 {key:"good",label:"Good",desc:"Campaign chair in place and functionally engaged. Chairs recruited at least twelve months before their event."},
 {key:"better",label:"Better",desc:"Chairs consistently exceed financial expectations and recruit from their networks. Chairs confirmed at least fifteen months before their event."},
-{key:"best",label:"Best in Class",desc:"Chair is a strategic asset. Next two to three chairs always in development. Outgoing chair recruits and mentors successor directly."}]},
+{key:"best",label:"Best in Class",desc:"Chair is a strategic asset. Next two to three chairs always in development. Outgoing chair recruits and mentors successor directly."}],
+implication:{
+notInPlace:"A market without a campaign chair structure is entirely dependent on staff relationships for its corporate development, and that dependency is a fragility. When your key staff person turns over, the corporate relationships and volunteer connections they built go with them. A well-recruited campaign chair provides the market with civic standing, corporate network access, and volunteer credibility that survives staff transitions. Without that structure, you are rebuilding the corporate foundation of your program every time the team changes.",
+inDevelopment:"Reactive chair recruitment is one of the most common and most expensive patterns in P2P markets. A chair who was approached a few months before the event and said yes out of personal loyalty to a staff member is not a chair in the strategic sense \u2014 they are doing you a favor, and the corporate activation that defines the role\u2019s real value never happens. The extended cultivation window \u2014 the period when a chair is building relationships, making introductions, and positioning the campaign within their network \u2014 is where the revenue is. If that window is not being used, you are getting a fraction of what this hold can produce.",
+good:"A campaign chair who is in place and functionally engaged, recruited well in advance, is a real asset. The next question is whether the chair is working their network proactively or primarily activating their own company. Good chairs do the latter reliably. Best in Class chairs do the former strategically \u2014 they identify the corporate relationships your program needs and use their standing to open them. That is the conversation you need to have with your current chair, and it starts with being explicit about what you are asking them to do.",
+better:"Chairs who consistently exceed financial expectations and recruit from their own networks are producing results that go well beyond what staff-driven development can achieve. The next level is succession discipline \u2014 not just having the next chair identified, but having them actively engaged in the current campaign so they understand what they are taking on before they take it on. The handoff between chairs is where most pipelines leak. Building it as a structured transition rather than a moment of departure is what sustains the momentum.",
+best:"A chair pipeline where the next two to three chairs are always in development and outgoing chairs are actively recruiting and mentoring their successors is one of the most durable structures in local P2P. It means your program\u2019s corporate development is never starting over, never dependent on a single staff relationship, and never at the mercy of a last-minute recruitment. Protect this structure carefully \u2014 it is built on trust relationships that take years to develop and can be disrupted quickly by a staff transition that does not honor the cultivation process."}},
+
 {id:"staffing",num:"Hold 2 of 5",title:"Staffing Consistency",fullTitle:"Staff Investment, Compensation & Retention",
 options:[
 {key:"notInPlace",label:"Not in Place",desc:"No structured compensation framework exists. Staffing is ad hoc and turnover is high."},
 {key:"inDevelopment",label:"In Development",desc:"Compensation exists but is below market. Turnover is high. Staff spend significant time on administrative tasks."},
 {key:"good",label:"Good",desc:"Compensation is competitive. Turnover manageable. Some operational support exists."},
 {key:"better",label:"Better",desc:"Compensation attracts and retains top talent. Operational support structured to protect fundraising time. Retention strong."},
-{key:"best",label:"Best in Class",desc:"Compensation at or above market at every level. Administrative burden minimized. Retention treated as a revenue metric. Career pathways retain high performers."}]},
+{key:"best",label:"Best in Class",desc:"Compensation at or above market at every level. Administrative burden minimized. Retention treated as a revenue metric. Career pathways retain high performers."}],
+implication:{
+notInPlace:"When I walked into organizations with no staffing framework, the first thing I noticed was not the revenue gap \u2014 it was the relationship gap. Every time a Local Geographic Leader walks out the door, they take three years of corporate relationships, volunteer trust, and institutional memory with them. You cannot build a high-performing P2P program on a revolving door. Before you invest in any other hold, you need to know why people are leaving and what it would take to make them stay. The answer almost always costs less than the turnover does.",
+inDevelopment:"Below-market compensation is a slow leak that most organizations do not notice until they are already hemorrhaging talent. The staff who leave first are always your best ones \u2014 they have options. What you are left with is people who cannot get a better offer elsewhere, and that is not a team that wins. Beyond pay, look hard at administrative burden. I have seen Local Geographic Leaders spending forty percent of their time on tasks that have nothing to do with fundraising. That is a revenue problem masquerading as an operations problem.",
+good:"You have stability, and that is worth more than most leaders give it credit for. The next frontier is time protection. Ask your field leaders to track their week \u2014 where is their time actually going versus where it should be going? In my experience, even well-compensated staff in well-run organizations lose ten to fifteen hours a week to administrative tasks that could be centralized, automated, or eliminated. That time has a revenue value. Calculate it and make the case for the operational investment.",
+better:"Strong retention at this level is a genuine competitive advantage, and you are probably seeing it in your corporate portfolio and volunteer relationships. The risk at this stage is complacency \u2014 your best people have options, and if they do not see a path forward they will start taking calls. Make sure career pathways are explicit, not implied. The staff who built your best markets should have a reason to still be with you in five years.",
+best:"You have built something that compounds over time, and that is the whole game. Long-tenured staff do not just retain relationships \u2014 they deepen them, and they develop the next generation of talent. The thing to watch at this level is whether your retention culture survives leadership transitions. I have seen Best in Class staffing environments collapse in eighteen months when a strong CDO exits and the new leader does not understand what they inherited. Document the culture, not just the compensation."}},
+
 {id:"training",num:"Hold 3 of 5",title:"Training",fullTitle:"Training Standardization, Content & Tools",
 options:[
 {key:"notInPlace",label:"Not in Place",desc:"No standardized training exists. Staff are not trained consistently."},
 {key:"inDevelopment",label:"In Development",desc:"Some training content exists but is inconsistently delivered or not connected to performance outcomes."},
 {key:"good",label:"Good",desc:"Standardized curriculum exists. Staff trained consistently. Core tactics defined and communicated across all markets."},
 {key:"better",label:"Better",desc:"Dedicated training function delivers consistent, measurable results. Core tactics standardized, benchmarked, and monitored."},
-{key:"best",label:"Best in Class",desc:"Training is a performance management system. Staff certified against defined competency standards. Best practices replicated from top markets in real time."}]},
+{key:"best",label:"Best in Class",desc:"Training is a performance management system. Staff certified against defined competency standards. Best practices replicated from top markets in real time."}],
+implication:{
+notInPlace:"What you have right now is not a training problem \u2014 it is a replication problem. Your best markets are probably performing well because of one or two exceptional staff members who figured things out on their own. But you cannot scale intuition. Without a shared tactical framework, every new hire starts from scratch, every underperforming market stays underperforming, and you have no systematic way to close the gap between your best markets and your average ones. The revenue difference between a trained field team and an untrained one is not marginal \u2014 it is the difference between a program that grows and one that plateaus.",
+inDevelopment:"Training that is not connected to performance outcomes is professional development theater. I have sat in on training sessions where the content was excellent and the application rate was near zero, because no one was measuring whether the tactics were actually being used in the field. The curriculum is not the hard part \u2014 the accountability system is. What gets measured gets done. Until you can track which tactics are being executed in which markets and correlate that to revenue performance, you are guessing.",
+good:"You have the infrastructure and that is the hardest part to build. Now the question is whether training is producing consistent execution or just consistent attendance. Pull your performance data and look at which markets are applying core tactics and which ones are not. I would bet the variance in your results maps almost directly to the variance in execution. Use your top markets as teaching cases \u2014 not in theory, but literally: have your best Local Geographic Leaders train their peers. Peer instruction changes behavior faster than anything else I have seen.",
+better:"At this level the differentiator is not what you teach but how you certify. The organizations I have seen break through to Best in Class all had one thing in common: they treated field competency as a professional credential, not a checklist. Staff who are certified against defined standards perform differently than staff who have simply attended training. They own the framework rather than receiving it. That ownership is what produces the results you are looking for in your bottom quartile markets.",
+best:"You have turned training into a talent development system, and that is genuinely rare. The next horizon is using your best markets as a farm system for the broader organization \u2014 identifying your top Local Program Leads, giving them stretch assignments, and creating a visible pathway to Area Director. When your training culture produces your next generation of field leaders, you have built something that sustains itself. Protect the investment and resist the temptation to cut training when budgets tighten \u2014 it is always a false economy."}},
+
 {id:"mission",num:"Hold 4 of 5",title:"Mission Narrative",fullTitle:"Mission & Narrative Alignment",
 options:[
 {key:"notInPlace",label:"Not in Place",desc:"No consistent mission narrative exists. Staff and volunteers cannot articulate impact clearly."},
 {key:"inDevelopment",label:"In Development",desc:"Mission messaging exists but is inconsistently applied and not embedded in fundraising conversations."},
 {key:"good",label:"Good",desc:"Mission narratives embedded in training, corporate activation, and participant communications."},
 {key:"better",label:"Better",desc:"Mission clarity is a revenue strategy. Every touchpoint connects the donor or participant to a specific, emotionally resonant impact narrative."},
-{key:"best",label:"Best in Class",desc:"Mission narrative differentiated by constituency — corporate, major donor, and participant versions each authentic, specific, and tested."}]},
+{key:"best",label:"Best in Class",desc:"Mission narrative differentiated by constituency \u2014 corporate, major donor, and participant versions each authentic, specific, and tested."}],
+implication:{
+notInPlace:"I have walked into corporate meetings with organizations where the staff could not tell me a single specific story about the people their mission serves. Not one. And I have watched those meetings fail in real time, because a corporate executive will write a check for impact but they will not write one for infrastructure. Mission narrative is not a marketing exercise \u2014 it is the emotional permission structure for every significant ask your organization makes. Without it, you are competing on logistics. You will lose that competition to every other charity knocking on the same door.",
+inDevelopment:"The gap between having messaging and using it is where most organizations live, and it is costing them more than they realize. Your staff and volunteers have probably seen the materials, attended the briefings, and nodded at the right moments. But when they are sitting across from a corporate executive or recruiting a volunteer, they are improvising. The fix is not more materials \u2014 it is more practice. Mission narrative needs to be rehearsed out loud, in the field, until it becomes instinct rather than recall.",
+good:"You have consistency, and in this business that is genuinely valuable. The next level is differentiation. The story you tell a corporate executive and the story you tell a walk participant should not be the same story \u2014 they have different motivations, different relationships to the mission, and different decision frameworks. A corporate leader wants to know about community impact and employee engagement. A participant wants to know about the person whose life was changed. When you develop those versions separately and test them, your conversion rates go up significantly.",
+better:"You are using mission as a revenue strategy, which is exactly right. The next iteration is constituency-specific testing \u2014 not just developing different versions but actually measuring which narratives produce the strongest behavioral response in each audience. Which story closes the corporate conversation faster? Which one drives the highest average gift from participants? When you start treating narrative as a performance variable rather than a communication choice, you unlock another layer of revenue that most organizations never find.",
+best:"What you have built is rare and worth protecting carefully. Mission narrative at this level is a genuine differentiator, but it is also fragile \u2014 it depends on staff who know the stories, leaders who use them, and a culture that treats mission as central rather than ceremonial. The risk at Best in Class is drift. Constituencies change, impact stories age, and the versions that worked two years ago may not land the same way today. Build a refresh cycle into your annual planning so the narratives stay current, specific, and tested."}},
+
 {id:"corporate",num:"Hold 5 of 5",title:"Corporate Presence",fullTitle:"Corporate Portfolio Engineering & Enterprise Activation",
 options:[
 {key:"notInPlace",label:"Not in Place",desc:"No corporate strategy exists. Engagement is opportunistic. No senior champion identification."},
 {key:"inDevelopment",label:"In Development",desc:"Some corporate relationships exist but are not actively managed or strategically developed. Relationships are contact-level rather than executive-level."},
 {key:"good",label:"Good",desc:"Defined corporate growth strategy exists. Priority sectors identified. Senior champions identified within major partners."},
 {key:"better",label:"Better",desc:"Portfolio actively engineered with mission alignment driving acquisition. Every major partner has a senior internal champion and a defined activation plan."},
-{key:"best",label:"Best in Class",desc:"Portfolio strategy operates at national and market levels simultaneously. Every major partner has a multi-year elevation pathway. Penetration rate tracked."}]}
+{key:"best",label:"Best in Class",desc:"Portfolio strategy operates at national and market levels simultaneously. Every major partner has a multi-year elevation pathway. Penetration rate tracked."}],
+implication:{
+notInPlace:"Opportunistic corporate engagement is the most expensive strategy in peer-to-peer fundraising, and most organizations do not realize they are using it. When you approach companies without a framework, you get what they are willing to give rather than what they are capable of giving. I have seen organizations leave millions of dollars on the table year after year because no one had mapped the portfolio, identified the senior champions, or built an activation plan that went deeper than the employee team. A corporate relationship without a senior champion is a vendor relationship. It will never grow beyond its current level.",
+inDevelopment:"Contact-level corporate relationships feel safer than they are. Your contact is one reorganization, one departure, or one budget cycle away from being replaced by someone who has never heard of you. The move that changes everything is identifying the executive inside each major partner who has both the authority and the motivation to take the relationship to the next level \u2014 and then making sure your leadership is in the room with theirs. That conversation cannot be initiated by a Local Geographic Leader. It requires organizational standing that only comes from the top.",
+good:"A defined strategy is a real advantage over most of your peers, and you should build on it systematically. The next move is concentration analysis \u2014 do you know what percentage of your P2P revenue comes from your top five corporate partners? If any single partner represents more than twenty percent, you have a concentration risk that belongs on your leadership agenda. The other move is penetration mapping: for each major employer, how many of their eligible employees are actually participating? The gap between current performance and theoretical capacity is your most honest measure of where the revenue is.",
+better:"You are engineering the portfolio rather than managing it, and that distinction matters enormously. The ceiling from here is multi-year elevation pathways \u2014 treating each major partner not as an annual renewal but as a five-year investment with defined milestones, expanding asks, and compounding returns. The organizations that operate at this level also track penetration rate as a standing metric: not just what a company gives, but what percentage of their eligible employees are involved. When penetration goes up, revenue follows. When it stagnates, you know where to intervene before it becomes a problem.",
+best:"You have built a corporate portfolio that functions as a strategic asset rather than a revenue line, and that is the highest level this business reaches. The discipline required to sustain it is significant \u2014 concentration monitoring, multi-year pathway management, coordinated national and local activation, and board-level visibility into the portfolio. The risk at this level is not a competitor taking your partners. It is internal drift: a CDO transition, a restructuring, or a budget cut to the corporate development function that erodes in two years what took a decade to build. Treat the portfolio architecture as institutional knowledge and document it accordingly."}}
 ];
 
 var RLABELS={notInPlace:"Not in Place",inDevelopment:"In Development",good:"Good",better:"Better",best:"Best in Class"};
@@ -430,11 +559,9 @@ function showResults(){
   document.getElementById("questionsWrap").style.display="none";
   document.getElementById("ctaWrap").style.display="none";
   document.getElementById("results").style.display="block";
-  document.querySelector(".org-section").style.display="none";
-  document.querySelector(".intro-text").style.display="none";
-  var org=document.getElementById("orgInput").value.trim();
   var name=document.getElementById("intakeName").value.trim();
-  document.getElementById("resultsOrg").textContent=(name?name+" \u00b7 ":"")+( org||"Your Organization");
+  var org=document.getElementById("intakeOrg").value.trim();
+  document.getElementById("resultsOrg").textContent=(name?name+" \u00b7 ":"")+(org||"Your Organization");
 
   var scored=HOLDS.map(function(h){
     var a=answers[h.id]||{};
@@ -492,7 +619,7 @@ function showResults(){
       model:"claude-sonnet-4-20250514",
       max_tokens:800,
       system:"You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience including running a $100M national P2P program across 1,200 markets. You deliver assessments as a trusted advisor \u2014 candid, constructive, and encouraging. You acknowledge what is working, frame gaps as opportunities for iteration, and inspire confidence in the path forward. No bullets. No headers. No numerical scores.",
-      messages:[{role:"user",content:"You have just completed a GBB Mini Diagnostic with the senior leader of "+orgName+". Here are all five holds scored, from highest to lowest priority:\n\n"+holdSummary+"\n\nWrite a single integrated assessment \u2014 4 paragraphs that flow as one continuous verbal delivery, the way a seasoned consultant speaks after reviewing results in a room. The tone should be positive yet honest. Acknowledge what is working. Frame gaps as opportunities. Be direct about priorities without being discouraging. Every hold must appear somewhere in the narrative. Write directly to the senior leader as 'you'."}]
+      messages:[{role:"user",content:"You have just completed a GBB Mini Diagnostic with the senior leader of "+orgName+". Here are all five holds scored, from highest to lowest priority:\n\n"+holdSummary+"\n\nWrite a single integrated assessment \u2014 4 paragraphs that flow as one continuous verbal delivery, the way a seasoned consultant speaks after reviewing results in a room. The tone should be positive yet honest \u2014 the way a trusted advisor delivers a candid assessment. Acknowledge what is working. Frame gaps as opportunities and areas for iteration, not failures. Be direct about priorities without being discouraging. Every hold must appear somewhere in the narrative. Weave them together \u2014 do not treat each hold as a separate topic. Lead with what matters most and wind down naturally through the remaining holds. Write directly to the senior leader as 'you'. Sound like someone who believes in the program\u2019s potential and knows exactly what it will take to get there."}]
     })
   })
   .then(function(r){return r.json();})
@@ -510,7 +637,14 @@ function showResults(){
     document.getElementById("leverageBox").innerHTML=html;
   })
   .catch(function(){
-    document.getElementById("leverageBox").innerHTML='<div class="lev-box"><div class="lev-label">Your Results</div><p style="font-size:15px;color:#374151;line-height:1.7;font-style:italic;">Your highest-priority hold is <strong>'+sorted[0].hold.fullTitle+'</strong>, rated '+RLABELS[sorted[0].rating]+'. Request full access to receive a complete written assessment.</p></div>';
+    var html='<div class="lev-box" style="padding:24px 24px;">'+
+      '<div class="lev-label" style="margin-bottom:14px;">Your GBB Diagnostic Assessment</div>'+
+      sorted.map(function(item,i){
+        var prefix=i===0?"Your most urgent priority is":i===1?"Closely related,":i===2?"Also significant,":i===3?"Worth noting,":"Finally,";
+        return '<p style="margin:0 0 14px;font-size:15px;color:#374151;line-height:1.7;font-style:italic;">'+prefix+' <strong>'+item.hold.fullTitle+'</strong> is rated '+RLABELS[item.rating]+'. '+item.hold.implication[item.rating]+'</p>';
+      }).join('')+
+    '</div>';
+    document.getElementById("leverageBox").innerHTML=html;
   });
 }
 
@@ -527,7 +661,6 @@ function restart(){
   document.getElementById("intakeOrg").value="";
   document.getElementById("intakeEmail").value="";
   document.getElementById("intakePhone").value="";
-  document.getElementById("orgInput").value="";
   buildQuestions();updateProgress();
   window.scrollTo({top:0,behavior:"smooth"});
 }
