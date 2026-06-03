@@ -121,6 +121,10 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
 .ct-lock:hover{background:#c9a83a;}
 @media(max-width:500px){.header-inner{padding:32px 20px 28px;}.main{padding:28px 16px 60px;}.q-scores{grid-template-columns:1fr;}.results-body{padding:18px;}.ct-cols,.ct-row{grid-template-columns:120px 1fr 1fr;}}
 </style>
+<script>
+  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+</script>
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </head>
 <body>
 
@@ -158,19 +162,19 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
         <div>
           <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Your Name <span style="color:#dc2626;">*</span></label>
-          <input id="intakeName" type="text" placeholder="First and last name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+          <input id="intakeName" name="name" type="text" data-fs-field placeholder="First and last name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
         </div>
         <div>
           <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Organization <span style="color:#dc2626;">*</span></label>
-          <input id="intakeOrg" type="text" placeholder="Your organization name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+          <input id="intakeOrg" name="organization" type="text" data-fs-field placeholder="Your organization name" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
         </div>
         <div>
           <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Email Address <span style="color:#dc2626;">*</span></label>
-          <input id="intakeEmail" type="email" placeholder="you@organization.org" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+          <input id="intakeEmail" name="email" type="email" data-fs-field placeholder="you@organization.org" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
         </div>
         <div>
           <label style="font-family:'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);display:block;margin-bottom:6px;">Phone Number <span style="color:#dc2626;">*</span></label>
-          <input id="intakePhone" type="tel" placeholder="(555) 555-5555" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
+          <input id="intakePhone" name="phone" type="tel" data-fs-field placeholder="(555) 555-5555" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:7px;font-family:Georgia,serif;font-size:15px;color:var(--gray-900);background:var(--cream);outline:none;" onfocus="this.style.borderColor='#93c5fd'" onblur="this.style.borderColor='var(--gray-200)'"/>
         </div>
       </div>
       <div id="intakeError" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:10px 14px;font-size:13px;color:#991b1b;margin-bottom:16px;">Please complete all four fields before continuing.</div>
@@ -217,166 +221,36 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
 
 
     <!-- COMPARISON MOCKUP -->
-    <div class="compare-teaser">
+    <div class="compare-teaser" id="compareTeaser">
       <div class="ct-header">
         <div class="ct-label" style="position:relative;">Full GBB Diagnostic&#8482; &mdash; Campaign Architecture&#8482;</div>
-        <div class="ct-title" style="position:relative;">See What the Comparison Tool Does</div>
-        <div class="ct-sub" style="position:relative;">The full diagnostic includes a Comparison Tool that loads two assessments side by side &mdash; hold by hold &mdash; so leadership can see where perspectives align and where the gaps are.</div>
+        <div class="ct-title" style="position:relative;">See How You Compare</div>
+        <div class="ct-sub" style="position:relative;">The full diagnostic includes a Comparison Tool that loads multiple assessments side by side &mdash; hold by hold &mdash; so leadership can see where perspectives align and where the gaps are. Below are your scores alongside two sample respondents.</div>
       </div>
       <div class="ct-body" style="padding:16px 20px;">
-
-        <!-- Explanation -->
-        <p style="font-size:13px;color:#374151;line-height:1.6;margin:0 0 16px;font-style:italic;">Below is a sample comparison between two respondents from the same organization &mdash; a national leader and a field leader &mdash; scoring the same five holds. The gaps between their assessments are often as revealing as the scores themselves.</p>
-
-        <!-- Respondent key -->
-        <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;">
+        <p style="font-size:13px;color:#374151;line-height:1.6;margin:0 0 16px;font-style:italic;">Your scores appear alongside Sarah Chen (Chief Development Officer) and Marcus Webb (Regional Director, Western US) &mdash; two sample respondents from the same organization scoring the same five holds. In the full tool, your entire leadership team can score independently and compare results.</p>
+        <div style="display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap;">
           <div style="display:flex;align-items:center;gap:6px;">
-            <div style="width:12px;height:12px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#b8972e;flex-shrink:0;"></div>
+            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#b8972e;">You</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
             <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#1e40af;">Sarah Chen</span>
             <span style="font-size:11px;color:#6b7280;">Chief Development Officer</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;">
-            <div style="width:12px;height:12px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
             <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#166534;">Marcus Webb</span>
             <span style="font-size:11px;color:#6b7280;">Regional Director, Western US</span>
           </div>
         </div>
-
-        <!-- Hold 1: Volunteer Leadership -->
-        <div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:10px;overflow:hidden;">
-          <div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;">
-            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#374151;">Volunteer Leadership Pipeline &amp; Succession</span>
-          </div>
-          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
-                <span style="font-size:11px;color:#1e40af;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Sarah Chen</span>
-              </div>
-              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#faf5ff;color:#6b21a8;border:1px solid #c4b5fd;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Best in Class</span>
-              <span style="font-size:13px;font-weight:700;color:#d97706;font-family:'Arial Narrow',Arial,sans-serif;">9/10</span>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
-                <span style="font-size:11px;color:#166534;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Marcus Webb</span>
-              </div>
-              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#eff6ff;color:#1e40af;border:1px solid #93c5fd;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Better</span>
-              <span style="font-size:13px;font-weight:700;color:#2563eb;font-family:'Arial Narrow',Arial,sans-serif;">7/10</span>
-            </div>
-            <div style="font-size:11px;color:#dc2626;font-style:italic;padding-top:2px;">&#9650; 2-level gap &mdash; national and field see this hold differently</div>
-          </div>
-        </div>
-
-        <!-- Hold 2: Corporate Portfolio -->
-        <div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:10px;overflow:hidden;">
-          <div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;">
-            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#374151;">Corporate Portfolio Engineering &amp; Enterprise Activation</span>
-          </div>
-          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
-                <span style="font-size:11px;color:#1e40af;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Sarah Chen</span>
-              </div>
-              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#eff6ff;color:#1e40af;border:1px solid #93c5fd;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Better</span>
-              <span style="font-size:13px;font-weight:700;color:#2563eb;font-family:'Arial Narrow',Arial,sans-serif;">8/10</span>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
-                <span style="font-size:11px;color:#166534;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Marcus Webb</span>
-              </div>
-              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#f0fdf4;color:#166534;border:1px solid #86efac;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Good</span>
-              <span style="font-size:13px;font-weight:700;color:#d97706;font-family:'Arial Narrow',Arial,sans-serif;">7/10</span>
-            </div>
-            <div style="font-size:11px;color:#6b7280;font-style:italic;padding-top:2px;">Aligned on priority, one level apart on rating</div>
-          </div>
-        </div>
-
-        <!-- Hold 3: Staffing -->
-        <div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:10px;overflow:hidden;">
-          <div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;">
-            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#374151;">Staff Investment, Compensation &amp; Retention</span>
-          </div>
-          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
-                <span style="font-size:11px;color:#1e40af;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Sarah Chen</span>
-              </div>
-              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#f0fdf4;color:#166534;border:1px solid #86efac;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Good</span>
-              <span style="font-size:13px;font-weight:700;color:#2563eb;font-family:'Arial Narrow',Arial,sans-serif;">6/10</span>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
-                <span style="font-size:11px;color:#166534;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Marcus Webb</span>
-              </div>
-              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#fffbeb;color:#92400e;border:1px solid #fcd34d;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">In Development</span>
-              <span style="font-size:13px;font-weight:700;color:#dc2626;font-family:'Arial Narrow',Arial,sans-serif;">9/10</span>
-            </div>
-            <div style="font-size:11px;color:#dc2626;font-style:italic;padding-top:2px;">&#9650; Significant gap &mdash; field rates this more urgent and lower than national</div>
-          </div>
-        </div>
-
-        <!-- Hold 4: Training -->
-        <div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:10px;overflow:hidden;">
-          <div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;">
-            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#374151;">Training Standardization, Content &amp; Tools</span>
-          </div>
-          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
-                <span style="font-size:11px;color:#1e40af;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Sarah Chen</span>
-              </div>
-              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#eff6ff;color:#1e40af;border:1px solid #93c5fd;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Better</span>
-              <span style="font-size:13px;font-weight:700;color:#6b7280;font-family:'Arial Narrow',Arial,sans-serif;">5/10</span>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
-                <span style="font-size:11px;color:#166534;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Marcus Webb</span>
-              </div>
-              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#eff6ff;color:#1e40af;border:1px solid #93c5fd;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Better</span>
-              <span style="font-size:13px;font-weight:700;color:#6b7280;font-family:'Arial Narrow',Arial,sans-serif;">5/10</span>
-            </div>
-            <div style="font-size:11px;color:#166534;font-style:italic;padding-top:2px;">&#10003; Full alignment &mdash; same rating and same priority score</div>
-          </div>
-        </div>
-
-        <!-- Hold 5: Mission -->
-        <div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:16px;overflow:hidden;">
-          <div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;">
-            <span style="font-family:'Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#374151;">Mission &amp; Narrative Alignment</span>
-          </div>
-          <div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>
-                <span style="font-size:11px;color:#1e40af;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Sarah Chen</span>
-              </div>
-              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#f0fdf4;color:#166534;border:1px solid #86efac;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Good</span>
-              <span style="font-size:13px;font-weight:700;color:#6b7280;font-family:'Arial Narrow',Arial,sans-serif;">4/10</span>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#166534;flex-shrink:0;"></div>
-                <span style="font-size:11px;color:#166534;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Marcus Webb</span>
-              </div>
-              <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#f0fdf4;color:#166534;border:1px solid #86efac;font-family:'Arial Narrow',Arial,sans-serif;font-weight:700;">Good</span>
-              <span style="font-size:13px;font-weight:700;color:#6b7280;font-family:'Arial Narrow',Arial,sans-serif;">4/10</span>
-            </div>
-            <div style="font-size:11px;color:#166534;font-style:italic;padding-top:2px;">&#10003; Aligned &mdash; both see this as lower priority relative to other holds</div>
-          </div>
-        </div>
-
-        <p style="font-size:12px;color:#6b7280;line-height:1.6;margin:0;font-style:italic;">This is a sample. In practice the full tool compares all 21 holds. The gaps &mdash; especially where field rates a hold lower and more urgent than national &mdash; are where the most important conversations live.</p>
+        <div id="compareRows"></div>
+        <p style="font-size:12px;color:#6b7280;line-height:1.6;margin:8px 0 0;font-style:italic;">This is a sample. In the full tool all 21 holds are compared. The gaps &mdash; especially where field rates a hold lower and more urgent than national &mdash; are where the most important conversations live.</p>
       </div>
-      <div class="ct-footer">
+      <div class="ct-footer" style="flex-direction:column;align-items:flex-start;gap:14px;">
         <div class="ct-cta-text"><strong>The full GBB Diagnostic covers all 21 holds.</strong> The Comparison Tool lets your whole leadership team score independently &mdash; then shows you exactly where you agree and where the gaps are.</div>
-        <a class="ct-lock" href="mailto:scott@scottarchconsultancy.com?subject=GBB%20Diagnostic%20%E2%80%94%20Full%20Access%20Request">&#128274; Unlock Full Access</a>
+          <a class="ct-lock" href="mailto:scott@scottarchconsultancy.com?subject=GBB%20Diagnostic%20%E2%80%94%20Full%20Access%20Request">&#128274; Unlock Full Access</a>
       </div>
     </div>
 
@@ -393,7 +267,6 @@ body{font-family:Georgia,serif;background:var(--cream);color:var(--gray-900);min
 
 <script>
 var WORKER_URL="https://sparkling-truth-7db6.scott-archimbaud.workers.dev";
-var FORMSPREE="https://formspree.io/f/mlgkrpvl";
 
 function submitIntake(){
   var name=document.getElementById("intakeName").value.trim();
@@ -403,11 +276,20 @@ function submitIntake(){
   var err=document.getElementById("intakeError");
   if(!name||!org||!email||!phone){err.style.display="block";return;}
   err.style.display="none";
-  fetch(FORMSPREE,{
+  // Submit via Formspree AJAX library
+  var fd=new FormData();
+  fd.append("name",name);
+  fd.append("organization",org);
+  fd.append("email",email);
+  fd.append("phone",phone);
+  fd.append("source","GBB Mini Diagnostic");
+  fetch("https://formspree.io/f/mlgkrpvl",{
     method:"POST",
-    headers:{"Content-Type":"application/json","Accept":"application/json"},
-    body:JSON.stringify({name:name,organization:org,email:email,phone:phone,source:"GBB Mini Diagnostic"})
-  }).catch(function(){});
+    body:fd,
+    headers:{"Accept":"application/json"}
+  }).then(function(r){
+    if(!r.ok){console.warn("Formspree submission failed",r.status);}
+  }).catch(function(e){console.warn("Formspree error",e);});
   document.getElementById("intakeScreen").style.display="none";
   document.getElementById("diagnosticScreen").style.display="block";
   document.getElementById("progWrap").style.display="block";
@@ -610,6 +492,7 @@ function showResults(){
     '</div>';
   }).join('');
 
+  buildCompare(sorted);
   setTimeout(function(){document.getElementById("results").scrollIntoView({behavior:"smooth",block:"start"});},100);
   document.getElementById("progFill").style.width="100%";
   document.getElementById("progLabel").textContent="Complete";
@@ -653,6 +536,80 @@ function showResults(){
     '</div>';
     document.getElementById("leverageBox").innerHTML=html;
   });
+}
+
+// Static dummy scores for Sarah and Marcus keyed by hold id
+var SARAH={vol_leadership:{rating:"best",score:9},staffing:{rating:"good",score:6},training:{rating:"better",score:5},mission:{rating:"good",score:4},corporate:{rating:"better",score:8}};
+var MARCUS={vol_leadership:{rating:"better",score:7},staffing:{rating:"inDevelopment",score:9},training:{rating:"better",score:5},mission:{rating:"good",score:4},corporate:{rating:"good",score:7}};
+
+function ratingBadge(rk,score,color){
+  var bg={notInPlace:"#f9fafb",inDevelopment:"#fffbeb",good:"#f0fdf4",better:"#eff6ff",best:"#faf5ff"};
+  var tc={notInPlace:"#6b7280",inDevelopment:"#92400e",good:"#166534",better:"#1e40af",best:"#6b21a8"};
+  var bc={notInPlace:"#d1d5db",inDevelopment:"#fcd34d",good:"#86efac",better:"#93c5fd",best:"#c4b5fd"};
+  var lbl=RLABELS[rk]||rk;
+  return '<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:'+bg[rk]+';color:'+tc[rk]+';border:1px solid '+bc[rk]+';font-family:\'Arial Narrow\',Arial,sans-serif;font-weight:700;">'+lbl+'</span>';
+}
+
+function buildCompare(sorted){
+  var html="";
+  var holdOrder=['vol_leadership','staffing','training','mission','corporate'];
+  // rebuild lookup by id
+  var userById={};
+  sorted.forEach(function(item){userById[item.hold.id]=item;});
+  var holdTitles={vol_leadership:"Volunteer Leadership Pipeline & Succession",staffing:"Staff Investment, Compensation & Retention",training:"Training Standardization, Content & Tools",mission:"Mission & Narrative Alignment",corporate:"Corporate Portfolio Engineering & Enterprise Activation"};
+
+  holdOrder.forEach(function(hid){
+    var user=userById[hid];
+    var sarah=SARAH[hid];
+    var marcus=MARCUS[hid];
+    if(!user)return;
+    var pc=pColor(user.score);
+
+    // check for gaps
+    var ratings=["notInPlace","inDevelopment","good","better","best"];
+    var ui=ratings.indexOf(user.rating);
+    var si=ratings.indexOf(sarah.rating);
+    var mi=ratings.indexOf(marcus.rating);
+    var maxGap=Math.max(Math.abs(ui-si),Math.abs(ui-mi),Math.abs(si-mi));
+    var gapNote="";
+    if(maxGap===0) gapNote='<div style="font-size:11px;color:#166534;font-style:italic;padding-top:3px;">&#10003; Full alignment across all three respondents</div>';
+    else if(maxGap>=2) gapNote='<div style="font-size:11px;color:#dc2626;font-style:italic;padding-top:3px;">&#9650; Significant gap &mdash; worth a conversation</div>';
+    else gapNote='<div style="font-size:11px;color:#6b7280;font-style:italic;padding-top:3px;">Minor variation &mdash; generally aligned</div>';
+
+    html+='<div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:10px;overflow:hidden;">'+
+      '<div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;">'+
+        '<span style="font-family:\'Arial Narrow\',Arial,sans-serif;font-size:12px;font-weight:700;color:#374151;">'+holdTitles[hid]+'</span>'+
+      '</div>'+
+      '<div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px;">'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">'+
+          '<div style="display:flex;align-items:center;gap:6px;min-width:90px;">'+
+            '<div style="width:8px;height:8px;border-radius:50%;background:#b8972e;flex-shrink:0;"></div>'+
+            '<span style="font-size:11px;color:#b8972e;font-family:\'Arial Narrow\',Arial,sans-serif;font-weight:700;">You</span>'+
+          '</div>'+
+          ratingBadge(user.rating,user.score,"#b8972e")+
+          '<span style="font-size:13px;font-weight:700;color:'+pc+';font-family:\'Arial Narrow\',Arial,sans-serif;">'+user.score+'/10</span>'+
+        '</div>'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">'+
+          '<div style="display:flex;align-items:center;gap:6px;min-width:90px;">'+
+            '<div style="width:8px;height:8px;border-radius:50%;background:#1e40af;flex-shrink:0;"></div>'+
+            '<span style="font-size:11px;color:#1e40af;font-family:\'Arial Narrow\',Arial,sans-serif;font-weight:700;">Sarah Chen</span>'+
+          '</div>'+
+          ratingBadge(sarah.rating,sarah.score,"#1e40af")+
+          '<span style="font-size:13px;font-weight:700;color:'+pColor(sarah.score)+';font-family:\'Arial Narrow\',Arial,sans-serif;">'+sarah.score+'/10</span>'+
+        '</div>'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">'+
+          '<div style="display:flex;align-items:center;gap:6px;min-width:90px;">'+
+            '<div style="width:8px;height:8px;border-radius:50%;background:#166534;flex-shrink:0;"></div>'+
+            '<span style="font-size:11px;color:#166534;font-family:\'Arial Narrow\',Arial,sans-serif;font-weight:700;">Marcus Webb</span>'+
+          '</div>'+
+          ratingBadge(marcus.rating,marcus.score,"#166534")+
+          '<span style="font-size:13px;font-weight:700;color:'+pColor(marcus.score)+';font-family:\'Arial Narrow\',Arial,sans-serif;">'+marcus.score+'/10</span>'+
+        '</div>'+
+        gapNote+
+      '</div>'+
+    '</div>';
+  });
+  document.getElementById("compareRows").innerHTML=html;
 }
 
 function restart(){
