@@ -371,7 +371,7 @@ async function callAPI(prompt,maxTok){
   var res=await fetch(WORKER_URL,{
     method:"POST",
     headers:{"Content-Type":"application/json","X-Service":"anthropic"},
-    body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:maxTok,temperature:0.2,messages:[{role:"user",content:prompt}]})
+    body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:maxTok,temperature:0.2,messages:[{role:"user",content:prompt}]})
   });
   var data=await res.json();
   if(data.error)throw new Error(data.error.message);
