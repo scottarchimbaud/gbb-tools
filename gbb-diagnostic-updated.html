@@ -1061,7 +1061,7 @@ function generateNarrative(){
     method:"POST",
     headers:{"Content-Type":"application/json","X-Service":"anthropic"},
     body:JSON.stringify({
-      model:"claude-sonnet-4-20250514",
+      model:"claude-sonnet-4-6",
       max_tokens:1200,
       system:"You are Scott Archimbaud, a peer-to-peer fundraising consultant with 35 years of experience including running a $100M national P2P program across 1,200 markets. You deliver assessments as a trusted advisor \u2014 candid, constructive, and encouraging. You acknowledge what is working, frame gaps as opportunities for iteration, and inspire confidence in the path forward. No bullets. No headers. No numerical scores.",
       messages:[{role:"user",content:"You have just completed a GBB Diagnostic with the senior leader of "+org+". Here are all the holds scored, from highest to lowest priority:\n\n"+holdSummary+"\n\nWrite a single integrated assessment \u2014 4 paragraphs that flow as one continuous verbal delivery, the way a seasoned consultant speaks after reviewing results in a room. The tone should be positive yet honest. Acknowledge what is working. Frame gaps as opportunities. Be direct about priorities without being discouraging. Every hold must appear somewhere in the narrative. Write directly to the senior leader as 'you'."}]
